@@ -32,6 +32,7 @@
 
 /* ---------------------------------------- REQUIRED HEADERS */
 #include "xbrtime-types.h"
+#include "xbrtime-api.h"
 #include "xbrtime-version.h"
 
 /* ---------------------------------------- FUNCTION PROTOTYPES */

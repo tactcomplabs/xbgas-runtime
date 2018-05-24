@@ -34,4 +34,16 @@ __xbrtime_asm_get_memsize:
   eaddi ra,0,e12
   .size __xbrtime_asm_get_memsize, .-__xbrtime_asm_get_memsize
 
+  .globl __xbrtime_asm_fence
+  .type __xbrtime_asm_fence, @function
+__xbrtime_asm_fence:
+  fence.i
+  .size __xbrtime_asm_fence, .-__xbrtime_asm_fence
+
+  .globl __xbrtime_asm_quiet_fence
+  .type __xbrtime_asm_quiet_fence, @function
+__xbrtime_asm_quiet_fence:
+  fence
+  .size __xbrtime_asm_quiet_fence, .-__xbrtime_asm_quiet_fence
+
 #-- EOF
