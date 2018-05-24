@@ -50,7 +50,7 @@ typedef struct{
   XBRTIME_PE_MAP _MAP[__XBRTIME_MAX_PE]; /*! XBRTIME_DATA: PE Mappings */
 }XBRTIME_DATA;
 
-extern XBRTIME_DATA __XBRTIME_CONFIG;
+extern XBRTIME_DATA *__XBRTIME_CONFIG;
 
 #ifdef __cplusplus
 }

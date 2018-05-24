@@ -38,13 +38,15 @@
 
 /*!   \fn int xbrtime_init( int NPEs, size_t MSIZE )
       \brief Initializes the XBGAS Runtime environment
-      \param NPEs is the total number of parallel elements
-      \param MSIZE is the memory size in bytes per PE
       \return 0 on success, nonzero otherwise
 */
-extern int xbrtime_init( int NPEs, size_t MSIZE );
+extern int xbrtime_init();
 
-
+/*!   \fn void xbrtime_free()
+      \brief Frees the XBGAS Runtime environment
+      \return void
+*/
+extern void xbrtime_free();
 
 #ifdef __cplusplus
 }
