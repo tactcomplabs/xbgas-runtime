@@ -36,7 +36,7 @@
 
 /* ---------------------------------------- FUNCTION PROTOTYPES */
 
-/*!   \fn int xbrtime_init( int NPEs, size_t MSIZE )
+/*!   \fn int xbrtime_init()
       \brief Initializes the XBGAS Runtime environment
       \return 0 on success, nonzero otherwise
 */
@@ -47,6 +47,14 @@ extern int xbrtime_init();
       \return void
 */
 extern void xbrtime_free();
+
+/*!   \fn int xbrtime_addr_accessible( const void *addr, int pe )
+      \brief Checks to see whether the address on the target pe can be reached
+      \param addr is a pointer to a valid address
+      \param pe is the target processing element
+      \return 1 on success, 0 otherwise
+*/
+extern int xbrtime_addr_accessible( const void *addr, int pe );
 
 #ifdef __cplusplus
 }

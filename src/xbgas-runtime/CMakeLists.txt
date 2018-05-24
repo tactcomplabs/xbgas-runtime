@@ -21,6 +21,7 @@ xbrtime-version.h
 xbrtime-types.h
 xbrtime_init.c
 xbrtime_ctor.c
+xbrtime_util.c
 xbrtime_ctor_asm.s
 xbrtime_util_asm.s
 )
