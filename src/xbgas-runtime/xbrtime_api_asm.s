@@ -32,17 +32,19 @@
   #             and unrolled (8-ways) transfers
   #---------------------------------------------------
   # Seq Calling Convention
-  #   - a0 = base address
-  #   - a1 = remote pe
-  #   - a2 = nelems
-  #   - a3 = stride (in bytes)
+  #   - a0 = base src address
+  #   - a1 = base dest address
+  #   - a2 = remote pe
+  #   - a3 = nelems
+  #   - a4 = stride (in bytes)
   #
   # Unrolled Calling Convention
-  #   - a0 = base address
-  #   - a1 = remote pe
-  #   - a2 = stride (in bytes)
-  #   - a3 = loop iters
-  #   = a4 = epilogue iters
+  #   - a0 = base src address
+  #   - a1 = base dest address
+  #   - a2 = remote pe
+  #   - a3 = stride (in bytes)
+  #   - a4 = loop iters
+  #   = a5 = epilogue iters
   #---------------------------------------------------
 
   .global __xbrtime_get_u1_seq
