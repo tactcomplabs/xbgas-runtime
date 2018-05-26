@@ -31,6 +31,19 @@
   #   - {seq,unr} corresponds to sequential transfers
   #             and unrolled (8-ways) transfers
   #---------------------------------------------------
+  # Seq Calling Convention
+  #   - a0 = base address
+  #   - a1 = remote pe
+  #   - a2 = nelems
+  #   - a3 = stride (in bytes)
+  #
+  # Unrolled Calling Convention
+  #   - a0 = base address
+  #   - a1 = remote pe
+  #   - a2 = stride (in bytes)
+  #   - a3 = loop iters
+  #   = a4 = epilogue iters
+  #---------------------------------------------------
 
   .global __xbrtime_get_u1_seq
   .type __xbrtime_get_u1_seq, @function

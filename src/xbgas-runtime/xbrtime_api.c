@@ -17,6 +17,72 @@
 void __xbrtime_asm_fence();
 void __xbrtime_asm_quiet_fence();
 
+void __xbrtime_get_u1_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_u1_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_u2_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_u2_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_u4_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_u4_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_u8_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_u8_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_s1_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_s1_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_s2_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_s2_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_s4_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_s4_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_get_s8_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_get_s8_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_u1_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_u1_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_u2_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_u2_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_u4_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_u4_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_u8_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_u8_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_s1_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_s1_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_s2_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_s2_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_s4_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_s4_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+void __xbrtime_put_s8_seq( uint64_t base, uint32_t pe,
+                           uint32_t nelems, uint32_t stride );
+void __xbrtime_put_s8_unr( uint64_t base, uint32_t pe, uint32_t stride,
+                           uint32_t loop_iters, uint32_t epilogue_iters);
+
+
 
 void xbgas_float_put(float *dest, const float *src,
                      size_t nelems, int stride, int pe){
