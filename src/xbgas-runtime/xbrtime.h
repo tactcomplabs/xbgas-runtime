@@ -34,6 +34,7 @@
 #include "xbrtime-types.h"
 #include "xbrtime-api.h"
 #include "xbrtime-version.h"
+#include "xbrtime-macros.h"
 
 /* ---------------------------------------- FUNCTION PROTOTYPES */
 

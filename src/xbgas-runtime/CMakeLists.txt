@@ -19,6 +19,7 @@ set(XBGASSrcs
 xbrtime.h
 xbrtime-version.h
 xbrtime-types.h
+xbrtime-macros.h
 xbrtime-api.h
 xbrtime_init.c
 xbrtime_ctor.c
