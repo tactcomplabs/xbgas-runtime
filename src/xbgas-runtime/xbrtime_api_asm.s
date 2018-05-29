@@ -67,6 +67,46 @@ __xbrtime_get_u1_seq:
   .global __xbrtime_get_u1_unr
   .type __xbrtime_get_u1_unr, @function
 __xbrtime_get_u1_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_u1_unr:
+  elbu x22, 0(x10)  #load 0
+  elbu x23, 0(x16)  #load 1
+  elbu x24, 0(x17)  #load 2
+  elbu x25, 0(x18)  #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sb x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sb x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sb x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sb x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_u1_unr
+
+  mv x31, zero
+.get_u1_unr_epi:
+  elbu x22, 0(x10)  #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sb x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_u1_unr_epi
+
   ret
   .size __xbrtime_get_u1_unr, .-__xbrtime_get_u1_unr
 
@@ -92,6 +132,46 @@ __xbrtime_get_u2_seq:
   .global __xbrtime_get_u2_unr
   .type __xbrtime_get_u2_unr, @function
 __xbrtime_get_u2_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_u2_unr:
+  elhu x22, 0(x10)  #load 0
+  elhu x23, 0(x16)  #load 1
+  elhu x24, 0(x17)  #load 2
+  elhu x25, 0(x18)  #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sh x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sh x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sh x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sh x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_u2_unr
+
+  mv x31, zero
+.get_u2_unr_epi:
+  elhu x22, 0(x10)  #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sh x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_u2_unr_epi
+
   ret
   .size __xbrtime_get_u2_unr, .-__xbrtime_get_u2_unr
 
@@ -117,6 +197,46 @@ __xbrtime_get_u4_seq:
   .global __xbrtime_get_u4_unr
   .type __xbrtime_get_u4_unr, @function
 __xbrtime_get_u4_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_u4_unr:
+  elw x22, 0(x10)  #load 0
+  elw x23, 0(x16)  #load 1
+  elw x24, 0(x17)  #load 2
+  elw x25, 0(x18)  #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sw x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sw x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sw x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sw x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_u4_unr
+
+  mv x31, zero
+.get_u4_unr_epi:
+  elw x22, 0(x10)  #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sw x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_u4_unr_epi
+
   ret
   .size __xbrtime_get_u4_unr, .-__xbrtime_get_u4_unr
 
@@ -142,6 +262,46 @@ __xbrtime_get_u8_seq:
   .global __xbrtime_get_u8_unr
   .type __xbrtime_get_u8_unr, @function
 __xbrtime_get_u8_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_u8_unr:
+  eld x22, 0(x10)  #load 0
+  eld x23, 0(x16)  #load 1
+  eld x24, 0(x17)  #load 2
+  eld x25, 0(x18)  #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sd x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sd x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sd x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sd x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_u8_unr
+
+  mv x31, zero
+.get_u8_unr_epi:
+  eld x22, 0(x10)  #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sd x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_u8_unr_epi
+
   ret
   .size __xbrtime_get_u8_unr, .-__xbrtime_get_u8_unr
 
@@ -167,6 +327,46 @@ __xbrtime_get_s1_seq:
   .global __xbrtime_get_s1_unr
   .type __xbrtime_get_s1_unr, @function
 __xbrtime_get_s1_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_s1_unr:
+  elb x22, 0(x10)   #load 0
+  elb x23, 0(x16)   #load 1
+  elb x24, 0(x17)   #load 2
+  elb x25, 0(x18)   #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sb x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sb x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sb x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sb x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_s1_unr
+
+  mv x31, zero
+.get_s1_unr_epi:
+  elb x22, 0(x10)   #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sb x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_s1_unr_epi
+
   ret
   .size __xbrtime_get_s1_unr, .-__xbrtime_get_s1_unr
 
@@ -192,6 +392,46 @@ __xbrtime_get_s2_seq:
   .global __xbrtime_get_s2_unr
   .type __xbrtime_get_s2_unr, @function
 __xbrtime_get_s2_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_s2_unr:
+  elh x22, 0(x10)   #load 0
+  elh x23, 0(x16)   #load 1
+  elh x24, 0(x17)   #load 2
+  elh x25, 0(x18)   #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sh x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sh x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sh x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sh x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_s2_unr
+
+  mv x31, zero
+.get_s2_unr_epi:
+  elh x22, 0(x10)   #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sh x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_s2_unr_epi
+
   ret
   .size __xbrtime_get_s2_unr, .-__xbrtime_get_s2_unr
 
@@ -217,6 +457,46 @@ __xbrtime_get_s4_seq:
   .global __xbrtime_get_s4_unr
   .type __xbrtime_get_s4_unr, @function
 __xbrtime_get_s4_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_s4_unr:
+  elw x22, 0(x10)   #load 0
+  elw x23, 0(x16)   #load 1
+  elw x24, 0(x17)   #load 2
+  elw x25, 0(x18)   #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sw x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sw x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sw x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sw x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_s4_unr
+
+  mv x31, zero
+.get_s4_unr_epi:
+  elw x22, 0(x10)   #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sw x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_s4_unr_epi
+
   ret
   .size __xbrtime_get_s4_unr, .-__xbrtime_get_s4_unr
 
@@ -242,6 +522,46 @@ __xbrtime_get_s8_seq:
   .global __xbrtime_get_s8_unr
   .type __xbrtime_get_s8_unr, @function
 __xbrtime_get_s8_unr:
+  eaddie e10, 0, a2 #pe source 0
+  eaddie e16, 0, a2 #pe source 1
+  eaddie e17, 0, a2 #pe source 2
+  eaddie e18, 0, a2 #pe source 3
+  add x16, x10, a3  #source addr 1
+  add x17, x16, a3  #source addr 2
+  add x18, x17, a3  #source addr 3
+  add x19, x11, a3  #dest addr 1
+  add x20, x19, a3  #dest addr 2
+  add x21, x20, a3  #dest addr 3
+  mv x31, zero
+.get_s8_unr:
+  eld x22, 0(x10)   #load 0
+  eld x23, 0(x16)   #load 1
+  eld x24, 0(x17)   #load 2
+  eld x25, 0(x18)   #load 3
+  add x10, x18, a3  #incr 0
+  add x16, x10, a3  #incr 1
+  add x17, x16, a3  #incr 2
+  add x18, x17, a3  #incr 3
+  add x31,x31,1     #incr loop trip
+  sd x22, 0(x11)    #store 0
+  add x11, x21, a3  #incr 0
+  sd x23, 0(x19)    #store 1
+  add x19, x11, a3  #incr 1
+  sd x24, 0(x20)    #store 2
+  add x20, x19, a3  #incr 2
+  sd x25, 0(x21)    #store 3
+  add x21, x20, a3  #incr 3
+  bne x31,a4,.get_s8_unr
+
+  mv x31, zero
+.get_s8_unr_epi:
+  eld x22, 0(x10)   #load 0
+  add x31,x31,1     #incr loop trip
+  add x10, x10, a3  #incr 0
+  sd x22, 0(x11)    #store 0
+  add x11, x11, a3  #incr 0
+  bne x31,a5,.get_s1_unr_epi
+
   ret
   .size __xbrtime_get_s8_unr, .-__xbrtime_get_s8_unr
 

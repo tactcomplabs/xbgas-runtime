@@ -22,6 +22,8 @@
 #define _XBRTIME_MIN_UNR_THRESHOLD_ 8
 #endif
 
+#define _XBRTIME_UNROLL_FACTOR_ 4
+
 #ifdef __cplusplus
 }
 #endif  /* extern "C" */
