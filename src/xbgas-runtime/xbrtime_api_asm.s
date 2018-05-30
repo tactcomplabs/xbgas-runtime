@@ -98,6 +98,8 @@ __xbrtime_get_u1_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_u1_unr
 
+  beqz a5,.get_u1_unr_eject
+
   mv x31, zero
 .get_u1_unr_epi:
   elbu x22, 0(x10)  #load 0
@@ -106,7 +108,7 @@ __xbrtime_get_u1_unr:
   sb x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_u1_unr_epi
-
+.get_u1_unr_eject:
   ret
   .size __xbrtime_get_u1_unr, .-__xbrtime_get_u1_unr
 
@@ -163,6 +165,8 @@ __xbrtime_get_u2_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_u2_unr
 
+  beqz a5,.get_u2_unr_eject
+
   mv x31, zero
 .get_u2_unr_epi:
   elhu x22, 0(x10)  #load 0
@@ -171,7 +175,7 @@ __xbrtime_get_u2_unr:
   sh x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_u2_unr_epi
-
+.get_u2_unr_eject:
   ret
   .size __xbrtime_get_u2_unr, .-__xbrtime_get_u2_unr
 
@@ -228,6 +232,8 @@ __xbrtime_get_u4_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_u4_unr
 
+  beqz a5,.get_u4_unr_eject
+
   mv x31, zero
 .get_u4_unr_epi:
   elw x22, 0(x10)  #load 0
@@ -236,7 +242,7 @@ __xbrtime_get_u4_unr:
   sw x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_u4_unr_epi
-
+.get_u4_unr_eject:
   ret
   .size __xbrtime_get_u4_unr, .-__xbrtime_get_u4_unr
 
@@ -293,6 +299,8 @@ __xbrtime_get_u8_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_u8_unr
 
+  beqz a5,.get_u8_unr_eject
+
   mv x31, zero
 .get_u8_unr_epi:
   eld x22, 0(x10)  #load 0
@@ -301,7 +309,7 @@ __xbrtime_get_u8_unr:
   sd x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_u8_unr_epi
-
+.get_u8_unr_eject:
   ret
   .size __xbrtime_get_u8_unr, .-__xbrtime_get_u8_unr
 
@@ -358,6 +366,8 @@ __xbrtime_get_s1_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_s1_unr
 
+  beqz a5,.get_s1_unr_eject
+
   mv x31, zero
 .get_s1_unr_epi:
   elb x22, 0(x10)   #load 0
@@ -366,7 +376,7 @@ __xbrtime_get_s1_unr:
   sb x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_s1_unr_epi
-
+.get_s1_unr_eject:
   ret
   .size __xbrtime_get_s1_unr, .-__xbrtime_get_s1_unr
 
@@ -423,6 +433,8 @@ __xbrtime_get_s2_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_s2_unr
 
+  beqz a5,.get_s2_unr_eject
+
   mv x31, zero
 .get_s2_unr_epi:
   elh x22, 0(x10)   #load 0
@@ -431,7 +443,7 @@ __xbrtime_get_s2_unr:
   sh x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_s2_unr_epi
-
+.get_s2_unr_eject:
   ret
   .size __xbrtime_get_s2_unr, .-__xbrtime_get_s2_unr
 
@@ -488,6 +500,8 @@ __xbrtime_get_s4_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_s4_unr
 
+  beqz a5,.get_s4_unr_eject
+
   mv x31, zero
 .get_s4_unr_epi:
   elw x22, 0(x10)   #load 0
@@ -496,7 +510,7 @@ __xbrtime_get_s4_unr:
   sw x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_s4_unr_epi
-
+.get_s4_unr_eject:
   ret
   .size __xbrtime_get_s4_unr, .-__xbrtime_get_s4_unr
 
@@ -553,6 +567,8 @@ __xbrtime_get_s8_unr:
   add x21, x20, a3  #incr 3
   bne x31,a4,.get_s8_unr
 
+  beqz a5,.get_s8_unr_eject
+
   mv x31, zero
 .get_s8_unr_epi:
   eld x22, 0(x10)   #load 0
@@ -561,7 +577,7 @@ __xbrtime_get_s8_unr:
   sd x22, 0(x11)    #store 0
   add x11, x11, a3  #incr 0
   bne x31,a5,.get_s1_unr_epi
-
+.get_s8_unr_eject:
   ret
   .size __xbrtime_get_s8_unr, .-__xbrtime_get_s8_unr
 
@@ -618,6 +634,8 @@ __xbrtime_put_u1_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_u1_unr
 
+  beqz a5,.put_u1_unr_eject
+
   mv x31, zero
 .put_u1_unr_epi:
   lbu x22, 0(x10)     #load 0
@@ -626,7 +644,7 @@ __xbrtime_put_u1_unr:
   esb x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_u1_unr_epi
-
+.put_u1_unr_eject:
   ret
   .size __xbrtime_put_u1_unr, .-__xbrtime_put_u1_unr
 
@@ -683,6 +701,8 @@ __xbrtime_put_u2_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_u2_unr
 
+  beqz a5,.put_u2_unr_eject
+
   mv x31, zero
 .put_u2_unr_epi:
   lhu x22, 0(x10)     #load 0
@@ -691,7 +711,7 @@ __xbrtime_put_u2_unr:
   esh x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_u2_unr_epi
-
+.put_u2_unr_eject:
   ret
   .size __xbrtime_put_u2_unr, .-__xbrtime_put_u2_unr
 
@@ -748,6 +768,8 @@ __xbrtime_put_u4_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_u4_unr
 
+  beqz a5,.put_u4_unr_eject
+
   mv x31, zero
 .put_u4_unr_epi:
   lwu x22, 0(x10)     #load 0
@@ -756,7 +778,7 @@ __xbrtime_put_u4_unr:
   esw x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_u4_unr_epi
-
+.put_u4_unr_eject:
   ret
   .size __xbrtime_put_u4_unr, .-__xbrtime_put_u4_unr
 
@@ -813,6 +835,8 @@ __xbrtime_put_u8_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_u8_unr
 
+  beqz a5,.put_u8_unr_eject
+
   mv x31, zero
 .put_u8_unr_epi:
   ld x22, 0(x10)      #load 0
@@ -821,7 +845,7 @@ __xbrtime_put_u8_unr:
   esd x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_u8_unr_epi
-
+.put_u8_unr_eject:
   ret
   .size __xbrtime_put_u8_unr, .-__xbrtime_put_u8_unr
 
@@ -878,6 +902,8 @@ __xbrtime_put_s1_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_s1_unr
 
+  beqz a5,.put_s1_unr_eject
+
   mv x31, zero
 .put_s1_unr_epi:
   lb x22, 0(x10)      #load 0
@@ -886,7 +912,7 @@ __xbrtime_put_s1_unr:
   esb x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_s1_unr_epi
-
+.put_s1_unr_eject:
   ret
   .size __xbrtime_put_s1_unr, .-__xbrtime_put_s1_unr
 
@@ -943,6 +969,8 @@ __xbrtime_put_s2_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_s2_unr
 
+  beqz a5,.put_s2_unr_eject
+
   mv x31, zero
 .put_s2_unr_epi:
   lh x22, 0(x10)      #load 0
@@ -951,7 +979,7 @@ __xbrtime_put_s2_unr:
   esh x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_s2_unr_epi
-
+.put_s2_unr_eject:
   ret
   .size __xbrtime_put_s2_unr, .-__xbrtime_put_s2_unr
 
@@ -1008,6 +1036,8 @@ __xbrtime_put_s4_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_s4_unr
 
+  beqz a5,.put_s4_unr_eject
+
   mv x31, zero
 .put_s4_unr_epi:
   lw x22, 0(x10)      #load 0
@@ -1016,7 +1046,7 @@ __xbrtime_put_s4_unr:
   esw x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_s4_unr_epi
-
+.put_s4_unr_eject:
   ret
   .size __xbrtime_put_s4_unr, .-__xbrtime_put_s4_unr
 
@@ -1073,6 +1103,8 @@ __xbrtime_put_s8_unr:
   add x21, x20, a3    #incr 3
   bne x31,a4,.put_s8_unr
 
+  beqz a5,.put_s8_unr_eject
+
   mv x31, zero
 .put_s8_unr_epi:
   ld x22, 0(x10)      #load 0
@@ -1081,7 +1113,7 @@ __xbrtime_put_s8_unr:
   esd x22, 0(x11)     #store 0
   add x11, x11, a3    #incr 0
   bne x31,a5,.put_s8_unr_epi
-
+.put_s8_unr_eject:
   ret
   .size __xbrtime_put_s8_unr, .-__xbrtime_put_s8_unr
 
