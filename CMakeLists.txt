@@ -12,6 +12,18 @@
 cmake_minimum_required (VERSION 2.6)
 project(xbgas-runtime C CXX ASM)
 
+#------------------------------------------------------------------------
+#-- COMPILER OPTIONS
+#------------------------------------------------------------------------
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -Wall")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -O0 -Wall")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3 -Wall")
+
+#------------------------------------------------------------------------
+#-- FIND PACKAGES
+#------------------------------------------------------------------------
+
 # Find all the relevant packages
 find_package(Doxygen)
 option(BUILD_DOCUMENTATION "Create and install the doxygen-ized API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
@@ -23,8 +35,9 @@ else()
   message(FATAL_ERROR "RISCV environment variable is not set.")
 endif()
 
-# Add our subdirectories
-add_subdirectory( src )
+#------------------------------------------------------------------------
+#-- DOCUMENTATION
+#------------------------------------------------------------------------
 
 # Doxygen config
 if(BUILD_DOCUMENTATION)
@@ -45,5 +58,12 @@ if(BUILD_DOCUMENTATION)
 
   message(STATUS "Enabling developer documentation")
 endif()
+
+#------------------------------------------------------------------------
+#-- SUBDIRECTORIES
+#------------------------------------------------------------------------
+# Add our subdirectories
+add_subdirectory( src )
+
 
 #-- EOF
