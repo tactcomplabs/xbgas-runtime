@@ -570,6 +570,15 @@ __xbrtime_get_s8_unr:
   .global __xbrtime_put_u1_seq
   .type __xbrtime_put_u1_seq, @function
 __xbrtime_put_u1_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_u1_seq:
+  lbu x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esb x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_u1_seq
   ret
   .size __xbrtime_put_u1_seq, .-__xbrtime_put_u1_seq
 
@@ -586,6 +595,15 @@ __xbrtime_put_u1_unr:
   .global __xbrtime_put_u2_seq
   .type __xbrtime_put_u2_seq, @function
 __xbrtime_put_u2_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_u2_seq:
+  lhu x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esh x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_u2_seq
   ret
   .size __xbrtime_put_u2_seq, .-__xbrtime_put_u2_seq
 
@@ -602,6 +620,15 @@ __xbrtime_put_u2_unr:
   .global __xbrtime_put_u4_seq
   .type __xbrtime_put_u4_seq, @function
 __xbrtime_put_u4_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_u4_seq:
+  lwu x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esw x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_u4_seq
   ret
   .size __xbrtime_put_u4_seq, .-__xbrtime_put_u4_seq
 
@@ -618,6 +645,15 @@ __xbrtime_put_u4_unr:
   .global __xbrtime_put_u8_seq
   .type __xbrtime_put_u8_seq, @function
 __xbrtime_put_u8_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_u8_seq:
+  ld x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esd x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_u8_seq
   ret
   .size __xbrtime_put_u8_seq, .-__xbrtime_put_u8_seq
 
@@ -634,6 +670,15 @@ __xbrtime_put_u8_unr:
   .global __xbrtime_put_s1_seq
   .type __xbrtime_put_s1_seq, @function
 __xbrtime_put_s1_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_s1_seq:
+  lb x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esb x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_s1_seq
   ret
   .size __xbrtime_put_s1_seq, .-__xbrtime_put_s1_seq
 
@@ -650,6 +695,15 @@ __xbrtime_put_s1_unr:
   .global __xbrtime_put_s2_seq
   .type __xbrtime_put_s2_seq, @function
 __xbrtime_put_s2_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_s2_seq:
+  lh x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esh x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_s2_seq
   ret
   .size __xbrtime_put_s2_seq, .-__xbrtime_put_s2_seq
 
@@ -666,6 +720,15 @@ __xbrtime_put_s2_unr:
   .global __xbrtime_put_s4_seq
   .type __xbrtime_put_s4_seq, @function
 __xbrtime_put_s4_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_s4_seq:
+  lw x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esw x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_s4_seq
   ret
   .size __xbrtime_put_s4_seq, .-__xbrtime_put_s4_seq
 
@@ -682,6 +745,15 @@ __xbrtime_put_s4_unr:
   .global __xbrtime_put_s8_seq
   .type __xbrtime_put_s8_seq, @function
 __xbrtime_put_s8_seq:
+  eaddie e11, 0, a2
+  mv x31, zero
+.put_s8_seq:
+  ld x30, 0(a0)
+  add a0, a0, a4
+  add x31,x31,1
+  esd x30, 0(a1)
+  add a1,a1,a4
+  bne x31,a3,.put_s8_seq
   ret
   .size __xbrtime_put_s8_seq, .-__xbrtime_put_s8_seq
 
