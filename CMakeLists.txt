@@ -4,8 +4,9 @@
 # All Rights Reserved
 # contact@tactcomplabs.com
 #
-# CoreGen can not be copied and/or distributed without the
-# express permission of Tactical Computing Laboratories, LLC
+# This file is a part of the XBGAS-RUNTIME package.  For license
+# information, see the LICENSE file in the top level directory of
+# this distribution.
 #
 
 cmake_minimum_required (VERSION 2.6)
