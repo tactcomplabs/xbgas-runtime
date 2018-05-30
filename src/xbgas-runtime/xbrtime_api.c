@@ -215,6 +215,11 @@ void xbgas_longdouble_put(long double *dest, const long double *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(long double)));
   }
   __xbrtime_asm_fence();
 }
@@ -235,6 +240,11 @@ void xbgas_longdouble_put_nb(long double *dest, const long double *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(long double)));
   }
 }
 
@@ -254,6 +264,11 @@ void xbgas_schar_put(signed char *dest, const signed char *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(signed char)));
   }
   __xbrtime_asm_fence();
 }
@@ -274,6 +289,11 @@ void xbgas_schar_put_nb(signed char *dest, const signed char *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(signed char)));
   }
 }
 
@@ -293,6 +313,11 @@ void xbgas_char_put(char *dest, const char *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(char)));
   }
   __xbrtime_asm_fence();
 }
@@ -313,6 +338,11 @@ void xbgas_char_put_nb(char *dest, const char *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(char)));
   }
 }
 
@@ -332,6 +362,11 @@ void xbgas_short_put(short *dest, const short *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(short)));
   }
   __xbrtime_asm_fence();
 }
