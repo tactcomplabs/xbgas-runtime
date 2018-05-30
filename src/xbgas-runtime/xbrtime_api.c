@@ -97,13 +97,22 @@ void __xbrtime_put_s8_seq( uint64_t base_src, uint64_t base_dest, uint32_t pe,
 void __xbrtime_put_s8_unr( uint64_t base_src, uint64_t base_dest, uint32_t pe,
                            uint32_t stride, uint32_t loop_iters,
                            uint32_t epilogue_iters);
+uint32_t xbrtime_decode_pe( int pe );
 
 
 
 void xbgas_float_put(float *dest, const float *src,
                      size_t nelems, int stride, int pe){
+  uint32_t loop_iters     = 0;
+  uint32_t epilogue_iters = 0;
   if( nelems >= _XBRTIME_MIN_UNR_THRESHOLD_ ){
     /* unrolled execution */
+    __xbrtime_put_u4_unr((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(stride*sizeof(float)),
+                         loop_iters,
+                         epilogue_iters);
   }else{
     /* sequential execution */
   }
@@ -112,6 +121,8 @@ void xbgas_float_put(float *dest, const float *src,
 
 void xbgas_float_put_nb(float *dest, const float *src,
                         size_t nelems, int stride, int pe){
+  uint32_t loop_iters     = 0;
+  uint32_t epilogue_iters = 0;
   if( nelems >= _XBRTIME_MIN_UNR_THRESHOLD_ ){
     /* unrolled execution */
   }else{

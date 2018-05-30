@@ -27,4 +27,21 @@ extern int xbrtime_addr_accessible( const void *addr, int pe ){
   return 1;
 }
 
+extern uint32_t xbrtime_decode_pe( int pe ){
+  uint32_t raw_pe = 0;
+  int i=0;
+
+  if( __XBRTIME_CONFIG == NULL ){
+    return raw_pe;
+  }
+
+  for( i=0; i<__XBRTIME_MAX_PE; i++ ){
+    if( __XBRTIME_CONFIG->_MAP[i]._LOGICAL == pe ){
+      return __XBRTIME_CONFIG->_MAP[i]._PHYSICAL;
+    }
+  }
+
+  return raw_pe;
+}
+
 /* EOF */
