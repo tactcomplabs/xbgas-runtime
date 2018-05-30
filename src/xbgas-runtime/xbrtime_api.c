@@ -1293,6 +1293,11 @@ void xbgas_float_get(float *dest, const float *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_get_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(float)));
   }
   __xbrtime_asm_fence();
 }
@@ -1313,6 +1318,11 @@ void xbgas_float_get_nb(float *dest, const float *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_get_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(float)));
   }
 }
 
