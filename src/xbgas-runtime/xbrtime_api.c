@@ -387,6 +387,11 @@ void xbgas_short_put_nb(short *dest, const short *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(short)));
   }
 }
 
@@ -406,6 +411,11 @@ void xbgas_int_put(int *dest, const int *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int)));
   }
   __xbrtime_asm_fence();
 }
@@ -426,6 +436,11 @@ void xbgas_int_put_nb(int *dest, const int *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int)));
   }
 }
 
@@ -445,6 +460,11 @@ void xbgas_long_put(long *dest, const long *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(long)));
   }
   __xbrtime_asm_fence();
 }
@@ -465,6 +485,11 @@ void xbgas_long_put_nb(long *dest, const long *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(long)));
   }
 }
 
@@ -484,6 +509,11 @@ void xbgas_longlong_put(long long *dest, const long long *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(long long)));
   }
   __xbrtime_asm_fence();
 }
@@ -504,6 +534,11 @@ void xbgas_longlong_put_nb(long long *dest, const long long *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(long long)));
   }
 }
 
@@ -523,6 +558,11 @@ void xbgas_uchar_put(unsigned char *dest, const unsigned char *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned char)));
   }
   __xbrtime_asm_fence();
 }
@@ -543,6 +583,11 @@ void xbgas_uchar_put_nb(unsigned char *dest, const unsigned char *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned char)));
   }
 }
 
@@ -562,6 +607,11 @@ void xbgas_ushort_put(unsigned short *dest, const unsigned short *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned short)));
   }
   __xbrtime_asm_fence();
 }
@@ -582,6 +632,11 @@ void xbgas_ushort_put_nb(unsigned short *dest, const unsigned short *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned short)));
   }
 }
 
@@ -601,6 +656,11 @@ void xbgas_uint_put(unsigned int *dest, const unsigned int *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned int)));
   }
   __xbrtime_asm_fence();
 }
@@ -621,6 +681,11 @@ void xbgas_uint_put_nb(unsigned int *dest, const unsigned int *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned int)));
   }
 }
 
@@ -640,6 +705,11 @@ void xbgas_ulong_put(unsigned long *dest, const unsigned long *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned long)));
   }
   __xbrtime_asm_fence();
 }
@@ -660,6 +730,11 @@ void xbgas_ulong_put_nb(unsigned long *dest, const unsigned long *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned long)));
   }
 }
 
@@ -679,6 +754,11 @@ void xbgas_ulonglong_put(unsigned long long *dest, const unsigned long long *src
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned long long)));
   }
   __xbrtime_asm_fence();
 }
@@ -699,6 +779,11 @@ void xbgas_ulonglong_put_nb(unsigned long long *dest, const unsigned long long *
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(unsigned long long)));
   }
 }
 
@@ -718,6 +803,11 @@ void xbgas_int8_put(int8_t *dest, const int8_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int8_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -738,6 +828,11 @@ void xbgas_int8_put_nb(int8_t *dest, const int8_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int8_t)));
   }
 }
 
@@ -757,6 +852,11 @@ void xbgas_int16_put(int16_t *dest, const int16_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int16_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -777,6 +877,11 @@ void xbgas_int16_put_nb(int16_t *dest, const int16_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int16_t)));
   }
 }
 
@@ -796,6 +901,11 @@ void xbgas_int32_put(int32_t *dest, const int32_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int32_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -816,6 +926,11 @@ void xbgas_int32_put_nb(int32_t *dest, const int32_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int32_t)));
   }
 }
 
@@ -835,6 +950,11 @@ void xbgas_int64_put(int64_t *dest, const int64_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int64_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -855,6 +975,11 @@ void xbgas_int64_put_nb(int64_t *dest, const int64_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(int64_t)));
   }
 }
 
@@ -874,6 +999,11 @@ void xbgas_uint8_put(uint8_t *dest, const uint8_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint8_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -894,6 +1024,11 @@ void xbgas_uint8_put_nb(uint8_t *dest, const uint8_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u1_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint8_t)));
   }
 }
 
@@ -913,6 +1048,11 @@ void xbgas_uint16_put(uint16_t *dest, const uint16_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint16_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -933,6 +1073,11 @@ void xbgas_uint16_put_nb(uint16_t *dest, const uint16_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u2_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint16_t)));
   }
 }
 
@@ -952,6 +1097,11 @@ void xbgas_uint32_put(uint32_t *dest, const uint32_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint32_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -972,6 +1122,11 @@ void xbgas_uint32_put_nb(uint32_t *dest, const uint32_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint32_t)));
   }
 }
 
@@ -991,6 +1146,11 @@ void xbgas_uint64_put(uint64_t *dest, const uint64_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint64_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -1011,6 +1171,11 @@ void xbgas_uint64_put_nb(uint64_t *dest, const uint64_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u8_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(uint64_t)));
   }
 }
 
@@ -1030,6 +1195,11 @@ void xbgas_size_put(size_t *dest, const size_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(size_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -1050,6 +1220,11 @@ void xbgas_size_put_nb(size_t *dest, const size_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_u4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(size_t)));
   }
 }
 
@@ -1069,6 +1244,11 @@ void xbgas_ptrdiff_put(ptrdiff_t *dest, const ptrdiff_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(ptrdiff_t)));
   }
   __xbrtime_asm_fence();
 }
@@ -1089,6 +1269,11 @@ void xbgas_ptrdiff_put_nb(ptrdiff_t *dest, const ptrdiff_t *src,
                          epilogue_iters);
   }else{
     /* sequential execution */
+    __xbrtime_put_s4_seq((uint64_t)(src),
+                         (uint64_t)(dest),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(ptrdiff_t)));
   }
 }
 
