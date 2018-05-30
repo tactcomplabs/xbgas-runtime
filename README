@@ -1,7 +1,50 @@
 xBGAS-RUNTIME
--------------------------------------------
+contact@tactcomplabs.com
+--------------------------------------------------------------------------------
 
-TODO
+xBGAS Machine Runtime Library
 
--------------------------------------------
+--------------------------------------------------------------------------------
+
+I.  Intro
+--------------------------------------------------------------------------------
+
+The xBGAS machine runtime library is designed to provide OpenSHMEM-like
+functionality for an xBGAS-enabled RISC-V system architecture.  The xBGAS
+machine runtime library is written in a mixture of C and Assembly in order to
+provide high performance SHMEM "Get" and "Put" functionality for other libraries
+and users.
+
+II. Requirements
+--------------------------------------------------------------------------------
+
+The xBGAS runtime library requires the following packages to build:
+- xBGAS RISC-V Tools: https://github.com/tactcomplabs/xbgas-tools
+- CMake 2.6+
+
+The xBGAS tools should be installed to a directory pointed to by the
+$RISCV environment variable (per the core RISCV tools build directions)
+
+III.  Compiling
+--------------------------------------------------------------------------------
+
+Compiling the xBGAS runtime requires that the user set the $RISCV environment
+variable to point to the appropriately installed xBGAS tools.  Building
+the library can be performed as follows:
+
+$> git clone https://github.com/tactcomplabs/xbgas-runtime.git
+$> cd xbgas-runtime
+$> mkdir build
+$> cd build
+$> cmake ../
+$> make
+
+...will create ~/xbgas-runtime/build/src/xbgas-runtime/libxbrtime.a
+
+Additional build arguments for CMake are as follows:
+- -DCMAKE_BUILD_TYPE=Debug : enables debug builds with debug symbols
+- -DCMAKE_BUILD_TYPE=Release : enables release builds with full optimization (default)
+- -DBUILD_DOCUMENTATION=ON : enables documentation; requires Doxygen; "make doc"
+
+--------------------------------------------------------------------------------
 EOF
