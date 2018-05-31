@@ -10,6 +10,11 @@
 # of the distribution.
 #
 
+# e10 = contains the physical PE id
+# e11 = contains the number of PEs
+# e12 = contains the size of the shared memory region
+# e13 = contains the starting address of the physical shared memory region
+
   .file "xbrtime_util_asm.s"
   .text
   .align 1
@@ -33,6 +38,12 @@ __xbrtime_asm_get_npes:
 __xbrtime_asm_get_memsize:
   eaddi ra,0,e12
   .size __xbrtime_asm_get_memsize, .-__xbrtime_asm_get_memsize
+
+  .global __xbrtime_asm_get_startaddr
+  .type __xbrtime_asm_get_startaddr, @function
+__xbrtime_asm_get_startaddr:
+  eaddi ra,0,e13
+  .size __xbrtime_asm_get_startaddr, .-__xbrtime_asm_get_startaddr
 
   .globl __xbrtime_asm_fence
   .type __xbrtime_asm_fence, @function

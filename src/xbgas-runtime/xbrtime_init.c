@@ -20,6 +20,7 @@ XBRTIME_DATA *__XBRTIME_CONFIG;
 size_t __xbrtime_asm_get_memsize();
 int __xbrtime_asm_get_id();
 int __xbrtime_asm_get_npes();
+uint64_t __xbrtime_asm_get_startaddr();
 
 extern void xbrtime_free(){
   if( __XBRTIME_CONFIG != NULL ){
@@ -42,7 +43,7 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_ID         = __xbrtime_asm_get_id();
   __XBRTIME_CONFIG->_MEMSIZE    = __xbrtime_asm_get_memsize();
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
-  __XBRTIME_CONFIG->_START_ADDR = __XBRTIME_BASE_ADDR;
+  __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
 
   // we deem anything less than a 4K page to be
   // too small for our needs
