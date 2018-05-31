@@ -54,7 +54,7 @@ extern int xbrtime_init(){
   /* init the PE mapping structure */
   for( i=0; i<__XBRTIME_CONFIG->_NPES; i++ ){
     __XBRTIME_CONFIG->_MAP[i]._LOGICAL   = i;
-    __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i;
+    __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i+1;
   }
   for( i=__XBRTIME_CONFIG->_NPES; i<__XBRTIME_MAX_PE; i++ ){
     __XBRTIME_CONFIG->_MAP[i]._LOGICAL   = -1;

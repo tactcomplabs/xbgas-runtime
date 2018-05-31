@@ -35,7 +35,7 @@ extern uint32_t xbrtime_decode_pe( int pe ){
     return raw_pe;
   }
 
-  for( i=0; i<__XBRTIME_MAX_PE; i++ ){
+  for( i=0; i<__XBRTIME_CONFIG->_NPES; i++ ){
     if( __XBRTIME_CONFIG->_MAP[i]._LOGICAL == pe ){
       return __XBRTIME_CONFIG->_MAP[i]._PHYSICAL;
     }
