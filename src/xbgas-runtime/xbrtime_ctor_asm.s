@@ -17,7 +17,6 @@
   .global __xbrtime_ctor_reg_reset
   .type __xbrtime_ctor_reg_reset, @function
 __xbrtime_ctor_reg_reset:
-  eaddie e13, 0, zero
   eaddie e14, 0, zero
   eaddie e15, 0, zero
   eaddie e16, 0, zero
