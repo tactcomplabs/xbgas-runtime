@@ -22,13 +22,13 @@
 #include <stdint.h>
 
 #define XBGAS_API_DECL_PUTGET(_memop, _opname, _type)       \
-  void xbgas_##_opname##_##_memop(_type *dest,              \
+  void xbrtime_##_opname##_##_memop(_type *dest,              \
                                   const _type *src,         \
                                   size_t nelems,            \
                                   int stride,               \
                                   int pe);                  \
                                                             \
-  void xbgas_##_opname##_##_memop##_nb(_type *dest,         \
+  void xbrtime_##_opname##_##_memop##_nb(_type *dest,         \
                                       const _type *src,     \
                                       size_t nelems,        \
                                       int stride,           \

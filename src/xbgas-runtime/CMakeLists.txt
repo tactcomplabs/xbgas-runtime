@@ -21,11 +21,13 @@ xbrtime.h
 xbrtime-version.h
 xbrtime-types.h
 xbrtime-macros.h
+xbrtime-alloc.h
 xbrtime-api.h
 xbrtime_init.c
 xbrtime_ctor.c
 xbrtime_util.c
 xbrtime_api.c
+xbrtime_alloc.c
 xbrtime_ctor_asm.s
 xbrtime_util_asm.s
 xbrtime_api_asm.s

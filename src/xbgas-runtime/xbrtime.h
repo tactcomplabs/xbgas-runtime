@@ -33,6 +33,7 @@
 /* ---------------------------------------- REQUIRED HEADERS */
 #include "xbrtime-types.h"
 #include "xbrtime-api.h"
+#include "xbrtime-alloc.h"
 #include "xbrtime-version.h"
 #include "xbrtime-macros.h"
 
@@ -57,6 +58,20 @@ extern void xbrtime_free();
       \return 1 on success, 0 otherwise
 */
 extern int xbrtime_addr_accessible( const void *addr, int pe );
+
+/*!   \fn void *xbrtime_malloc( size_t sz )
+      \brief Allocates a block of contiguous shared memory of minimum size, 'sz'
+      \param size is the minimum size of the allocated block
+      \return Valid pointer on success, NULL otherwise
+*/
+extern void *xbrtime_malloc( size_t sz );
+
+/*!   \fn void xbrtime_free( void *ptr )
+      \brief Free's a target memory block starting at ptr
+      \param *ptr is a valid base pointer to an allocated block
+      \return Void
+*/
+extern void xbrtime_free( void *ptr );
 
 #ifdef __cplusplus
 }
