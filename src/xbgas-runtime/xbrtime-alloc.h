@@ -20,6 +20,13 @@
 
 #include <stdlib.h>
 
+typedef struct _XBRTIME_MEM_T{
+  size_t nblocks;
+  uint64_t start_addr;
+  struct _XBRTIME_MEM_T *prev;
+  struct _XBRTIME_MEM_T *next;
+}XBRTIME_MEM_T;
+
 #ifdef __cplusplus
 }
 #endif  /* extern "C" */

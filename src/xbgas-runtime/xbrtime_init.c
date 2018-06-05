@@ -44,6 +44,7 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_MEMSIZE    = __xbrtime_asm_get_memsize();
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
+  __XBRTIME_CONFIG->_MMAP       = NULL;
 
   // we deem anything less than a 4K page to be
   // too small for our needs
@@ -51,6 +52,8 @@ extern int xbrtime_init(){
     free( __XBRTIME_CONFIG );
     return -1;
   }
+
+  __XBRTIME_CONFIG->_FREEBLOCKS = (__XBRTIME_CONFIG->_MEMSIZE/4096);
 
   /* init the PE mapping structure */
   for( i=0; i<__XBRTIME_CONFIG->_NPES; i++ ){

@@ -19,6 +19,7 @@
 #endif
 
 #include <stdint.h>
+#include "xbrtime-alloc.h"
 
 #define __XBRTIME_MAX_PE 2147483647
 
@@ -43,9 +44,11 @@ typedef struct{
  */
 typedef struct{
   size_t    _MEMSIZE;     /*! XBRTIME_DATA: Size of the shared memory region (in bytes) */
+  size_t    _FREEBLOCKS;  /*! XBRTIME_DATA: Number of free blocks (multiples of 4k pages) */
   int       _ID;          /*! XBRTIME_DATA: Local node ID */
   int       _NPES;        /*! XBRTIME_DATA: Number of parallel elements */
   uint64_t  _START_ADDR;  /*! XBRTIME_DATA: Starting address of the shared memory region */
+  XBRTIME_MEM_T *_MMAP;   /*! XBRTIME_DATA: Allocated memory map */
   XBRTIME_PE_MAP _MAP[__XBRTIME_MAX_PE]; /*! XBRTIME_DATA: PE Mappings */
 }XBRTIME_DATA;
 
