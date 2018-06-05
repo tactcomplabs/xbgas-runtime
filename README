@@ -46,5 +46,18 @@ Additional build arguments for CMake are as follows:
 - -DCMAKE_BUILD_TYPE=Release : enables release builds with full optimization (default)
 - -DBUILD_DOCUMENTATION=ON : enables documentation; requires Doxygen; "make doc"
 
+IV.   Installing
+--------------------------------------------------------------------------------
+
+First, follow the steps in Section III. to compile the source code and
+the documentation.  Additionally, you can specify the following cmake directive
+to change the installation location:
+
+- -DCMAKE_INSTALL_PREFIX=/path/to/installation/
+
+Once you have compiled the library and the documentation, do the following
+to install the library, headers and docs:
+$> make install
+
 --------------------------------------------------------------------------------
 EOF
