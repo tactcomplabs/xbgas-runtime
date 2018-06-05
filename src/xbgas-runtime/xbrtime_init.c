@@ -22,7 +22,7 @@ int __xbrtime_asm_get_id();
 int __xbrtime_asm_get_npes();
 uint64_t __xbrtime_asm_get_startaddr();
 
-extern void xbrtime_free(){
+extern void xbrtime_close(){
   if( __XBRTIME_CONFIG != NULL ){
     free( __XBRTIME_CONFIG );
   }

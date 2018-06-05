@@ -45,11 +45,11 @@
 */
 extern int xbrtime_init();
 
-/*!   \fn void xbrtime_free()
-      \brief Frees the XBGAS Runtime environment
+/*!   \fn void xbrtime_close()
+      \brief Closes the XBGAS Runtime environment
       \return void
 */
-extern void xbrtime_free();
+extern void xbrtime_close();
 
 /*!   \fn int xbrtime_addr_accessible( const void *addr, int pe )
       \brief Checks to see whether the address on the target pe can be reached
