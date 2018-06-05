@@ -36,4 +36,8 @@ xbrtime_api_asm.s
 include_directories( . )
 add_library( xbrtime STATIC ${XBGASSrcs} )
 
+install(TARGETS xbrtime DESTINATION lib )
+install(DIRECTORY ./ DESTINATION include
+        FILES_MATCHING PATTERN "*.h*")
+
 # EOF
