@@ -11,6 +11,15 @@
  *
  */
 
+/*!   \file xbrtime-api.h
+      \brief XBGAS Runtime Data Transfer API Header File
+
+      The XBGAS Runtime provides C/CXX level function interfaces
+      for applications to conveniently utilize the shared memory
+      capabilities present in the xBGAS extension to the RISC-V
+      specification
+*/
+
 #ifndef _XBRTIME_API_H_
 #define _XBRTIME_API_H_
 
@@ -21,14 +30,16 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+
+
 #define XBGAS_API_DECL_PUTGET(_memop, _opname, _type)       \
-  void xbrtime_##_opname##_##_memop(_type *dest,              \
+  void xbrtime_##_opname##_##_memop(_type *dest,            \
                                   const _type *src,         \
                                   size_t nelems,            \
                                   int stride,               \
                                   int pe);                  \
                                                             \
-  void xbrtime_##_opname##_##_memop##_nb(_type *dest,         \
+  void xbrtime_##_opname##_##_memop##_nb(_type *dest,       \
                                       const _type *src,     \
                                       size_t nelems,        \
                                       int stride,           \

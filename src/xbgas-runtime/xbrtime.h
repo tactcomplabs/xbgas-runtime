@@ -61,7 +61,7 @@ extern int xbrtime_addr_accessible( const void *addr, int pe );
 
 /*!   \fn void *xbrtime_malloc( size_t sz )
       \brief Allocates a block of contiguous shared memory of minimum size, 'sz'
-      \param size is the minimum size of the allocated block
+      \param sz is the minimum size of the allocated block
       \return Valid pointer on success, NULL otherwise
 */
 extern void *xbrtime_malloc( size_t sz );

@@ -11,6 +11,15 @@
  *
  */
 
+/*!   \file xbrtime-macros.h
+      \brief XBGAS Runtime Macro Header File
+
+      The XBGAS Runtime provides C/CXX level function interfaces
+      for applications to conveniently utilize the shared memory
+      capabilities present in the xBGAS extension to the RISC-V
+      specification
+*/
+
 #ifndef _XBRTIME_MACROS_H_
 #define _XBRTIME_MACROS_H_
 
@@ -19,9 +28,11 @@
 #endif
 
 #ifndef _XBRTIME_MIN_UNR_THRESHOLD_
+/** @brief Minimum transfer unrolling (to hide latency) */
 #define _XBRTIME_MIN_UNR_THRESHOLD_ 8
 #endif
 
+/** @brief Unrolling factor for unrolled transfer API functons */
 #define _XBRTIME_UNROLL_FACTOR_ 4
 
 #ifdef __cplusplus
