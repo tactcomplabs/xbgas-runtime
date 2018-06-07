@@ -9,6 +9,8 @@
 # this distribution.
 #
 
+include_directories(${XBGAS_PATH})
+
 file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.c)
 
 if(BUILD_XFER_TESTING)

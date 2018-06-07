@@ -9,6 +9,8 @@
 # this distribution.
 #
 
+include_directories(${XBGAS_PATH})
+
 file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.c)
 
 if(BUILD_INIT_TESTING)
@@ -23,6 +25,7 @@ foreach(testSrc ${TEST_SRCS})
   set(CMAKE_C_COMPILER "${RISCV_ENV}/bin/riscv64-unknown-elf-gcc")
   set(CMAKE_ASM_COMPILER "${RISCV_ENV}/bin/riscv64-unknown-elf-gcc")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+  set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
   # Add linker deps
   target_link_libraries(${testName} xbrtime)

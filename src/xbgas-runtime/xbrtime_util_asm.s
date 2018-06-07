@@ -22,39 +22,43 @@
   .global __xbrtime_asm_get_id
   .type __xbrtime_asm_get_id, @function
 __xbrtime_asm_get_id:
-  eaddi ra,0,e10
+  eaddi a0,0,e10
   ret
   .size __xbrtime_asm_get_id, .-__xbrtime_asm_get_id
 
   .global __xbrtime_asm_get_npes
   .type __xbrtime_asm_get_npes, @function
 __xbrtime_asm_get_npes:
-  eaddi ra,0,e11
+  eaddi a0,0,e11
   ret
   .size __xbrtime_asm_get_npes, .-__xbrtime_asm_get_npes
 
   .global __xbrtime_asm_get_memsize
   .type __xbrtime_asm_get_memsize, @function
 __xbrtime_asm_get_memsize:
-  eaddi ra,0,e12
+  eaddi a0,0,e12
+  ret
   .size __xbrtime_asm_get_memsize, .-__xbrtime_asm_get_memsize
 
   .global __xbrtime_asm_get_startaddr
   .type __xbrtime_asm_get_startaddr, @function
 __xbrtime_asm_get_startaddr:
-  eaddi ra,0,e13
+  eaddi a0,0,e13
+  ret
   .size __xbrtime_asm_get_startaddr, .-__xbrtime_asm_get_startaddr
 
   .globl __xbrtime_asm_fence
   .type __xbrtime_asm_fence, @function
 __xbrtime_asm_fence:
   fence.i
+  ret
   .size __xbrtime_asm_fence, .-__xbrtime_asm_fence
 
   .globl __xbrtime_asm_quiet_fence
   .type __xbrtime_asm_quiet_fence, @function
 __xbrtime_asm_quiet_fence:
   fence
+  ret
   .size __xbrtime_asm_quiet_fence, .-__xbrtime_asm_quiet_fence
 
 #-- EOF

@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include "xbrtime-alloc.h"
 
-#define __XBRTIME_MAX_PE 2147483647
+#define __XBRTIME_MAX_PE 1024
 
 /*! \struct XBRTIME_PE_MAP
  *  \brief Defines the internal PE mapping
