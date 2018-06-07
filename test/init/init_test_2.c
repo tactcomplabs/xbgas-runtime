@@ -1,4 +1,4 @@
-/* _INIT_TEST_1_C_
+/* _INIT_TEST_2_C_
  *
  * Copyright (C) 2017-2018 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -19,8 +19,6 @@ int main( int argc, char **argv ){
   printf( "Initializing xBGAS Runtime\n" );
   rtn = xbrtime_init();
   printf( "xBGAS is Initialized; Closing xBGAS\n" );
-  xbrtime_close();
-  printf( "xBGAS is Closed\n" );
 
   return rtn;
 }
