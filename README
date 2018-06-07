@@ -59,5 +59,31 @@ Once you have compiled the library and the documentation, do the following
 to install the library, headers and docs:
 $> make install
 
+V.    Testing
+--------------------------------------------------------------------------------
+
+The test harness for the xBGAS runtime library is built into the CMake build
+infrastructure.  If you would like to build and run the integrated xBGAS
+tests, add the following to your cmake build configuration:
+
+- -DBUILD_ALL_TESTING=ON
+
+If you would like to enable individual blocks of tests, you can do so via
+the following cmake build arguments:
+
+- -DBUILD_INIT_TESTING=ON   : enables the "init" tests
+- -DBUILD_ALLOC_TESTING=ON  : enables the allocation/free tests
+- -DBUILD_XFER_TESTING=ON   : enables the data transfer tests
+
+Once you have build the library and associated tests, you can run the tests
+via the following command line:
+
+$> make test
+
+NOTE: All the tests require that the "$RISCV" environment variable be set
+as was the case with the build process.  Also note that the "mpirun"
+binary (utilized in building the xBGAS-tools) must also be in the standard
+$PATH.  All the tests are currently set to run using two PE's.
+
 --------------------------------------------------------------------------------
 EOF
