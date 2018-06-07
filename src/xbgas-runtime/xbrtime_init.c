@@ -21,12 +21,19 @@ size_t __xbrtime_asm_get_memsize();
 int __xbrtime_asm_get_id();
 int __xbrtime_asm_get_npes();
 uint64_t __xbrtime_asm_get_startaddr();
+void __xbrtime_asm_fence();
 
 extern void xbrtime_close(){
 
-  /* TODO; free all the memory */
-
   if( __XBRTIME_CONFIG != NULL ){
+    /* hard fence */
+    __xbrtime_asm_fence();
+
+    /* free all the remaining shared blocks */
+    while( __XBRTIME_CONFIG->_MMAP != NULL ){
+      xbrtime_free((void *)(__XBRTIME_CONFIG->_MMAP->start_addr));
+    }
+
     free( __XBRTIME_CONFIG );
   }
 }

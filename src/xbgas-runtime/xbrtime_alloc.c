@@ -119,7 +119,17 @@ void __xbrtime_shared_free(void *ptr){
     if( mem->start_addr == (uint64_t)(ptr) ){
       /* found the correct block */
       __XBRTIME_CONFIG->_FREEBLOCKS += mem->nblocks;
-      mem->prev->next = mem->next;
+      if( mem->prev != NULL ){
+        mem->prev->next = mem->next;
+      }else{
+        /* removing the first block */
+        if( mem->next == NULL ){
+          /* last block */
+          __XBRTIME_CONFIG->_MMAP = NULL;
+        }else{
+          __XBRTIME_CONFIG->_MMAP = mem->next;
+        }
+      }
       free( mem );
       return ;
     }
