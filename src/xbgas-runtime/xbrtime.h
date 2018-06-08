@@ -73,6 +73,19 @@ extern void *xbrtime_malloc( size_t sz );
 */
 extern void xbrtime_free( void *ptr );
 
+/*!   \fn int xbrtime_mype()
+      \brief Returns the logical PE number of the calling entity
+      \return Logical PE on success, nonzero otherwise
+*/
+extern int xbrtime_mype();
+
+
+/*!   \fn int xbrtime_num_pes()
+      \brief Returns the total number of configured PEs
+      \return Total PEs on success, nonzero otherwise
+*/
+extern int xbrtime_num_pes();
+
 #ifdef __cplusplus
 }
 #endif  /* extern "C" */

@@ -77,4 +77,18 @@ extern int xbrtime_init(){
   return 0;
 }
 
+extern int xbrtime_mype(){
+  if( __XBRTIME_CONFIG == NULL ){
+    return -1;
+  }
+  return __XBRTIME_CONFIG->_ID;
+}
+
+extern int xbrtime_num_pes(){
+  if( __XBRTIME_CONFIG == NULL ){
+    return -1;
+  }
+  return __XBRTIME_CONFIG->_NPES;
+}
+
 /* EOF */
