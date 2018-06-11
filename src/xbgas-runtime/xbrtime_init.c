@@ -34,6 +34,11 @@ extern void xbrtime_close(){
       xbrtime_free((void *)(__XBRTIME_CONFIG->_MMAP->start_addr));
     }
 
+    if( __XBRTIME_CONFIG->_MAP != NULL ){
+      free( __XBRTIME_CONFIG->_MAP );
+      __XBRTIME_CONFIG->_MAP = NULL;
+    }
+
     free( __XBRTIME_CONFIG );
   }
 }
@@ -42,6 +47,9 @@ extern int xbrtime_init(){
 
   /* vars */
   int i = 0;
+#if 0
+  uint64_t *ptr = NULL;
+#endif
 
   /* allocate the structure in the local heap */
   __XBRTIME_CONFIG = NULL;
@@ -56,23 +64,44 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
 
-  // we deem anything less than a 4K page to be
-  // too small for our needs
+  /*
+   * we deem anything less than a 4K page to be
+   * too small for our needs
+   */
   if( __XBRTIME_CONFIG->_MEMSIZE < 4096 ){
+    free( __XBRTIME_CONFIG );
+    return -1;
+  }
+
+  /* too many total PEs */
+  if( __XBRTIME_CONFIG->_NPES > __XBRTIME_MAX_PE ){
+    free( __XBRTIME_CONFIG );
+    return -1;
+  }
+
+  /* init the pe mapping block */
+  __XBRTIME_CONFIG->_MAP = malloc( sizeof( XBRTIME_PE_MAP ) *
+                                   __XBRTIME_CONFIG->_NPES );
+  if( __XBRTIME_CONFIG->_MAP == NULL ){
     free( __XBRTIME_CONFIG );
     return -1;
   }
 
   __XBRTIME_CONFIG->_FREEBLOCKS = (__XBRTIME_CONFIG->_MEMSIZE/4096);
 
+#if 0
+  ptr = (uint64_t *)(__XBRTIME_CONFIG->_START_ADDR);
+#endif
+
   /* init the PE mapping structure */
   for( i=0; i<__XBRTIME_CONFIG->_NPES; i++ ){
     __XBRTIME_CONFIG->_MAP[i]._LOGICAL   = i;
     __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i+1;
-  }
-  for( i=__XBRTIME_CONFIG->_NPES; i<__XBRTIME_MAX_PE; i++ ){
-    __XBRTIME_CONFIG->_MAP[i]._LOGICAL   = -1;
-    __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = -1;
+#if 0
+    __XBRTIME_CONFIG->_MAP[i]._BASE      = *ptr;
+    ptr = 0x00ull;
+    ptr += 8;
+#endif
   }
   return 0;
 }

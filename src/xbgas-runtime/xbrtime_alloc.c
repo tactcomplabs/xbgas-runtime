@@ -13,6 +13,18 @@
 
 #include "xbrtime.h"
 
+uint64_t __xbrtime_ltor(uint64_t remote, int pe){
+  if( xbrtime_mype() == pe ){
+    /* return the same address block */
+    return remote;
+#if 0
+  }else{
+    /* TODO: perform the address translation */
+#endif
+  }
+  return remote;
+}
+
 uint64_t __xbrtime_find_base_addr( size_t nblocks ){
   uint64_t tmp        = 0x00ull;
   int success         = 0;

@@ -32,6 +32,7 @@
 typedef struct{
   int _LOGICAL;           /*! XBRTIME_PE_MAP: Logical node ID */
   int _PHYSICAL;          /*! XBRTIME_PE_MAP: Physical node ID */
+  uint64_t _BASE;         /*! XBRTIME_PE_MAP: Base physical address */
 }XBRTIME_PE_MAP;
 
 /*! \struct XBRTIME_DATA
@@ -49,7 +50,7 @@ typedef struct{
   int       _NPES;        /*! XBRTIME_DATA: Number of parallel elements */
   uint64_t  _START_ADDR;  /*! XBRTIME_DATA: Starting address of the shared memory region */
   XBRTIME_MEM_T *_MMAP;   /*! XBRTIME_DATA: Allocated memory map */
-  XBRTIME_PE_MAP _MAP[__XBRTIME_MAX_PE]; /*! XBRTIME_DATA: PE Mappings */
+  XBRTIME_PE_MAP *_MAP;   /*! XBRTIME_DATA: PE Mappings */
 }XBRTIME_DATA;
 
 extern XBRTIME_DATA *__XBRTIME_CONFIG;
