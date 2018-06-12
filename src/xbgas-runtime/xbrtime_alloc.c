@@ -22,12 +22,14 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
   int i               = 0;
   uint64_t base_slot  = 0x00ull;
   uint64_t offset     = 0x00ull;
+  uint64_t new_addr   = 0x00ull;
 
   if( xbrtime_mype() == pe ){
     /* return the same address block */
     return remote;
   }else{
     /* perform the address translation */
+    printf( "Translating local address at pe=%d from 0x%016llx\n", pe, remote );
     for( i=0; i<_XBRTIME_MEM_SLOTS_; i++ ){
       if( (remote >= __XBRTIME_CONFIG->_MMAP[i].start_addr) &&
           (remote < (__XBRTIME_CONFIG->_MMAP[i].start_addr+
@@ -38,8 +40,10 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
         /* calculate the local offset */
         offset = remote - __XBRTIME_CONFIG->_MMAP[i].start_addr;
 
-        return (__xbrtime_get_remote_alloc(base_slot,xbrtime_decode_pe(pe))
-                +offset);
+        new_addr = (__xbrtime_get_remote_alloc(base_slot,xbrtime_decode_pe(pe))
+                                    +offset);
+        printf( "Remote address at pe=%d is 0x%016llx\n", pe, new_addr );
+        return new_addr;
       }
     }
   }
