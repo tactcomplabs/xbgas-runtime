@@ -61,4 +61,16 @@ __xbrtime_asm_quiet_fence:
   ret
   .size __xbrtime_asm_quiet_fence, .-__xbrtime_asm_quiet_fence
 
+
+  # __xbrtime_get_remote_alloc calling convention
+  # - a0 = base address of slot to query from
+  # - a1 = remote pe
+  .globl __xbrtime_get_remote_alloc
+  .type __xbrtime_get_remote_alloc, @function
+__xbrtime_get_remote_alloc:
+  eaddie e10, 0, a1
+  eld a0, 0(a0)
+  ret
+  .size __xbrtime_get_remote_alloc, .-__xbrtime_get_remote_alloc
+
 #-- EOF

@@ -45,7 +45,6 @@ typedef struct{
  */
 typedef struct{
   size_t    _MEMSIZE;     /*! XBRTIME_DATA: Size of the shared memory region (in bytes) */
-  size_t    _FREEBLOCKS;  /*! XBRTIME_DATA: Number of free blocks (multiples of 4k pages) */
   int       _ID;          /*! XBRTIME_DATA: Local node ID */
   int       _NPES;        /*! XBRTIME_DATA: Number of parallel elements */
   uint64_t  _START_ADDR;  /*! XBRTIME_DATA: Starting address of the shared memory region */

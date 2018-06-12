@@ -35,6 +35,9 @@
 /** @brief Unrolling factor for unrolled transfer API functons */
 #define _XBRTIME_UNROLL_FACTOR_ 4
 
+/** @brief Defines the number of memory allocation slots */
+#define _XBRTIME_MEM_SLOTS_ 2048
+
 #ifdef __cplusplus
 }
 #endif  /* extern "C" */

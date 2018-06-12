@@ -24,14 +24,17 @@ uint64_t __xbrtime_asm_get_startaddr();
 void __xbrtime_asm_fence();
 
 extern void xbrtime_close(){
+  int i = 0;
 
   if( __XBRTIME_CONFIG != NULL ){
     /* hard fence */
     __xbrtime_asm_fence();
 
     /* free all the remaining shared blocks */
-    while( __XBRTIME_CONFIG->_MMAP != NULL ){
-      xbrtime_free((void *)(__XBRTIME_CONFIG->_MMAP->start_addr));
+    for( i=0; i<_XBRTIME_MEM_SLOTS_; i++ ){
+      if( __XBRTIME_CONFIG->_MMAP[i].size != 0 ){
+        xbrtime_free((void *)(__XBRTIME_CONFIG->_MMAP[i].start_addr));
+      }
     }
 
     if( __XBRTIME_CONFIG->_MAP != NULL ){
@@ -47,9 +50,6 @@ extern int xbrtime_init(){
 
   /* vars */
   int i = 0;
-#if 0
-  uint64_t *ptr = NULL;
-#endif
 
   /* allocate the structure in the local heap */
   __XBRTIME_CONFIG = NULL;
@@ -58,7 +58,7 @@ extern int xbrtime_init(){
     return -1;
   }
 
-  __XBRTIME_CONFIG->_MMAP       = NULL;
+  __XBRTIME_CONFIG->_MMAP       = malloc(sizeof(XBRTIME_MEM_T) * _XBRTIME_MEM_SLOTS_);
   __XBRTIME_CONFIG->_ID         = __xbrtime_asm_get_id();
   __XBRTIME_CONFIG->_MEMSIZE    = __xbrtime_asm_get_memsize();
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
@@ -87,21 +87,16 @@ extern int xbrtime_init(){
     return -1;
   }
 
-  __XBRTIME_CONFIG->_FREEBLOCKS = (__XBRTIME_CONFIG->_MEMSIZE/4096);
-
-#if 0
-  ptr = (uint64_t *)(__XBRTIME_CONFIG->_START_ADDR);
-#endif
+  /* init the memory allocation slots */
+  for( i=0;i<_XBRTIME_MEM_SLOTS_; i++ ){
+    __XBRTIME_CONFIG->_MMAP[i].start_addr = 0x00ull;
+    __XBRTIME_CONFIG->_MMAP[i].size       = 0;
+  }
 
   /* init the PE mapping structure */
   for( i=0; i<__XBRTIME_CONFIG->_NPES; i++ ){
     __XBRTIME_CONFIG->_MAP[i]._LOGICAL   = i;
     __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i+1;
-#if 0
-    __XBRTIME_CONFIG->_MAP[i]._BASE      = *ptr;
-    ptr = 0x00ull;
-    ptr += 8;
-#endif
   }
   return 0;
 }

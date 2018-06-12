@@ -13,139 +13,99 @@
 
 #include "xbrtime.h"
 
+/* ------------------------------------------------- FUNCTION PROTOTYPES */
+uint64_t __xbrtime_get_remote_alloc( uint64_t slot, int pe );
+uint32_t xbrtime_decode_pe( int pe );
+void __xbrtime_asm_quiet_fence();
+
 uint64_t __xbrtime_ltor(uint64_t remote, int pe){
+  int i               = 0;
+  uint64_t base_slot  = 0x00ull;
+  uint64_t offset     = 0x00ull;
+
   if( xbrtime_mype() == pe ){
     /* return the same address block */
     return remote;
-#if 0
   }else{
-    /* TODO: perform the address translation */
-#endif
+    /* perform the address translation */
+    for( i=0; i<_XBRTIME_MEM_SLOTS_; i++ ){
+      if( (remote >= __XBRTIME_CONFIG->_MMAP[i].start_addr) &&
+          (remote < (__XBRTIME_CONFIG->_MMAP[i].start_addr+
+                     __XBRTIME_CONFIG->_MMAP[i].size)) ){
+        /* found our slot */
+        base_slot = (uint64_t)(&__XBRTIME_CONFIG->_MMAP[i].start_addr);
+
+        /* calculate the local offset */
+        offset = remote - __XBRTIME_CONFIG->_MMAP[i].start_addr;
+
+        return (__xbrtime_get_remote_alloc(base_slot,xbrtime_decode_pe(pe))
+                +offset);
+      }
+    }
   }
-  return remote;
-}
-
-uint64_t __xbrtime_find_base_addr( size_t nblocks ){
-  uint64_t tmp        = 0x00ull;
-  int success         = 0;
-  XBRTIME_MEM_T *cur  = NULL;
-  XBRTIME_MEM_T *wcur = NULL;
-
   /*
-   * walk the allocated list
-   * calculate each allocated blocks next block addr
-   * if there exists no next block that encapsulates
-   * that address, allocate it
+   * if we reach this point, there is an error in translation
+   * return 0x00ull will cause a user access violation on the
+   * memory operation and raise a segmentation fault
    *
    */
-  cur = __XBRTIME_CONFIG->_MMAP;
-  while( cur != NULL ){
-
-    /* calculate the next theoretical starting addr */
-    tmp = cur->start_addr + ((cur->nblocks+1)*4096);
-
-    /* search the list to see if there is a collision */
-    wcur = __XBRTIME_CONFIG->_MMAP;
-    while( wcur != NULL ){
-      if( (tmp >= wcur->start_addr) &&
-          (tmp < (wcur->start_addr + ((wcur->nblocks+1)*4096)) ) ){
-        /* falls within memory range: failed */
-        success = 1;
-      }
-      wcur = wcur->next;
-    }
-
-    /* if there is no collision, see if the total address space is in range */
-    if( success == 0 ){
-      return tmp;
-    }
-
-    cur = cur->next;
-  }
-
   return 0x00ull;
 }
 
 void *__xbrtime_shared_malloc( size_t sz ){
   void *ptr = NULL;
-  size_t nblocks = 0;
-  uint64_t start = 0x00ull;
-  XBRTIME_MEM_T *mem = NULL;
-  XBRTIME_MEM_T *tmp = NULL;
+  int slot  = -1;
+  int i     = 0;
+  int done  = 0;
 
-  if( (sz%4096) > 0 ){
-    nblocks = (sz/4096)+1;
-  }else{
-    nblocks = (sz/4096);
+  /* find an open slot */
+  while( (slot == -1) && (done != 1) ){
+    if( __XBRTIME_CONFIG->_MMAP[i].size == 0 ){
+      slot = i;
+      done = 1;
+    }
+    i++;
+    if( i==_XBRTIME_MEM_SLOTS_ ){
+      done = 1;
+    }
   }
 
-  if( nblocks > __XBRTIME_CONFIG->_FREEBLOCKS ){
+  /* no open slots */
+  if( slot == -1 ){
     return NULL;
   }
 
-  if( __XBRTIME_CONFIG->_MMAP == NULL ){
-    /* first allocation */
-    mem = malloc( sizeof( XBRTIME_MEM_T ) );
-    if( mem == NULL ){
-      return NULL;
-    }
-
-    mem->nblocks = nblocks;
-    mem->start_addr = __XBRTIME_CONFIG->_START_ADDR;
-    mem->prev = NULL;
-    mem->next = NULL;
-
-    __XBRTIME_CONFIG->_FREEBLOCKS = __XBRTIME_CONFIG->_FREEBLOCKS-nblocks;
-    __XBRTIME_CONFIG->_MMAP = mem;
-    ptr = (void *)(mem->start_addr);
-  }else{
-    /* find an empty block */
-    start = __xbrtime_find_base_addr(nblocks);
-    if( start == 0x00ull ){
-      return NULL;
-    }
-
-    mem = malloc( sizeof( XBRTIME_MEM_T ) );
-    if( mem == NULL ){
-      return NULL;
-    }
-
-    tmp = __XBRTIME_CONFIG->_MMAP;
-    tmp->prev = mem;
-    mem->nblocks = nblocks;
-    mem->start_addr = start;
-    mem->prev = NULL;
-    mem->next = tmp;
-    __XBRTIME_CONFIG->_FREEBLOCKS = __XBRTIME_CONFIG->_FREEBLOCKS-nblocks;
-    ptr = (void *)(mem->start_addr);
+  /* attempt to create an allocation */
+  ptr = malloc( sz );
+  if( ptr == NULL ){
+    return NULL;
   }
 
+  /* memory is good, register the block */
+  __XBRTIME_CONFIG->_MMAP[slot].size = sz;
+  __XBRTIME_CONFIG->_MMAP[slot].start_addr = (uint64_t)(ptr);
   return ptr;
 }
 
 void __xbrtime_shared_free(void *ptr){
-  XBRTIME_MEM_T *mem = NULL;
+  uint64_t mem = (uint64_t)(ptr);
+  int i = 0;
 
-  mem = __XBRTIME_CONFIG->_MMAP;
-  while( mem != NULL ){
-    if( mem->start_addr == (uint64_t)(ptr) ){
-      /* found the correct block */
-      __XBRTIME_CONFIG->_FREEBLOCKS += mem->nblocks;
-      if( mem->prev != NULL ){
-        mem->prev->next = mem->next;
-      }else{
-        /* removing the first block */
-        if( mem->next == NULL ){
-          /* last block */
-          __XBRTIME_CONFIG->_MMAP = NULL;
-        }else{
-          __XBRTIME_CONFIG->_MMAP = mem->next;
-        }
-      }
-      free( mem );
+  /*
+   * walk the allocated blocks and attempt to free
+   * the allocation
+   *
+   */
+  for( i=0; i<_XBRTIME_MEM_SLOTS_; i++ ){
+    if( (mem >= __XBRTIME_CONFIG->_MMAP[i].start_addr) &&
+        (mem < (__XBRTIME_CONFIG->_MMAP[i].start_addr+
+                __XBRTIME_CONFIG->_MMAP[i].size)) ){
+      /* found the allocation */
+      free( ptr );
+      __XBRTIME_CONFIG->_MMAP[i].start_addr = 0x00ull;
+      __XBRTIME_CONFIG->_MMAP[i].size = 0;
       return ;
     }
-    mem = mem->next;
   }
 }
 
@@ -157,13 +117,13 @@ extern void *xbrtime_malloc( size_t sz ){
     return NULL;
   }else if( __XBRTIME_CONFIG == NULL ){
     return NULL;
-  }else if( __XBRTIME_CONFIG->_FREEBLOCKS == 0 ){
-    return NULL;
   }else if( sz > __XBRTIME_CONFIG->_MEMSIZE ){
     return NULL;
   }
 
   ptr = __xbrtime_shared_malloc( sz );
+
+  __xbrtime_asm_quiet_fence();
 
   return ptr;
 }
@@ -178,4 +138,5 @@ extern void xbrtime_free( void *ptr ){
   }
 
   __xbrtime_shared_free(ptr);
+  __xbrtime_asm_quiet_fence();
 }
