@@ -86,6 +86,12 @@ extern int xbrtime_mype();
 */
 extern int xbrtime_num_pes();
 
+/*!   \fn void xbrtime_barrier()
+      \brief Performs a global barrier operation of all configured PEs
+      \return Void
+*/
+extern void xbrtime_barrier();
+
 #ifdef __cplusplus
 }
 #endif  /* extern "C" */

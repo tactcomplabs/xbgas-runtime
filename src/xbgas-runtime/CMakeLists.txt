@@ -28,6 +28,7 @@ xbrtime_ctor.c
 xbrtime_util.c
 xbrtime_api.c
 xbrtime_alloc.c
+xbrtime_barrier.c
 xbrtime_ctor_asm.s
 xbrtime_util_asm.s
 xbrtime_api_asm.s

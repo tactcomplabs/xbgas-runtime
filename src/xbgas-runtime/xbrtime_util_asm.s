@@ -73,4 +73,16 @@ __xbrtime_get_remote_alloc:
   ret
   .size __xbrtime_get_remote_alloc, .-__xbrtime_get_remote_alloc
 
+  # __xbrtime_remote_touch
+  # - a0 = base address of remote barrier variable
+  # - a1 = remote pe
+  # - a2 = sense
+  .globl __xbrtime_remote_touch
+  .type __xbrtime_remote_touch, @function
+__xbrtime_remote_touch:
+  eaddie e10, 0, a1
+  esd a2, 0(a0)
+  ret
+  .size __xbrtime_remote_touch, .-__xbrtime_remote_touch
+
 #-- EOF

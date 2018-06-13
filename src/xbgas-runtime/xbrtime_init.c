@@ -63,6 +63,8 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_MEMSIZE    = __xbrtime_asm_get_memsize();
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
+  __XBRTIME_CONFIG->_SENSE      = 0x00ull;
+  __XBRTIME_CONFIG->_BARRIER    = 0x00ull;
 
   /*
    * we deem anything less than a 4K page to be
@@ -98,6 +100,10 @@ extern int xbrtime_init(){
     __XBRTIME_CONFIG->_MAP[i]._LOGICAL   = i;
     __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i+1;
   }
+
+  /* initiate a barrier */
+  xbrtime_barrier();
+
   return 0;
 }
 

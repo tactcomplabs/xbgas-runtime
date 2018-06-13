@@ -44,6 +44,10 @@ int main( int argc, char **argv ){
     printf( "PE=%d; DOING NOTHING\n", xbrtime_mype() );
   }
 
+  /* perform a barrier */
+  printf( "PE=%d; EXECUTING BARRIER\n", xbrtime_mype() );
+  xbrtime_barrier();
+
   printf( "PE=%d; VALUE=0x%"PRIu64"\n", xbrtime_mype(), VALUE);
 
   printf( "PE=%d; xBGAS is Closing\n", xbrtime_mype() );
