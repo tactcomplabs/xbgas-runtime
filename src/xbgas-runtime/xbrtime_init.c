@@ -26,6 +26,9 @@ void __xbrtime_asm_fence();
 extern void xbrtime_close(){
   int i = 0;
 
+  /* initiate a barrier */
+  //xbrtime_barrier();
+
   if( __XBRTIME_CONFIG != NULL ){
     /* hard fence */
     __xbrtime_asm_fence();
@@ -63,8 +66,9 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_MEMSIZE    = __xbrtime_asm_get_memsize();
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
-  __XBRTIME_CONFIG->_SENSE      = 0x00ull;
-  __XBRTIME_CONFIG->_BARRIER    = 0x00ull;
+  __XBRTIME_CONFIG->_SENSE      = 0x01ull;
+  __XBRTIME_CONFIG->_BARRIER[0] = 0xfffffffffull;
+  __XBRTIME_CONFIG->_BARRIER[1] = 0xaaaaaaaaaull;
 
   /*
    * we deem anything less than a 4K page to be
@@ -102,7 +106,7 @@ extern int xbrtime_init(){
   }
 
   /* initiate a barrier */
-  xbrtime_barrier();
+  //xbrtime_barrier();
 
   return 0;
 }

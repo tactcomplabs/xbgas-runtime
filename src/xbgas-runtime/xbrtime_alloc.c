@@ -12,6 +12,7 @@
  */
 
 #include "xbrtime.h"
+#include <inttypes.h>
 
 /* ------------------------------------------------- FUNCTION PROTOTYPES */
 uint64_t __xbrtime_get_remote_alloc( uint64_t slot, int pe );
@@ -29,7 +30,8 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
     return remote;
   }else{
     /* perform the address translation */
-    printf( "PE=%d; Translating local address at pe=%d from 0x%016llx\n", xbrtime_mype(), pe, remote );
+    printf( "PE=%d; Translating local address at pe=%d from 0x%"PRIu64"\n",
+            xbrtime_mype(), pe, remote );
     for( i=0; i<_XBRTIME_MEM_SLOTS_; i++ ){
       if( (remote >= __XBRTIME_CONFIG->_MMAP[i].start_addr) &&
           (remote < (__XBRTIME_CONFIG->_MMAP[i].start_addr+
@@ -42,7 +44,8 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
 
         new_addr = (__xbrtime_get_remote_alloc(base_slot,xbrtime_decode_pe(pe))
                                     +offset);
-        printf( "PE=%d; Remote address at pe=%d is 0x%016llx\n", xbrtime_mype(), pe, new_addr );
+        printf( "PE=%d; Remote address in slot=%d at pe=%d is 0x%"PRIu64"\n",
+                i, xbrtime_mype(), pe, new_addr );
         return new_addr;
       }
     }
@@ -86,6 +89,8 @@ void *__xbrtime_shared_malloc( size_t sz ){
   }
 
   /* memory is good, register the block */
+  printf( "PE=%d; ALLOCATING MEMORY IN SLOT=%d\n",
+          xbrtime_mype(), slot );
   __XBRTIME_CONFIG->_MMAP[slot].size = sz;
   __XBRTIME_CONFIG->_MMAP[slot].start_addr = (uint64_t)(ptr);
   return ptr;
@@ -126,7 +131,6 @@ extern void *xbrtime_malloc( size_t sz ){
   }
 
   ptr = __xbrtime_shared_malloc( sz );
-
   __xbrtime_asm_quiet_fence();
 
   return ptr;

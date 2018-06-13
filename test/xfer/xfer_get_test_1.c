@@ -19,7 +19,6 @@
 int main( int argc, char **argv ){
   int rtn = 0;
   uint64_t *ptr = NULL;
-  uint64_t VALUE = 0x00ull;
   size_t sz = _XBGAS_ALLOC_SIZE_;
 
   printf( "Initializing xBGAS Runtime\n" );
@@ -29,13 +28,17 @@ int main( int argc, char **argv ){
   printf( "PE=%d; Allocating %d bytes\n", xbrtime_mype(), (int)(sz) );
   ptr = (uint64_t *)(xbrtime_malloc( sz ));
 
-  printf( "PE=%d; PTR = %p\n", xbrtime_mype(), ptr );
+  printf( "PE=%d; *PTR = 0x%"PRIu64"\n", xbrtime_mype(), (uint64_t)(ptr) );
   ptr[0] = (uint64_t)(xbrtime_mype());
+
+  /* perform a barrier */
+  printf( "PE=%d; EXECUTING BARRIER\n", xbrtime_mype() );
+  xbrtime_barrier();
 
   if( xbrtime_mype() == 0 ){
     /* perform an operation */
     printf( "PE=%d; PERFORMING OPERATION\n", xbrtime_mype() );
-    xbrtime_ulonglong_get((unsigned long long *)(&VALUE),
+    xbrtime_ulonglong_get((unsigned long long *)(ptr),
                           (unsigned long long *)(ptr),
                           1,
                           1,
@@ -48,7 +51,8 @@ int main( int argc, char **argv ){
   printf( "PE=%d; EXECUTING BARRIER\n", xbrtime_mype() );
   xbrtime_barrier();
 
-  printf( "PE=%d; VALUE=0x%"PRIu64"\n", xbrtime_mype(), VALUE);
+  printf( "PE=%d; PTR[0]=0x%"PRIu64"\n",
+          xbrtime_mype(), ptr[0]);
 
   printf( "PE=%d; xBGAS is Closing\n", xbrtime_mype() );
   xbrtime_free( ptr );

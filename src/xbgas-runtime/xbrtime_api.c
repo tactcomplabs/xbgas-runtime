@@ -12,6 +12,7 @@
  */
 
 #include "xbrtime.h"
+#include <inttypes.h>
 
 /* ------------------------------------------------- FUNCTION PROTOTYPES */
 void __xbrtime_asm_fence();
@@ -1931,7 +1932,8 @@ void xbrtime_ulonglong_get(unsigned long long *dest, const unsigned long long *s
                          epilogue_iters);
   }else{
     /* sequential execution */
-    printf( "PE=%d; xbrtime_ulonglong_get\n", xbrtime_mype() );
+    printf( "PE=%d; xbrtime_ulonglong_get from 0x%"PRIu64"\n", xbrtime_mype(),
+          __xbrtime_ltor((uint64_t)(src),pe) );
     __xbrtime_get_u8_seq(__xbrtime_ltor((uint64_t)(src),pe),
                          (uint64_t)(dest),
                          xbrtime_decode_pe(pe),
