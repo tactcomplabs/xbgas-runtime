@@ -38,19 +38,25 @@ extern void xbrtime_barrier(){
     target = xbrtime_mype()+1;
   }
 
-  printf( "PE=%d; BARRIER TARGET=%d\n", xbrtime_mype(),
+#ifdef XBGAS_DEBUG
+  printf( "XBGAS_DEBUG : PE=%d; BARRIER TARGET=%d\n", xbrtime_mype(),
           (int)(target) );
+#endif
 
   /* convert to physical pe */
   target = (uint64_t)(xbrtime_decode_pe((int)(target)));
 
   /* inform the target */
   addr = (uint64_t)(&__XBRTIME_CONFIG->_BARRIER[sense]);
-  printf( "PE=%d; TOUCHING REMOTE ADDRESS ON PHYSICAL TARGET=%d\n",
+#ifdef XBGAS_DEBUG
+  printf( "XBGAS_DEBUG : PE=%d; TOUCHING REMOTE ADDRESS ON PHYSICAL TARGET=%d\n",
           xbrtime_mype(),
           (int)(target) );
+#endif
   __xbrtime_remote_touch( addr, target, sense );
-  printf( "PE=%d; SUCCESS TOUCHING REMOTE ADDRESS\n", xbrtime_mype() );
+#ifdef XBGAS_DEBUG
+  printf( "XBGAS_DEBUG : PE=%d; SUCCESS TOUCHING REMOTE ADDRESS\n", xbrtime_mype() );
+#endif
   __xbrtime_asm_quiet_fence();
 
   /* spinwait on local value */
@@ -72,7 +78,9 @@ extern void xbrtime_barrier(){
   }else{
     __XBRTIME_CONFIG->_SENSE = 0;
   }
-  printf( "PE=%d; BARRIER COMPLETE\n", xbrtime_mype() );
+#ifdef XBGAS_DEBUG
+  printf( "XBGAS_DEBUG : PE=%d; BARRIER COMPLETE\n", xbrtime_mype() );
+#endif
 }
 
 /* EOF */
