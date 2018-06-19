@@ -30,15 +30,24 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-
+/**
+ * xbrtime_TYPE_MEMOP(TYPE *dest, TYPE *src, size_t nelems, int stride, int pe)
+ *
+ */
 
 #define XBGAS_API_DECL_PUTGET(_memop, _opname, _type)       \
+  /**                                                       \
+   * @see xbrtime_TYPE_MEMOP                                \
+   */                                                       \
   void xbrtime_##_opname##_##_memop(_type *dest,            \
                                   const _type *src,         \
                                   size_t nelems,            \
                                   int stride,               \
                                   int pe);                  \
                                                             \
+  /**                                                       \
+   * @see xbrtime_TYPE_MEMOP                                \
+   */                                                       \
   void xbrtime_##_opname##_##_memop##_nb(_type *dest,       \
                                       const _type *src,     \
                                       size_t nelems,        \
