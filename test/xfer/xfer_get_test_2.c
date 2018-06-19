@@ -1,4 +1,4 @@
-/* _XFER_TEST_2_C_
+/* _XFER_GET_TEST_2_C_
  *
  * Copyright (C) 2017-2018 Tactical Computing Laboratories, LLC
  * All Rights Reserved

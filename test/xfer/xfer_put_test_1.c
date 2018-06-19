@@ -1,4 +1,4 @@
-/* _XFER_GET_TEST_1_C_
+/* _XFER_PUT_TEST_1_C_
  *
  * Copyright (C) 2017-2018 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -38,7 +38,7 @@ int main( int argc, char **argv ){
   if( xbrtime_mype() == 0 ){
     /* perform an operation */
     printf( "PE=%d; PERFORMING OPERATION\n", xbrtime_mype() );
-    xbrtime_ulonglong_get((unsigned long long *)(ptr),
+    xbrtime_ulonglong_put((unsigned long long *)(ptr),
                           (unsigned long long *)(ptr),
                           1,
                           1,
