@@ -70,15 +70,6 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_BARRIER[0] = 0xfffffffffull;
   __XBRTIME_CONFIG->_BARRIER[1] = 0xaaaaaaaaaull;
 
-  /*
-   * we deem anything less than a 4K page to be
-   * too small for our needs
-   */
-  if( __XBRTIME_CONFIG->_MEMSIZE < 4096 ){
-    free( __XBRTIME_CONFIG );
-    return -1;
-  }
-
   /* too many total PEs */
   if( __XBRTIME_CONFIG->_NPES > __XBRTIME_MAX_PE ){
     free( __XBRTIME_CONFIG );
