@@ -27,7 +27,7 @@ extern void xbrtime_close(){
   int i = 0;
 
   /* initiate a barrier */
-  //xbrtime_barrier();
+  xbrtime_barrier();
 
   if( __XBRTIME_CONFIG != NULL ){
     /* hard fence */

@@ -81,9 +81,8 @@ via the following command line:
 $> make test
 
 NOTE: All the tests require that the "$RISCV" environment variable be set
-as was the case with the build process.  Also note that the "mpirun"
-binary (utilized in building the xBGAS-tools) must also be in the standard
-$PATH.  All the tests are currently set to run using two PE's.
+as was the case with the build process.  All the tests are currently set to
+run using four PE's.
 
 --------------------------------------------------------------------------------
 EOF
