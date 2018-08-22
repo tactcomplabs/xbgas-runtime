@@ -26,10 +26,10 @@ void __xbrtime_asm_fence();
 extern void xbrtime_close(){
   int i = 0;
 
-  /* initiate a barrier */
-  xbrtime_barrier();
-
   if( __XBRTIME_CONFIG != NULL ){
+    /* initiate a barrier */
+    xbrtime_barrier();
+
     /* hard fence */
     __xbrtime_asm_fence();
 
