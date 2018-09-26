@@ -132,8 +132,6 @@ extern void *xbrtime_malloc( size_t sz ){
     return NULL;
   }else if( __XBRTIME_CONFIG == NULL ){
     return NULL;
-  }else if( sz > __XBRTIME_CONFIG->_MEMSIZE ){
-    return NULL;
   }
 
   ptr = __xbrtime_shared_malloc( sz );
