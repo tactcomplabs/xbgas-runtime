@@ -20,7 +20,7 @@ int main( int argc, char **argv ){
   int rtn = 0;
   uint64_t *ptr = NULL;
   size_t sz = _XBGAS_ALLOC_SIZE_;
-
+	int i = 0;
   printf( "Initializing xBGAS Runtime\n" );
   rtn = xbrtime_init();
   printf( "PE=%d; xBGAS is Initialized\n", xbrtime_mype() );
@@ -51,6 +51,7 @@ int main( int argc, char **argv ){
   printf( "PE=%d; EXECUTING BARRIER\n", xbrtime_mype() );
   xbrtime_barrier();
 
+	printf(" PE=%d; entering while loop\n", xbrtime_mype());
   printf( "PE=%d; PTR[0]=0x%"PRIu64"\n",
           xbrtime_mype(), ptr[0]);
 

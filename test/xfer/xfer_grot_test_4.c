@@ -10,9 +10,11 @@
  *
  */
 
+#include <unistd.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include "xbrtime.h"
+#include <stdlib.h>
 
 #define _XBGAS_ALLOC_SIZE_ 8
 #define _XBGAS_ALLOC_NELEMS_ 512
@@ -60,7 +62,6 @@ int main( int argc, char **argv ){
   /* perform a barrier */
   printf( "PE=%d; EXECUTING BARRIER\n", xbrtime_mype() );
   xbrtime_barrier();
-
   printf( "PE=%d; PTR[0]=0x%"PRIu64"\n",
           xbrtime_mype(), ptr[0]);
 

@@ -38,6 +38,9 @@ foreach(testSrc ${TEST_SRCS})
   add_test(NAME ${testName}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin
     COMMAND mpirun -n 2 ${RISCV_ENV}/bin/spike -x512 pk ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName})
-  set_tests_properties( ${testName} PROPERTIES PASS_REGULAR_EXPRESSION "")
+  set_tests_properties( ${testName} 
+	PROPERTIES 
+		PASS_REGULAR_EXPRESSION ""
+		ENVIRONMENT "MPICH_ASYNC_PROGRESS=1")
 endforeach(testSrc)
 endif()
