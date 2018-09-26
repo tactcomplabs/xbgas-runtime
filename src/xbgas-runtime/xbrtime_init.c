@@ -67,8 +67,6 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
   __XBRTIME_CONFIG->_SENSE      = 0x01ull;
-	printf("__XBRTIME_CONFIG->_BARRIER[1] = %ld\n", __XBRTIME_CONFIG->_BARRIER[1]);
-	printf("__XBRTIME_CONFIG->_BARRIER[0] = %ld\n", __XBRTIME_CONFIG->_BARRIER[0]);
 	if(__XBRTIME_CONFIG->_BARRIER[0] != 1)
   	__XBRTIME_CONFIG->_BARRIER[0] = 0xfffffffffull;
 	if(__XBRTIME_CONFIG->_BARRIER[1] != 2)
