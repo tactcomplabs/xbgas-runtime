@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 #define _XBGAS_ALLOC_SIZE_ 8
-#define _XBGAS_ALLOC_NELEMS_ 512
+#define _XBGAS_ALLOC_NELEMS_ 1024
 
 int main( int argc, char **argv ){
   int rtn = 0;

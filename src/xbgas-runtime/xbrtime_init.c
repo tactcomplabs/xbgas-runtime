@@ -67,16 +67,18 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
   __XBRTIME_CONFIG->_SENSE      = 0x01ull;
+  __XBRTIME_CONFIG->_SENSE_FULL = 0x01ull;
 	if(__XBRTIME_CONFIG->_BARRIER[0] != 1)
   	__XBRTIME_CONFIG->_BARRIER[0] = 0xfffffffffull;
 	if(__XBRTIME_CONFIG->_BARRIER[1] != 2)
   		__XBRTIME_CONFIG->_BARRIER[1] = 0xaaaaaaaaaull;
-
   /* too many total PEs */
   if( __XBRTIME_CONFIG->_NPES > __XBRTIME_MAX_PE ){
     free( __XBRTIME_CONFIG );
     return -1;
   }
+	for( i = 0; i< __XBRTIME_MAX_PE*2; i ++)
+		__XBRTIME_CONFIG->_BARRIER_FULL[i] = 0;
 
   /* init the pe mapping block */
   __XBRTIME_CONFIG->_MAP = malloc( sizeof( XBRTIME_PE_MAP ) *
@@ -99,7 +101,6 @@ extern int xbrtime_init(){
   }
 
   /* initiate a barrier */
-  //xbrtime_barrier();
 
   return 0;
 }

@@ -10,7 +10,7 @@
  * of the distribution.
  *
  */
-
+//#define MAX_PE 12
 #ifndef _XBRTIME_TYPES_H_
 #define _XBRTIME_TYPES_H_
 
@@ -37,8 +37,8 @@ typedef struct{
 
 /*! \struct XBRTIME_DATA
  *  \brief Defines the internal xbrtime configuration data
- *
- * Defines the internal xbrtime configuration data that includes
+ me_mype()t
+* Defines the internal xbrtime configuration data that includes
  * the respective paramters of the parallel environment and the
  * contiguous memory regions
  *
@@ -49,7 +49,9 @@ typedef struct{
   int       _NPES;        /*! XBRTIME_DATA: Number of parallel elements */
   uint64_t  _START_ADDR;  /*! XBRTIME_DATA: Starting address of the shared memory region */
   uint64_t  _SENSE;       /*! XBRTIME_DATA: Sense of the barrier sync stage */
+  uint64_t  _SENSE_FULL;       /*! XBRTIME_DATA: Sense of the barrier sync stage */
   uint64_t  _BARRIER[2];  /*! XBRTIME_DATA: Barrier value */
+  uint64_t  _BARRIER_FULL[__XBRTIME_MAX_PE*2]; /*! XBRTIME_DATA: Full barrier*/
   XBRTIME_MEM_T *_MMAP;   /*! XBRTIME_DATA: Allocated memory map */
   XBRTIME_PE_MAP *_MAP;   /*! XBRTIME_DATA: PE Mappings */
 }XBRTIME_DATA;
