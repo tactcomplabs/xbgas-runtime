@@ -85,4 +85,3 @@ __xbrtime_remote_touch:
   ret
   .size __xbrtime_remote_touch, .-__xbrtime_remote_touch
 
-#-- EOF
