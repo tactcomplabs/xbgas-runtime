@@ -54,44 +54,60 @@
                                       int stride,           \
                                       int pe);
 
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, float, float)
   XBGAS_API_DECL_PUTGET(put, double, double)
   XBGAS_API_DECL_PUTGET(put, longdouble, long double)
+#endif
   XBGAS_API_DECL_PUTGET(put, schar, signed char)
   XBGAS_API_DECL_PUTGET(put, char, char)
   XBGAS_API_DECL_PUTGET(put, short, short)
   XBGAS_API_DECL_PUTGET(put, int, int)
   XBGAS_API_DECL_PUTGET(put, long, long)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, longlong, long long)
+#endif
   XBGAS_API_DECL_PUTGET(put, uchar, unsigned char)
   XBGAS_API_DECL_PUTGET(put, ushort, unsigned short)
   XBGAS_API_DECL_PUTGET(put, uint, unsigned int)
   XBGAS_API_DECL_PUTGET(put, ulong, unsigned long)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, ulonglong, unsigned long long)
+#endif
   XBGAS_API_DECL_PUTGET(put, int8, int8_t)
   XBGAS_API_DECL_PUTGET(put, int16, int16_t)
   XBGAS_API_DECL_PUTGET(put, int32, int32_t)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, int64, int64_t)
+#endif
   XBGAS_API_DECL_PUTGET(put, uint8, uint8_t)
   XBGAS_API_DECL_PUTGET(put, uint16, uint16_t)
   XBGAS_API_DECL_PUTGET(put, uint32, uint32_t)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, uint64, uint64_t)
+#endif
   XBGAS_API_DECL_PUTGET(put, size, size_t)
   XBGAS_API_DECL_PUTGET(put, ptrdiff, ptrdiff_t)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(get, float, float)
   XBGAS_API_DECL_PUTGET(get, double, double)
   XBGAS_API_DECL_PUTGET(get, longdouble, long double)
+#endif
   XBGAS_API_DECL_PUTGET(get, schar, signed char)
   XBGAS_API_DECL_PUTGET(get, char, char)
   XBGAS_API_DECL_PUTGET(get, short, short)
   XBGAS_API_DECL_PUTGET(get, int, int)
   XBGAS_API_DECL_PUTGET(get, long, long)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(get, longlong, long long)
+#endif
   XBGAS_API_DECL_PUTGET(get, uchar, unsigned char)
   XBGAS_API_DECL_PUTGET(get, ushort, unsigned short)
   XBGAS_API_DECL_PUTGET(get, uint, unsigned int)
   XBGAS_API_DECL_PUTGET(get, ulong, unsigned long)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(get, ulonglong, unsigned long long)
+#endif
   XBGAS_API_DECL_PUTGET(get, int8, int8_t)
   XBGAS_API_DECL_PUTGET(get, int16, int16_t)
   XBGAS_API_DECL_PUTGET(get, int32, int32_t)
@@ -99,7 +115,9 @@
   XBGAS_API_DECL_PUTGET(get, uint8, uint8_t)
   XBGAS_API_DECL_PUTGET(get, uint16, uint16_t)
   XBGAS_API_DECL_PUTGET(get, uint32, uint32_t)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(get, uint64, uint64_t)
+#endif
   XBGAS_API_DECL_PUTGET(get, size, size_t)
   XBGAS_API_DECL_PUTGET(get, ptrdiff, ptrdiff_t)
 #undef XBGAS_API_DECL_PUTGET

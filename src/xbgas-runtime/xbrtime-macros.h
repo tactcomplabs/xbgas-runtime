@@ -27,6 +27,14 @@
 #define extern "C" {
 #endif
 
+#if __riscv_xlen == 64
+/** @brief Standard addressing mode */
+#define _XBRTIME_XLEN_ uint64_t
+#else
+/** @brief Standard addressing mode */
+#define _XBRTIME_XLEN_ uint32_t
+#endif
+
 #ifndef _XBRTIME_MIN_UNR_THRESHOLD_
 /** @brief Minimum transfer unrolling (to hide latency) */
 #define _XBRTIME_MIN_UNR_THRESHOLD_ 8

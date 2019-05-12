@@ -15,15 +15,15 @@
 #include <inttypes.h>
 
 /* ------------------------------------------------- FUNCTION PROTOTYPES */
-uint64_t __xbrtime_get_remote_alloc( uint64_t slot, int pe );
+_XBRTIME_XLEN_ __xbrtime_get_remote_alloc( _XBRTIME_XLEN_ slot, int pe );
 uint32_t xbrtime_decode_pe( int pe );
 void __xbrtime_asm_quiet_fence();
 
-uint64_t __xbrtime_ltor(uint64_t remote, int pe){
-  int i               = 0;
-  uint64_t base_slot  = 0x00ull;
-  uint64_t offset     = 0x00ull;
-  uint64_t new_addr   = 0x00ull;
+_XBRTIME_XLEN_ __xbrtime_ltor(uint64_t remote, int pe){
+  int i                     = 0;
+  _XBRTIME_XLEN_ base_slot  = 0x00
+  _XBRTIME_XLEN_ offset     = 0x00;
+  _XBRTIME_XLEN_ new_addr   = 0x00;
 
   if( xbrtime_mype() == pe ){
     /* return the same address block */
@@ -31,15 +31,20 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
   }else{
     /* perform the address translation */
 #ifdef XBGAS_DEBUG
+  #if __riscv_xlen == 64
     printf( "XBGAS_DEBUG : PE=%d; Translating local address at pe=%d from 0x%"PRIu64"\n",
             xbrtime_mype(), pe, remote );
+  #else
+    printf( "XBGAS_DEBUG : PE=%d; Translating local address at pe=%d from 0x%"PRIu32"\n",
+            xbrtime_mype(), pe, remote );
+  #endif
 #endif
     for( i=0; i<_XBRTIME_MEM_SLOTS_; i++ ){
       if( (remote >= __XBRTIME_CONFIG->_MMAP[i].start_addr) &&
           (remote < (__XBRTIME_CONFIG->_MMAP[i].start_addr+
                      __XBRTIME_CONFIG->_MMAP[i].size)) ){
         /* found our slot */
-        base_slot = (uint64_t)(&__XBRTIME_CONFIG->_MMAP[i].start_addr);
+        base_slot = (_XBRTIME_XLEN_)(&__XBRTIME_CONFIG->_MMAP[i].start_addr);
 
         /* calculate the local offset */
         offset = remote - __XBRTIME_CONFIG->_MMAP[i].start_addr;
@@ -47,8 +52,13 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
         new_addr = (__xbrtime_get_remote_alloc(base_slot,xbrtime_decode_pe(pe))
                                     +offset);
 #ifdef XBGAS_DEBUG
+  #if __riscv_xlen == 64
         printf( "XBGAS_DEBUG : PE=%d; Remote address in slot=%d at pe=%d is 0x%"PRIu64"\n",
                 i, xbrtime_mype(), pe, new_addr );
+  #else
+        printf( "XBGAS_DEBUG : PE=%d; Remote address in slot=%d at pe=%d is 0x%"PRIu32"\n",
+                i, xbrtime_mype(), pe, new_addr );
+  #endif
 #endif
         return new_addr;
       }
@@ -60,7 +70,7 @@ uint64_t __xbrtime_ltor(uint64_t remote, int pe){
    * memory operation and raise a segmentation fault
    *
    */
-  return 0x00ull;
+  return 0x00;
 }
 
 void *__xbrtime_shared_malloc( size_t sz ){
@@ -98,12 +108,12 @@ void *__xbrtime_shared_malloc( size_t sz ){
           xbrtime_mype(), slot );
 #endif
   __XBRTIME_CONFIG->_MMAP[slot].size = sz;
-  __XBRTIME_CONFIG->_MMAP[slot].start_addr = (uint64_t)(ptr);
+  __XBRTIME_CONFIG->_MMAP[slot].start_addr = (_XBRTIME_XLEN_)(ptr);
   return ptr;
 }
 
 void __xbrtime_shared_free(void *ptr){
-  uint64_t mem = (uint64_t)(ptr);
+  _XBRTIME_XLEN_ mem = (_XBRTIME_XLEN_)(ptr);
   int i = 0;
 
   /*
@@ -117,7 +127,7 @@ void __xbrtime_shared_free(void *ptr){
                 __XBRTIME_CONFIG->_MMAP[i].size)) ){
       /* found the allocation */
       free( ptr );
-      __XBRTIME_CONFIG->_MMAP[i].start_addr = 0x00ull;
+      __XBRTIME_CONFIG->_MMAP[i].start_addr = 0x00;
       __XBRTIME_CONFIG->_MMAP[i].size = 0;
       return ;
     }

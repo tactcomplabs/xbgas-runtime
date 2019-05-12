@@ -16,14 +16,14 @@
 /* ------------------------------------------------- FUNCTION PROTOTYPES */
 void __xbrtime_asm_fence();
 void __xbrtime_asm_quiet_fence();
-void __xbrtime_remote_touch( uint64_t addr, uint64_t target, uint64_t sense );
+void __xbrtime_remote_touch( _XBRTIME_XLEN_ addr, _XBRTIME_XLEN_ target, _XBRTIME_XLEN_ sense );
 uint32_t xbrtime_decode_pe( int pe );
 
 extern void xbrtime_barrier(){
-  volatile uint64_t sense = __XBRTIME_CONFIG->_SENSE;
-  volatile uint64_t tmp = 0x00ull;
-  uint64_t target = 0x00ull;
-  uint64_t addr = 0x00ull;
+  volatile _XBRTIME_XLEN_ sense = __XBRTIME_CONFIG->_SENSE;
+  volatile _XBRTIME_XLEN_ tmp = 0x00ull;
+  _XBRTIME_XLEN_ target = 0x00;
+  _XBRTIME_XLEN_ addr = 0x00;
 
   /* sanity check */
   if( xbrtime_num_pes() == 1 ){
@@ -46,10 +46,10 @@ extern void xbrtime_barrier(){
 #endif
 
   /* convert to physical pe */
-  target = (uint64_t)(xbrtime_decode_pe((int)(target)));
+  target = (_XBRTIME_XLEN_)(xbrtime_decode_pe((int)(target)));
 
   /* inform the target */
-  addr = (uint64_t)(&__XBRTIME_CONFIG->_BARRIER[sense]);
+  addr = (_XBRTIME_XLEN_)(&__XBRTIME_CONFIG->_BARRIER[sense]);
 #ifdef XBGAS_DEBUG
   printf( "XBGAS_DEBUG : PE=%d; TOUCHING REMOTE ADDRESS ON PHYSICAL TARGET=%d\n",
           xbrtime_mype(),

@@ -26,10 +26,6 @@
 #error XBGAS-RUNTIME IS ONLY SUPPORTED UNDER RISCV
 #endif
 
-#if (__riscv_xlen != 64 )
-#error XBGAS-RUNTIME ONLY SUPPORTS 64 BIT COMPILATION
-#endif
-
 #ifdef __cplusplus
 }
 #endif  /* extern "C" */

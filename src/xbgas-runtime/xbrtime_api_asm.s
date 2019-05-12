@@ -248,6 +248,7 @@ __xbrtime_get_u4_unr:
 
   #---------------------------------------------------
 
+#if __riscv_xlen == 64
   .global __xbrtime_get_u8_seq
   .type __xbrtime_get_u8_seq, @function
 __xbrtime_get_u8_seq:
@@ -312,6 +313,7 @@ __xbrtime_get_u8_unr:
 .get_u8_unr_eject:
   ret
   .size __xbrtime_get_u8_unr, .-__xbrtime_get_u8_unr
+#endif
 
   #---------------------------------------------------
 
@@ -515,7 +517,7 @@ __xbrtime_get_s4_unr:
   .size __xbrtime_get_s4_unr, .-__xbrtime_get_s4_unr
 
   #---------------------------------------------------
-
+#if __riscv_xlen == 64
   .global __xbrtime_get_s8_seq
   .type __xbrtime_get_s8_seq, @function
 __xbrtime_get_s8_seq:
@@ -580,6 +582,7 @@ __xbrtime_get_s8_unr:
 .get_s8_unr_eject:
   ret
   .size __xbrtime_get_s8_unr, .-__xbrtime_get_s8_unr
+#endif
 
   #---------------------------------------------------
 
@@ -783,7 +786,7 @@ __xbrtime_put_u4_unr:
   .size __xbrtime_put_u4_unr, .-__xbrtime_put_u4_unr
 
   #---------------------------------------------------
-
+#if __riscv_xlen == 64
   .global __xbrtime_put_u8_seq
   .type __xbrtime_put_u8_seq, @function
 __xbrtime_put_u8_seq:
@@ -848,7 +851,7 @@ __xbrtime_put_u8_unr:
 .put_u8_unr_eject:
   ret
   .size __xbrtime_put_u8_unr, .-__xbrtime_put_u8_unr
-
+#endif
   #---------------------------------------------------
 
   .global __xbrtime_put_s1_seq
@@ -1051,7 +1054,7 @@ __xbrtime_put_s4_unr:
   .size __xbrtime_put_s4_unr, .-__xbrtime_put_s4_unr
 
   #---------------------------------------------------
-
+#if __riscv_xlen == 64
   .global __xbrtime_put_s8_seq
   .type __xbrtime_put_s8_seq, @function
 __xbrtime_put_s8_seq:
@@ -1116,5 +1119,5 @@ __xbrtime_put_s8_unr:
 .put_s8_unr_eject:
   ret
   .size __xbrtime_put_s8_unr, .-__xbrtime_put_s8_unr
-
+#endif
 #-- EOF

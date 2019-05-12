@@ -18,9 +18,9 @@ extern int xbrtime_addr_accessible( const void *addr, int pe ){
     return 0;
   }
 
-  if( ((uint64_t)(addr) >
+  if( ((_XBRTIME_XLEN_)(addr) >
       (__XBRTIME_CONFIG->_START_ADDR+__XBRTIME_CONFIG->_MEMSIZE)) ||
-      ((uint64_t)(addr) < (__XBRTIME_CONFIG->_START_ADDR)) ){
+      ((_XBRTIME_XLEN_)(addr) < (__XBRTIME_CONFIG->_START_ADDR)) ){
     return 0;
   }
 

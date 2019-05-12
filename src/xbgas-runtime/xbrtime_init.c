@@ -20,7 +20,7 @@ XBRTIME_DATA *__XBRTIME_CONFIG;
 size_t __xbrtime_asm_get_memsize();
 int __xbrtime_asm_get_id();
 int __xbrtime_asm_get_npes();
-uint64_t __xbrtime_asm_get_startaddr();
+_XBRTIME_XLEN_ __xbrtime_asm_get_startaddr();
 void __xbrtime_asm_fence();
 
 extern void xbrtime_close(){

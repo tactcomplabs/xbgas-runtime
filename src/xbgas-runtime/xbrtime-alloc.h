@@ -19,9 +19,10 @@
 #endif
 
 #include <stdlib.h>
+#include "xbrtime-macros.h"
 
 typedef struct _XBRTIME_MEM_T{
-  uint64_t start_addr;
+  _XBRTIME_XLEN_ start_addr;
   size_t size;
 }XBRTIME_MEM_T;
 
