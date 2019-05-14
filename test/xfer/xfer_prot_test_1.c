@@ -55,6 +55,7 @@ int main( int argc, char **argv ){
   /* perform a barrier */
   printf( "PE=%d; EXECUTING BARRIER\n", xbrtime_mype() );
   xbrtime_barrier();
+  //xbrtime_barrier_full();
 
   printf( "PE=%d; PTR[0]=0x%"PRIu64"\n",
           xbrtime_mype(), ptr[0]);
