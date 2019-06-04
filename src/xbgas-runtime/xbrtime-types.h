@@ -37,8 +37,7 @@ typedef struct{
 
 /*! \struct XBRTIME_DATA
  *  \brief Defines the internal xbrtime configuration data
- me_mype()t
-* Defines the internal xbrtime configuration data that includes
+ * Defines the internal xbrtime configuration data that includes
  * the respective paramters of the parallel environment and the
  * contiguous memory regions
  *
