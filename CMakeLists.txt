@@ -43,13 +43,13 @@ else()
   message(FATAL_ERROR "RISCV environment variable is not set.")
 endif()
 
-if(XBGAS_RV32)
-  set(CMAKE_C_COMPILER "${RISCV_ENV}/bin/riscv32-unknown-elf-gcc")
-  set(CMAKE_ASM_COMPILER "${RISCV_ENV}/bin/riscv32-unknown-elf-gcc")
-else()
-  set(CMAKE_C_COMPILER "${RISCV_ENV}/bin/riscv64-unknown-elf-gcc")
-  set(CMAKE_ASM_COMPILER "${RISCV_ENV}/bin/riscv64-unknown-elf-gcc")
-endif()
+# if(XBGAS_RV32)
+set(CMAKE_C_COMPILER "${RISCV_ENV}/bin/riscv32-unknown-elf-gcc")
+set(CMAKE_ASM_COMPILER "${RISCV_ENV}/bin/riscv32-unknown-elf-gcc")
+# else()
+#   set(CMAKE_C_COMPILER "${RISCV_ENV}/bin/riscv64-unknown-elf-gcc")
+#   set(CMAKE_ASM_COMPILER "${RISCV_ENV}/bin/riscv64-unknown-elf-gcc")
+# endif()
 
 #------------------------------------------------------------------------
 #-- DOCUMENTATION
@@ -79,14 +79,14 @@ endif()
 #-- TESTING
 #------------------------------------------------------------------------
 # Enable testing
-enable_testing()
+# enable_testing()
 
 #------------------------------------------------------------------------
 #-- SUBDIRECTORIES
 #------------------------------------------------------------------------
 # Add our subdirectories
 add_subdirectory( src )
-add_subdirectory( test )
+# add_subdirectory( test )
 
 
 #-- EOF

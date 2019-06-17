@@ -21,7 +21,7 @@ void __xbrtime_asm_quiet_fence();
 
 _XBRTIME_XLEN_ __xbrtime_ltor(uint64_t remote, int pe){
   int i                     = 0;
-  _XBRTIME_XLEN_ base_slot  = 0x00
+  _XBRTIME_XLEN_ base_slot  = 0x00;
   _XBRTIME_XLEN_ offset     = 0x00;
   _XBRTIME_XLEN_ new_addr   = 0x00;
 
