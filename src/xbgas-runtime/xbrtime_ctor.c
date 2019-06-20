@@ -13,7 +13,7 @@
 
 #include "xbrtime.h"
 //#define INIT_ADDR 0xBB00000000000000ull
-#define END_ADDR 0xAA00000000000000ull
+//#define END_ADDR 0xAA00000000000000ull
 
 volatile uint64_t *barrier;
 
@@ -34,8 +34,8 @@ __attribute__((constructor)) void __xbrtime_ctor(){
 }
 __attribute__((destructor)) void __xbrtime_dtor(){
   /* free_barrier */
-	uint64_t end = 0;
-	*((uint64_t *)END_ADDR) = end;
+	//uint64_t end = 0;
+	//*((uint64_t *)END_ADDR) = end;
 	//if(end || *((uint64_t *)END_ADDR))
 		//end = 1;
   free ((void*)barrier); 	
