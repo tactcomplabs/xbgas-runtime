@@ -13,7 +13,7 @@
 
 #include "xbrtime.h"
 //#define INIT_ADDR 0xBB00000000000000ull
-//#define END_ADDR 0xAA00000000000000ull
+#define END_ADDR 0xAA00000000000000ull
 
 volatile uint64_t *barrier;
 
@@ -24,7 +24,8 @@ void __xbrtime_ctor_reg_reset();
 __attribute__((constructor)) void __xbrtime_ctor(){
   /* initialize the unnecessary registers */
   __xbrtime_ctor_reg_reset();
-  barrier = malloc(sizeof(uint64_t)*2);	
+	// As max PE = 1024, at most 10 rounds are needed in the synchronizatino  
+  barrier = malloc(sizeof(uint64_t)*2*10);	
 //	printf("CTOR: Init\n");
 	//int init = 0;
 //	*((uint64_t *)INIT_ADDR) = init;
@@ -34,8 +35,8 @@ __attribute__((constructor)) void __xbrtime_ctor(){
 }
 __attribute__((destructor)) void __xbrtime_dtor(){
   /* free_barrier */
-	//uint64_t end = 0;
-	//*((uint64_t *)END_ADDR) = end;
+	uint64_t end = 0;
+	*((uint64_t *)END_ADDR) = end;
 	//if(end || *((uint64_t *)END_ADDR))
 		//end = 1;
   free ((void*)barrier); 	
