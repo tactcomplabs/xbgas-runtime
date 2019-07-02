@@ -17,7 +17,6 @@
 
 
 
-//uint64_t iter = 1;
 /* ------------------------------------------------- FUNCTION PROTOTYPES */
 void __xbrtime_asm_fence();
 void __xbrtime_asm_quiet_fence();
@@ -110,90 +109,5 @@ extern void xbrtime_barrier(){
 #endif
 }
 
-extern void xbrtime_barrier_full(){
-  volatile uint64_t sense = __XBRTIME_CONFIG->_SENSE_FULL;
-  volatile uint64_t tmp = 0x00ull;
-  uint64_t target = 0x00ull;
-  uint64_t addr = 0x00ull;
-	int mype = 0;
-	int i    = 0;
-	volatile int flag = 1;
-	int size = 0;
-	
-  /* sanity check */
-	size = xbrtime_num_pes();
-  if( size == 1 ){
-    return ;
-  }
-	mype = xbrtime_mype();
-  /* force a heavy fence */
-  __xbrtime_asm_fence();
-#ifdef XBGAS_DEBUG
-	printf("XBGAS_DEBUG:: PE = %d, sense = %ld, complete __xbrtime_asm_fence()\n",xbrtime_mype(), sense);
-#endif
-
-	if(mype != 0){
-		//printf("XBGAS_DEBUG:: PE = %d starts the barrier, sense = %ld, BARRIER_FULL[0]= %lu\n",xbrtime_mype(), sense,  __XBRTIME_CONFIG->_BARRIER_FULL[0+sense*size]);
-    target = 0;
-  	target = (uint64_t)(xbrtime_decode_pe((int)(target)));
-  	addr = (uint64_t)(&__XBRTIME_CONFIG->_BARRIER_FULL[mype + sense*size]);
- 		__xbrtime_remote_touch( addr, target, sense+1 );
-  	__xbrtime_asm_quiet_fence();
-  	/* spinwait on local value */
-  	tmp = __sync_fetch_and_add(&__XBRTIME_CONFIG->_BARRIER_FULL[0 + sense*size],0);
-  	while( tmp != sense+1 ){
-    	tmp = __sync_fetch_and_add(&__XBRTIME_CONFIG->_BARRIER_FULL[0 + sense*size],0);
-			//	printf("PE = %d, BARRIER_FULL[%ld] = %ld\n",mype, sense*size, __XBRTIME_CONFIG->_BARRIER_FULL[0 + sense*size]);
-  		__xbrtime_remote_touch( addr, target,  sense+1 );
-  		__xbrtime_asm_quiet_fence();
-  	}
-		//reset the local barrier var
-		//printf("XBGAS_DEBUG:: PE = %d finishes the second stage of the barrier, __XBRTIME_CONFIG->_BARRIER_FULL[0]= %lu\n",xbrtime_mype(), __XBRTIME_CONFIG->_BARRIER_FULL[0+sense*size]);
-		//__XBRTIME_CONFIG->_BARRIER_FULL[0 + sense*size] = 0;
-	}
-	else{  // PE0
-		//printf("XBGAS_DEBUG:: PE = %d starts the barrier, sense = %ld\n",xbrtime_mype(), sense);
-  	addr = (uint64_t)(&__XBRTIME_CONFIG->_BARRIER_FULL[0 + sense*size]);
-		// spinlock until all the rest PEs touches their barrier
-		while(flag){
-			flag 	= 0;
-			tmp 	= 0;
-			for(i = 1; i < xbrtime_num_pes(); i++){
-  			tmp = __sync_fetch_and_add(&__XBRTIME_CONFIG->_BARRIER_FULL[i + sense*size],0);
-		//		printf("PE = %d, BARRIER_FULL[%ld] = %ld\n",mype, i + sense*size, __XBRTIME_CONFIG->_BARRIER_FULL[i + sense*size]);
-				if(tmp != sense + 1)	
-					flag = 1;
-			}
-		}
-		flag = 2;
-		while(flag){
-		for(i = 1; i < xbrtime_num_pes(); i++ ){		
-			// rest local barrier var
-			target = (uint64_t)(xbrtime_decode_pe((int)(i)));
-			//printf("PE = %d, touch target = %ld\n",mype, target);
-			__xbrtime_remote_touch( addr, target, sense + 1 );	
-  		__xbrtime_asm_quiet_fence();
-		}
-		flag--;
-		}
-	//	printf("XBGAS_DEBUG:: PE = %d finishes the second stage of the barrier\n",xbrtime_mype());
-	}
-
-
-  /* switch the sense */
-	for(i = 0; i < xbrtime_num_pes()*2; i++ )
-			//__XBRTIME_CONFIG->_BARRIER_FULL[i] = 0xdeadbeeful;
-  //__XBRTIME_CONFIG->_BARRIER_FULL[0] = 0xdeadbeefull;
-  if( sense == 0 ){
-    __XBRTIME_CONFIG->_SENSE_FULL = 1;
-  }else{
-    __XBRTIME_CONFIG->_SENSE_FULL = 0;
-  }
-
-
-#ifdef XBGAS_DEBUG
-  printf( "XBGAS_DEBUG : PE=%d; FULL BARRIER COMPLETE\n", xbrtime_mype() );
-#endif
-}
 
 /* EOF */
