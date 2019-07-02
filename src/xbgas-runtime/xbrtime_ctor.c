@@ -24,7 +24,7 @@ void __xbrtime_ctor_reg_reset();
 __attribute__((constructor)) void __xbrtime_ctor(){
   /* initialize the unnecessary registers */
   __xbrtime_ctor_reg_reset();
-  barrier = malloc(sizeof(uint64_t)*2);	
+  barrier = malloc(sizeof(uint64_t)*2*10);	
 //	printf("CTOR: Init\n");
 	//int init = 0;
 //	*((uint64_t *)INIT_ADDR) = init;

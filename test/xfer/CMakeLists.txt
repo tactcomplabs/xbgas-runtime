@@ -28,7 +28,7 @@ foreach(testSrc ${TEST_SRCS})
   set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
   # Add linker deps
-  target_link_libraries(${testName} xbrtime)
+  target_link_libraries(${testName} xbrtime m)
 
   # Drop the exe's in a separate directory
   set_target_properties(${testName} PROPERTIES

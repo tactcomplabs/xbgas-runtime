@@ -18,9 +18,7 @@
 #define extern "C" {
 #endif
 
-#define INIT_ADDR 0xBB00000000000000ull
 
-void temp_barrier();
 
  /*!   \fn void xbrtime_TYPENAME_broadcast( TYPE *dest, const TYPE *src, size_t nelems, int stride, int root )
        \brief Broadcasts one or more values of type TYPE from the root to all PEs

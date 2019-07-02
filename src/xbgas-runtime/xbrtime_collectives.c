@@ -37,7 +37,7 @@
                  xbrtime_##_typename##_put(dest, src, nelems, stride, r_partner);                           \
              }                                                                                              \
          }                                                                                                  \
-         temp_barrier();                                                                                    \
+         xbrtime_barrier();                                                                                    \
     }                                                                                                       \
  }
 
@@ -86,7 +86,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
     }                                                                                                             \
                                                                                                                   \
     /* Ensure accumulate buffer is ready */                                                                       \
-    temp_barrier();                                                                                               \
+    xbrtime_barrier();                                                                                               \
                                                                                                                   \
     /* Perform communication if PE active at stage i and has valid partner */                                     \
     for(i = 0; i < numpes_log; i++)                                                                               \
@@ -106,7 +106,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
                 }                                                                                                 \
             }                                                                                                     \
         }                                                                                                         \
-        temp_barrier();                                                                                           \
+        xbrtime_barrier();                                                                                           \
     }                                                                                                             \
                                                                                                                   \
     /* Copy data to destination on root*/                                                                         \
@@ -266,7 +266,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
     }                                                                                                             \
                                                                                                                   \
     /* Ensure accumulate buffer is ready */                                                                       \
-    temp_barrier();                                                                                               \
+    xbrtime_barrier();                                                                                               \
                                                                                                                   \
     /* Perform communication if PE active at stage i and has valid partner */                                     \
     for(i = 0; i < numpes_log; i++)                                                                               \
@@ -286,7 +286,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
                 }                                                                                                 \
             }                                                                                                     \
         }                                                                                                         \
-        temp_barrier();                                                                                           \
+        xbrtime_barrier();                                                                                           \
     }                                                                                                             \
                                                                                                                   \
     /* Copy data to destination on root*/                                                                         \
@@ -388,7 +388,7 @@ void xbrtime_##_typename##_scatter(_type *dest, const _type *src, int *pe_msg_sz
     }                                                                                                                               \
                                                                                                                                     \
     /* Ensure all PEs are ready for communication */                                                                                \
-    temp_barrier();                                                                                                                 \
+    xbrtime_barrier();                                                                                                                 \
                                                                                                                                     \
     /* Perform communication if PE active at stage i and has valid partner */                                                       \
     for(i = numpes_log-1; i >= 0; i--)                                                                                              \
@@ -411,7 +411,7 @@ void xbrtime_##_typename##_scatter(_type *dest, const _type *src, int *pe_msg_sz
                 xbrtime_##_typename##_put(&temp[(adj_disp[v_partner])], &temp[(adj_disp[v_partner])], iter_msg_size, 1, r_partner); \
             }                                                                                                                       \
         }                                                                                                                           \
-        temp_barrier();                                                                                                             \
+        xbrtime_barrier();                                                                                                             \
    }                                                                                                                                \
                                                                                                                                     \
    /* Copy data to destination */                                                                                                   \
@@ -475,7 +475,7 @@ void xbrtime_##_typename##_gather(_type *dest, const _type *src, int *pe_msg_sz,
     }                                                                                                                                 \
                                                                                                                                       \
     /* Ensure all PEs are ready for communication */                                                                                  \
-    temp_barrier();                                                                                                                   \
+    xbrtime_barrier();                                                                                                                   \
                                                                                                                                       \
     /* Perform communication if PE active at stage i and has valid partner */                                                         \
     for(i = 0; i < numpes_log; i++)                                                                                                   \
@@ -498,7 +498,7 @@ void xbrtime_##_typename##_gather(_type *dest, const _type *src, int *pe_msg_sz,
                 xbrtime_##_typename##_get(&temp[(adj_disp[v_partner])], &temp[(adj_disp[v_partner])], iter_msg_size, 1, r_partner);   \
             }                                                                                                                         \
         }                                                                                                                             \
-        temp_barrier();                                                                                                               \
+        xbrtime_barrier();                                                                                                               \
    }                                                                                                                                  \
                                                                                                                                       \
    /* Copy data ordered by rpe to destination on root*/                                                                               \
@@ -555,7 +555,7 @@ void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_strid
         src_buff[i] = src[i * src_stride];                                                                                  \
     }                                                                                                                       \
                                                                                                                             \
-    temp_barrier();                                                                                                         \
+    xbrtime_barrier();                                                                                                         \
                                                                                                                             \
     /* Perform put to dest_buff of each PE */                                                                               \
     for(i = 0; i < numpes; i++)                                                                                             \
@@ -563,7 +563,7 @@ void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_strid
         xbrtime_##_typename##_put(&dest_buff[my_rpe*nelems], &src_buff[i*nelems], nelems, 1, i);                            \
     }                                                                                                                       \
                                                                                                                             \
-    temp_barrier();                                                                                                         \
+    xbrtime_barrier();                                                                                                         \
                                                                                                                             \
     /* Copy to dest with stride */                                                                                          \
     for(i = 0; i < total_elems; i++)                                                                                        \
@@ -609,8 +609,3 @@ void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_strid
 #undef XBGAS_GATHER
 #undef XBGAS_ALLTOALL
 
-void temp_barrier()
-{
-	int init = 1;
-	*((uint64_t *)INIT_ADDR) = init;
-}
