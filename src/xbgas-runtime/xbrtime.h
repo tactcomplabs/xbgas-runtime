@@ -96,11 +96,6 @@ extern int xbrtime_num_pes();
 extern void xbrtime_barrier();
 
 
-/*!   \fn void xbrtime_barrier_full()
-      \brief Performs a heavy global barrier, used only at init and end.
-      \return Void
-*/
-extern void xbrtime_barrier_full();
 
 #ifdef __cplusplus
 }
