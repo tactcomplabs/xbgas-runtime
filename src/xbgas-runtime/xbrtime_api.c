@@ -111,7 +111,6 @@ _XBRTIME_XLEN_ __xbrtime_ltor(_XBRTIME_XLEN_ remote,int pe);
 
 
 
-#if __riscv_xlen == 64
 void xbrtime_float_put(float *dest, const float *src,
                      size_t nelems, int stride, int pe){
   uint32_t loop_iters     = 0;
@@ -161,6 +160,7 @@ void xbrtime_float_put_nb(float *dest, const float *src,
   }
 }
 
+#if __riscv_xlen == 64
 void xbrtime_double_put(double *dest, const double *src,
                       size_t nelems, int stride, int pe){
   uint32_t loop_iters     = 0;
@@ -1297,7 +1297,6 @@ void xbrtime_ptrdiff_put_nb(ptrdiff_t *dest, const ptrdiff_t *src,
   }
 }
 
-#if __riscv_xlen == 64
 void xbrtime_float_get(float *dest, const float *src,
                      size_t nelems, int stride, int pe){
   uint32_t loop_iters     = 0;
@@ -1347,6 +1346,7 @@ void xbrtime_float_get_nb(float *dest, const float *src,
   }
 }
 
+#if __riscv_xlen == 64
 void xbrtime_double_get(double *dest, const double *src,
                       size_t nelems, int stride, int pe){
   uint32_t loop_iters     = 0;

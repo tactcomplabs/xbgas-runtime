@@ -248,7 +248,7 @@ __xbrtime_get_u4_unr:
 
   #---------------------------------------------------
 
-#if __riscv_xlen == 64
+.if __riscv_xlen == 64 
   .global __xbrtime_get_u8_seq
   .type __xbrtime_get_u8_seq, @function
 __xbrtime_get_u8_seq:
@@ -312,7 +312,7 @@ __xbrtime_get_u8_unr:
 .get_u8_unr_eject:
   ret
   .size __xbrtime_get_u8_unr, .-__xbrtime_get_u8_unr
-#endif
+.endif
 
   #---------------------------------------------------
 
@@ -516,7 +516,7 @@ __xbrtime_get_s4_unr:
   .size __xbrtime_get_s4_unr, .-__xbrtime_get_s4_unr
 
   #---------------------------------------------------
-#if __riscv_xlen == 64
+.if __riscv_xlen == 64
   .global __xbrtime_get_s8_seq
   .type __xbrtime_get_s8_seq, @function
 __xbrtime_get_s8_seq:
@@ -581,7 +581,7 @@ __xbrtime_get_s8_unr:
 .get_s8_unr_eject:
   ret
   .size __xbrtime_get_s8_unr, .-__xbrtime_get_s8_unr
-#endif
+.endif
 
   #---------------------------------------------------
 
@@ -725,7 +725,11 @@ __xbrtime_put_u4_seq:
   eaddie e11, 0, a2
   mv x31, zero
 .put_u4_seq:
+.if __riscv_xlen == 64
   lwu x30, 0(a0)
+.else
+  lw x30, 0(a0)
+.endif
   add a0, a0, a4
   add x31,x31,1
   esw x30, 0(a1)
@@ -751,10 +755,17 @@ __xbrtime_put_u4_unr:
   add x21, x20, a3    #dest addr3
   mv x31, zero
 .put_u4_unr:
+.if __riscv_xlen == 64 
   lwu x22, 0(x10)     #load 0
   lwu x23, 0(x16)     #load 1
   lwu x24, 0(x17)     #load 2
   lwu x25, 0(x18)     #load 3
+.else
+  lw x22, 0(x10)     #load 0
+  lw x23, 0(x16)     #load 1
+  lw x24, 0(x17)     #load 2
+  lw x25, 0(x18)     #load 3
+.endif
   add x10, x18, a3    #incr 0
   add x16, x10, a3    #incr 1
   add x17, x16, a3    #incr 2
@@ -774,7 +785,11 @@ __xbrtime_put_u4_unr:
 
   mv x31, zero
 .put_u4_unr_epi:
+.if __riscv_xlen == 64
   lwu x22, 0(x10)     #load 0
+.else
+  lw x22, 0(x10)     #load 0
+.endif
   add x31, x31, 1     #incr loop trip
   add x10, x10, a3    #incr 0
   esw x22, 0(x11)     #store 0
@@ -785,7 +800,7 @@ __xbrtime_put_u4_unr:
   .size __xbrtime_put_u4_unr, .-__xbrtime_put_u4_unr
 
   #---------------------------------------------------
-#if __riscv_xlen == 64
+.if __riscv_xlen == 64
   .global __xbrtime_put_u8_seq
   .type __xbrtime_put_u8_seq, @function
 __xbrtime_put_u8_seq:
@@ -850,7 +865,7 @@ __xbrtime_put_u8_unr:
 .put_u8_unr_eject:
   ret
   .size __xbrtime_put_u8_unr, .-__xbrtime_put_u8_unr
-#endif
+.endif
   #---------------------------------------------------
 
   .global __xbrtime_put_s1_seq
@@ -1053,7 +1068,7 @@ __xbrtime_put_s4_unr:
   .size __xbrtime_put_s4_unr, .-__xbrtime_put_s4_unr
 
   #---------------------------------------------------
-#if __riscv_xlen == 64
+.if __riscv_xlen == 64
   .global __xbrtime_put_s8_seq
   .type __xbrtime_put_s8_seq, @function
 __xbrtime_put_s8_seq:
@@ -1118,5 +1133,5 @@ __xbrtime_put_s8_unr:
 .put_s8_unr_eject:
   ret
   .size __xbrtime_put_s8_unr, .-__xbrtime_put_s8_unr
-#endif
+.endif
 #-- EOF

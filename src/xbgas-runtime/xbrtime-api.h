@@ -54,8 +54,8 @@
                                       int stride,           \
                                       int pe);
 
-#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, float, float)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(put, double, double)
   XBGAS_API_DECL_PUTGET(put, longdouble, long double)
 #endif
@@ -88,8 +88,8 @@
 #endif
   XBGAS_API_DECL_PUTGET(put, size, size_t)
   XBGAS_API_DECL_PUTGET(put, ptrdiff, ptrdiff_t)
-#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(get, float, float)
+#if __riscv_xlen == 64
   XBGAS_API_DECL_PUTGET(get, double, double)
   XBGAS_API_DECL_PUTGET(get, longdouble, long double)
 #endif
