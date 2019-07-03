@@ -70,7 +70,11 @@ __xbrtime_asm_quiet_fence:
   .type __xbrtime_get_remote_alloc, @function
 __xbrtime_get_remote_alloc:
   eaddie e10, 0, a1
+.if __riscv_xlen == 64 
+	eld a0, 0(a0)
+.else
 	elw a0, 0(a0)
+.endif
   ret
   .size __xbrtime_get_remote_alloc, .-__xbrtime_get_remote_alloc
 
@@ -83,7 +87,11 @@ __xbrtime_get_remote_alloc:
   .type __xbrtime_remote_touch, @function
 __xbrtime_remote_touch:
   eaddie e10, 0, a1
+.if __riscv_xlen == 64
+	esd a2, 0(a0)
+.else
 	esw a2, 0(a0)
+.endif
   ret
   .size __xbrtime_remote_touch, .-__xbrtime_remote_touch
 
