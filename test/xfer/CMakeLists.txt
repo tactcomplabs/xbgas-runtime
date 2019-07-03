@@ -28,7 +28,7 @@ foreach(testSrc ${TEST_SRCS})
   set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
   # Add linker deps
-  target_link_libraries(${testName} xbrtime)
+  target_link_libraries(${testName} xbrtime m)
 
   # Drop the exe's in a separate directory
   set_target_properties(${testName} PROPERTIES
@@ -37,7 +37,7 @@ foreach(testSrc ${TEST_SRCS})
   # Add the tests for execution
   add_test(NAME ${testName}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin
-    COMMAND mpirun -n 2 ${RISCV_ENV}/bin/spike -x512 pk ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName})
+    COMMAND mpirun -n 2 -bind-to core:2 ${RISCV_ENV}/bin/spike -x512 pk ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName})
   set_tests_properties( ${testName} 
 	PROPERTIES 
 		PASS_REGULAR_EXPRESSION "" 

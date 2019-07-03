@@ -263,7 +263,6 @@ __xbrtime_get_u8_seq:
   bne x31,a3,.get_u8_seq
   ret
   .size __xbrtime_get_u8_seq, .-__xbrtime_get_u8_seq
-
   #---------------------------------------------------
 
   .global __xbrtime_get_u8_unr

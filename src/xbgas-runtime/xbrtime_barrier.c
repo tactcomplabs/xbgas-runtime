@@ -12,6 +12,10 @@
  */
 
 #include "xbrtime.h"
+#define SENSE __XBRTIME_CONFIG->_SENSE
+//#define XBGAS_DEBUG
+
+
 
 /* ------------------------------------------------- FUNCTION PROTOTYPES */
 void __xbrtime_asm_fence();
@@ -20,67 +24,74 @@ void __xbrtime_remote_touch( _XBRTIME_XLEN_ addr, _XBRTIME_XLEN_ target, _XBRTIM
 uint32_t xbrtime_decode_pe( int pe );
 
 extern void xbrtime_barrier(){
-  volatile _XBRTIME_XLEN_ sense = __XBRTIME_CONFIG->_SENSE;
-  volatile _XBRTIME_XLEN_ tmp = 0x00ull;
-  _XBRTIME_XLEN_ target = 0x00;
-  _XBRTIME_XLEN_ addr = 0x00;
 
+	int32_t 								i 							= 0; 
+	int32_t									stride 					= 1;
+  volatile _XBRTIME_XLEN_ sense 					= SENSE;
+  _XBRTIME_XLEN_ 					target 					= 0x00ull;
+  _XBRTIME_XLEN_ 					addr 						= 0x00ull;
+	_XBRTIME_XLEN_					num_pe 					= xbrtime_num_pes();
+	
   /* sanity check */
-  if( xbrtime_num_pes() == 1 ){
+  if( num_pe == 1 ){
     return ;
   }
+	
+	/*Get the total iterations */
+	_XBRTIME_XLEN_  mype   = xbrtime_mype();
+	_XBRTIME_XLEN_	 iter   = (_XBRTIME_XLEN_)(log(num_pe)/log(2));
+	if (iter < log(num_pe)/log(2))
+		iter++;
+  
   /* force a heavy fence */
   __xbrtime_asm_fence();
 
 #ifdef XBGAS_DEBUG
 	printf("XBGAS_DEBUG:: PE = %d, sense = %ld, complete __xbrtime_asm_fence()\n",xbrtime_mype(), sense);
 #endif
-  /* derive the correct target pe */
-  if( xbrtime_mype() != (xbrtime_num_pes()-1) ){
-    target = xbrtime_mype()+1;
-  }
-
+	while(i < iter){
+  	/* derive the correct target pe */
+		target 	= (mype + stride)%num_pe; 
 #ifdef XBGAS_DEBUG
-  printf( "XBGAS_DEBUG : PE=%d; BARRIER TARGET=%d\n", xbrtime_mype(),
+  	printf( "XBGAS_DEBUG : PE=%d; BARRIER TARGET=%d\n", xbrtime_mype(),
           (int)(target) );
 #endif
 
-  /* convert to physical pe */
-  target = (_XBRTIME_XLEN_)(xbrtime_decode_pe((int)(target)));
-
-  /* inform the target */
-  addr = (_XBRTIME_XLEN_)(&__XBRTIME_CONFIG->_BARRIER[sense]);
+  	target 	= (_XBRTIME_XLEN_)(xbrtime_decode_pe((int)(target)));
+  	addr 		= (_XBRTIME_XLEN_)(&__XBRTIME_CONFIG->_BARRIER[sense*10+i]);
 #ifdef XBGAS_DEBUG
-  printf( "XBGAS_DEBUG : PE=%d; TOUCHING REMOTE ADDRESS ON PHYSICAL TARGET=%d\n",
+  	printf( "XBGAS_DEBUG : PE=%d; TOUCHING REMOTE ADDRESS ON PHYSICAL TARGET=%d\n",
           xbrtime_mype(),
           (int)(target) );
 #endif
-  //store the sense+1 to the remote target
-  __xbrtime_remote_touch( addr, target, sense + 1 );
+  	__xbrtime_remote_touch( addr, target, stride);	
 #ifdef XBGAS_DEBUG
-	printf("\033[1m\033[32m XBGAS_DEBUG:: PE = %d, complete remote touch, sense = %ld, addr = 0x%lx, __XBRTIME_CONFIG->_BARRIER[sense]=%lx \033[0m \n",xbrtime_mype(), sense, addr,  __XBRTIME_CONFIG->_BARRIER[sense]);
-  printf( "XBGAS_DEBUG : PE=%d; SUCCESS TOUCHING REMOTE ADDRESS\n", xbrtime_mype() );
+		printf("\033[1m\033[32m XBGAS_DEBUG:: PE = %d, complete remote touch, sense = %ld, addr = 0x%lx, __XBRTIME_CONFIG->_BARRIER[sense]=%lx \033[0m \n",xbrtime_mype(), sense, addr,  __XBRTIME_CONFIG->_BARRIER[sense]);
+  	printf( "XBGAS_DEBUG : PE=%d; SUCCESS TOUCHING REMOTE ADDRESS\n", xbrtime_mype() );
 #endif
-  __xbrtime_asm_quiet_fence();
 
+
+  	/* spinwait on local value */
+ 		while( __XBRTIME_CONFIG->_BARRIER[SENSE*10+i] != stride ){
 #ifdef XBGAS_DEBUG
-	printf("\033[1m\033[35m XBGAS_DEBUG:: PE = %d, about to run __sync_fetch_and_add()\033[0m \n",xbrtime_mype());
+			printf("XBGAS_DEBUG:: PE = %d, sense = %ld, local barrier var = 0x%lx\n",xbrtime_mype(), sense, __XBRTIME_CONFIG->_BARRIER[SENSE]);
 #endif
+		}
+
+
+		stride *= 2;
+		i++;
+
+	}
+
+
+
+  //__xbrtime_asm_quiet_fence();
+
+  //tmp = __sync_add_and_fetch(&__XBRTIME_CONFIG->_BARRIER[sense],0);
+  //__sync_fetch_and_add(&__XBRTIME_CONFIG->_BARRIER[SENSE],0);
+
   /* spinwait on local value */
-  tmp = __sync_fetch_and_add(&__XBRTIME_CONFIG->_BARRIER[sense],0);
-#ifdef XBGAS_DEBUG
-	printf("XBGAS_DEBUG:: PE = %d, sense = %ld, tmp = 0x%lx\n",xbrtime_mype(), sense, tmp);
-#endif
-  while( tmp != (sense + 1) ){
-    tmp = __sync_fetch_and_add(&__XBRTIME_CONFIG->_BARRIER[sense],0);
-  	__xbrtime_remote_touch( addr, target, sense + 1 );
-  	__xbrtime_asm_quiet_fence();
-
-    //tmp = __sync_add_and_fetch(&__XBRTIME_CONFIG->_BARRIER[sense],0);
-#ifdef XBGAS_DEBUG
-		printf("XBGAS_DEBUG:: PE = %d, sense = %ld, tmp = 0x%lx\n",xbrtime_mype(), sense, tmp);
-#endif
-  }
 #if 0
   tmp = __XBRTIME_CONFIG->_BARRIER;
   while( tmp != sense ){
@@ -88,22 +99,16 @@ extern void xbrtime_barrier(){
   }
 #endif
 
-#ifdef XBGAS_DEBUG
-	printf("XBGAS_DEBUG:: PE = %d, complete  __sync_fetch_and_add()\n",xbrtime_mype());
-#endif
   /* switch the sense */
-  /*__XBRTIME_CONFIG->_BARRIER[sense] = 0xdeadbeefull;
-  if( sense == 0 ){
-    __XBRTIME_CONFIG->_SENSE = 1;
-  }else{
-    __XBRTIME_CONFIG->_SENSE = 0;
-  }*/
-	// Avoid conditional statements
-  __XBRTIME_CONFIG->_SENSE = 1 - sense;
+	for (i = 0; i < iter; i++)
+  	__XBRTIME_CONFIG->_BARRIER[SENSE*10+i] = 0xdeadbeefull;
+	// Flip the Sense
+  SENSE = 1 - SENSE;
 
 #ifdef XBGAS_DEBUG
   printf( "XBGAS_DEBUG : PE=%d; BARRIER COMPLETE\n", xbrtime_mype() );
 #endif
 }
+
 
 /* EOF */

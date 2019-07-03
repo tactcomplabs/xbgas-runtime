@@ -20,7 +20,6 @@ int main( int argc, char **argv ){
   int rtn = 0;
   uint64_t *ptr = NULL;
   size_t sz = _XBGAS_ALLOC_SIZE_;
-	int i = 0;
   printf( "Initializing xBGAS Runtime\n" );
   rtn = xbrtime_init();
   printf( "PE=%d; xBGAS is Initialized\n", xbrtime_mype() );

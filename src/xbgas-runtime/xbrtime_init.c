@@ -12,6 +12,8 @@
  */
 
 #include "xbrtime.h"
+extern volatile  _XBRTIME_XLEN_  *barrier;
+
 
 /* ------------------------------------------------- GLOBALS */
 XBRTIME_DATA *__XBRTIME_CONFIG;
@@ -67,11 +69,16 @@ extern int xbrtime_init(){
   __XBRTIME_CONFIG->_NPES       = __xbrtime_asm_get_npes();
   __XBRTIME_CONFIG->_START_ADDR = __xbrtime_asm_get_startaddr();
   __XBRTIME_CONFIG->_SENSE      = 0x01ull;
-	if(__XBRTIME_CONFIG->_BARRIER[0] != 1)
-  	__XBRTIME_CONFIG->_BARRIER[0] = 0xfffffffffull;
-	if(__XBRTIME_CONFIG->_BARRIER[1] != 2)
-  		__XBRTIME_CONFIG->_BARRIER[1] = 0xaaaaaaaaaull;
-
+  __XBRTIME_CONFIG->_BARRIER 		= barrier;
+	// MAX_PE_NUM = 1024, thus, MAX_Barrier buffer space = log2^1024 = 10
+	for( i = 0; i < 10; i++){
+  	__XBRTIME_CONFIG->_BARRIER[i] 		= 0xffffffffull;
+  	__XBRTIME_CONFIG->_BARRIER[10+i] 	= 0xaaaaaaaaull;
+	}
+#ifdef XBGAS_DEBUG
+	printf("PE:%d----BARRIER[0] = 0x%lx\n", __XBRTIME_CONFIG->_ID, __XBRTIME_CONFIG->_BARRIER[0]);
+	printf("PE:%d----BARRIER[1] = 0x%lx\n", __XBRTIME_CONFIG->_ID, __XBRTIME_CONFIG->_BARRIER[1]);
+#endif
   /* too many total PEs */
   if( __XBRTIME_CONFIG->_NPES > __XBRTIME_MAX_PE ){
     free( __XBRTIME_CONFIG );
@@ -98,8 +105,6 @@ extern int xbrtime_init(){
     __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i+1;
   }
 
-  /* initiate a barrier */
-  //xbrtime_barrier();
 
   return 0;
 }

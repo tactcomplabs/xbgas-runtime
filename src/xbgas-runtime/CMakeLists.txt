@@ -16,15 +16,20 @@ xbrtime-types.h
 xbrtime-macros.h
 xbrtime-alloc.h
 xbrtime-api.h
+xbrtime-collectives.h
+xbrtime-atomics.h
 xbrtime_init.c
 xbrtime_ctor.c
 xbrtime_util.c
 xbrtime_api.c
 xbrtime_alloc.c
 xbrtime_barrier.c
+xbrtime_collectives.c
+xbrtime_atomics.c
 xbrtime_ctor_asm.s
 xbrtime_util_asm.s
 xbrtime_api_asm.s
+xbrtime_atomics_asm.s
 )
 
 include_directories( . )

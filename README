@@ -87,11 +87,10 @@ $PATH.  All the tests are currently set to run using two PE's.
 
 VI.    Demo & Tutorials
 --------------------------------------------------------------------------------
-The folloiwng video introduces how to play with RISC-V xBGAS extension, including
-programming with the xBGAS runtime, comping and executing the xBGAS benchmarks.
+The following video introduces how to play with RISC-V xBGAS extension, including
+programming with the xBGAS runtime, compiling, and executing the xBGAS benchmarks.
 
 * https://youtu.be/IeIpJkMjMuc
 
 --------------------------------------------------------------------------------
-
 EOF

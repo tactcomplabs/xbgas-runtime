@@ -29,6 +29,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 /* ---------------------------------------- REQUIRED HEADERS */
 #include "xbrtime-types.h"
@@ -36,6 +37,8 @@
 #include "xbrtime-alloc.h"
 #include "xbrtime-version.h"
 #include "xbrtime-macros.h"
+#include "xbrtime-collectives.h"
+#include "xbrtime-atomics.h"
 
 /* ---------------------------------------- FUNCTION PROTOTYPES */
 
@@ -91,6 +94,8 @@ extern int xbrtime_num_pes();
       \return Void
 */
 extern void xbrtime_barrier();
+
+
 
 #ifdef __cplusplus
 }

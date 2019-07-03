@@ -158,7 +158,6 @@ extern void xbrtime_free( void *ptr ){
   }else if( __XBRTIME_CONFIG->_MMAP == NULL ){
     return ;
   }
-
   __xbrtime_shared_free(ptr);
   __xbrtime_asm_quiet_fence();
 }
