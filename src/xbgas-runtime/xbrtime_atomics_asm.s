@@ -41,7 +41,7 @@
     .global __xbrtime_atomic_add_u4
     .type __xbrtime_atomic_add_u4, @function
   __xbrtime_atomic_add_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoadd.w t0, a1, a0
     ret
     .size __xbrtime_atomic_add_u4, .-__xbrtime_atomic_add_u4
@@ -51,7 +51,7 @@
     .global __xbrtime_atomic_add_s4
     .type __xbrtime_atomic_add_s4, @function
   __xbrtime_atomic_add_s4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoadd.w t0, a1, a0
     ret
     .size __xbrtime_atomic_add_s4, .-__xbrtime_atomic_add_s4
@@ -61,7 +61,7 @@
     .global __xbrtime_atomic_add_u8
     .type __xbrtime_atomic_add_u8, @function
   __xbrtime_atomic_add_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoadd.d t0, a1, a0
     ret
     .size __xbrtime_atomic_add_u8, .-__xbrtime_atomic_add_u8
@@ -71,7 +71,7 @@
     .global __xbrtime_atomic_add_s8
     .type __xbrtime_atomic_add_s8, @function
   __xbrtime_atomic_add_s8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoadd.d t0, a1, a0
     ret
     .size __xbrtime_atomic_add_s8, .-__xbrtime_atomic_add_s8
@@ -81,7 +81,7 @@
     .global __xbrtime_atomic_lor_u4
     .type __xbrtime_atomic_lor_u4, @function
   __xbrtime_atomic_lor_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoor.w t0, a1, a0
     ret
     .size __xbrtime_atomic_lor_u4, .-__xbrtime_atomic_lor_u4
@@ -91,7 +91,7 @@
     .global __xbrtime_atomic_lor_s4
     .type __xbrtime_atomic_lor_s4, @function
   __xbrtime_atomic_lor_s4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoor.w t0, a1, a0
     ret
     .size __xbrtime_atomic_lor_s4, .-__xbrtime_atomic_lor_s4
@@ -101,7 +101,7 @@
     .global __xbrtime_atomic_lor_u8
     .type __xbrtime_atomic_lor_u8, @function
   __xbrtime_atomic_lor_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoor.d t0, a1, a0
     ret
     .size __xbrtime_atomic_lor_u8, .-__xbrtime_atomic_lor_u8
@@ -111,7 +111,7 @@
     .global __xbrtime_atomic_lor_s8
     .type __xbrtime_atomic_lor_s8, @function
   __xbrtime_atomic_lor_s8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoor.d t0, a1, a0
     ret
     .size __xbrtime_atomic_lor_s8, .-__xbrtime_atomic_lor_s8
@@ -121,7 +121,7 @@
     .global __xbrtime_atomic_lxor_u4
     .type __xbrtime_atomic_lxor_u4, @function
   __xbrtime_atomic_lxor_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoxor.w t0, a1, a0
     ret
     .size __xbrtime_atomic_lxor_u4, .-__xbrtime_atomic_lxor_u4
@@ -131,7 +131,7 @@
     .global __xbrtime_atomic_lxor_s4
     .type __xbrtime_atomic_lxor_s4, @function
   __xbrtime_atomic_lxor_s4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoxor.w t0, a1, a0
     ret
     .size __xbrtime_atomic_lxor_s4, .-__xbrtime_atomic_lxor_s4
@@ -141,7 +141,7 @@
     .global __xbrtime_atomic_lxor_u8
     .type __xbrtime_atomic_lxor_u8, @function
   __xbrtime_atomic_lxor_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoxor.d t0, a1, a0
     ret
     .size __xbrtime_atomic_lxor_u8, .-__xbrtime_atomic_lxor_u8
@@ -151,7 +151,7 @@
     .global __xbrtime_atomic_lxor_s8
     .type __xbrtime_atomic_lxor_s8, @function
   __xbrtime_atomic_lxor_s8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoxor.d t0, a1, a0
     ret
     .size __xbrtime_atomic_lxor_s8, .-__xbrtime_atomic_lxor_s8
@@ -161,7 +161,7 @@
     .global __xbrtime_atomic_land_u4
     .type __xbrtime_atomic_land_u4, @function
   __xbrtime_atomic_land_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoand.w t0, a1, a0
     ret
     .size __xbrtime_atomic_land_u4, .-__xbrtime_atomic_land_u4
@@ -171,7 +171,7 @@
     .global __xbrtime_atomic_land_s4
     .type __xbrtime_atomic_land_s4, @function
   __xbrtime_atomic_land_s4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoand.w t0, a1, a0
     ret
     .size __xbrtime_atomic_land_s4, .-__xbrtime_atomic_land_s4
@@ -181,7 +181,7 @@
     .global __xbrtime_atomic_land_u8
     .type __xbrtime_atomic_land_u8, @function
   __xbrtime_atomic_land_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoand.d t0, a1, a0
     ret
     .size __xbrtime_atomic_land_u8, .-__xbrtime_atomic_land_u8
@@ -191,7 +191,7 @@
     .global __xbrtime_atomic_land_s8
     .type __xbrtime_atomic_land_s8, @function
   __xbrtime_atomic_land_s8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamoand.d t0, a1, a0
     ret
     .size __xbrtime_atomic_land_s8, .-__xbrtime_atomic_land_s8
@@ -201,7 +201,7 @@
     .global __xbrtime_atomic_min_u4
     .type __xbrtime_atomic_min_u4, @function
   __xbrtime_atomic_min_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamomin.w t0, a1, a0
     ret
     .size __xbrtime_atomic_min_u4, .-__xbrtime_atomic_min_u4
@@ -221,7 +221,7 @@
     .global __xbrtime_atomic_min_u8
     .type __xbrtime_atomic_min_u8, @function
   __xbrtime_atomic_min_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamomin.d t0, a1, a0
     ret
     .size __xbrtime_atomic_min_u8, .-__xbrtime_atomic_min_u8
@@ -241,7 +241,7 @@
     .global __xbrtime_atomic_max_u4
     .type __xbrtime_atomic_max_u4, @function
   __xbrtime_atomic_max_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamomax.w t0, a1, a0
     ret
     .size __xbrtime_atomic_max_u4, .-__xbrtime_atomic_max_u4
@@ -261,7 +261,7 @@
     .global __xbrtime_atomic_max_u8
     .type __xbrtime_atomic_max_u8, @function
     __xbrtime_atomic_max_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamomax.d t0, a1, a0
     ret
     .size __xbrtime_atomic_max_u8, .-__xbrtime_atomic_max_u8
@@ -281,7 +281,7 @@
     .global __xbrtime_atomic_compare_swap_u4
     .type __xbrtime_atomic_compare_swap_u4, @function
   __xbrtime_atomic_compare_swap_u4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamocas.w t0, a1, a0
     ret
     .size __xbrtime_atomic_compare_swap_u4, .-__xbrtime_atomic_compare_swap_u4
@@ -291,7 +291,7 @@
     .global __xbrtime_atomic_compare_swap_s4
     .type __xbrtime_atomic_compare_swap_s4, @function
   __xbrtime_atomic_compare_swap_s4:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamocas.w t0, a1, a0
     ret
     .size __xbrtime_atomic_compare_swap_s4, .-__xbrtime_atomic_compare_swap_s4
@@ -301,7 +301,7 @@
     .global __xbrtime_atomic_compare_swap_u8
     .type __xbrtime_atomic_compare_swap_u8, @function
   __xbrtime_atomic_compare_swap_u8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamocas.d t0, a1, a0
     ret
     .size __xbrtime_atomic_compare_swap_u8, .-__xbrtime_atomic_compare_swap_u8
@@ -311,7 +311,7 @@
     .global __xbrtime_atomic_compare_swap_s8
     .type __xbrtime_atomic_compare_swap_s8, @function
   __xbrtime_atomic_compare_swap_s8:
-    eaddie e10, 0, a2
+    eaddie e10, a2, 0
     eamocas.d t0, a1, a0
     ret
     .size __xbrtime_atomic_compare_swap_s8, .-__xbrtime_atomic_compare_swap_s8
