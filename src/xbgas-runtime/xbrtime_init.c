@@ -13,6 +13,7 @@
 
 #include "xbrtime.h"
 extern volatile  uint64_t* barrier;
+#define INIT_ADDR 0xBB00000000000000ull
 
 /* ------------------------------------------------- GLOBALS */
 XBRTIME_DATA *__XBRTIME_CONFIG;
@@ -75,7 +76,7 @@ extern int xbrtime_init(){
   	__XBRTIME_CONFIG->_BARRIER[10+i] 	= 0xaaaaaaaaaull;
 	}
 #ifdef XBGAS_DEBUG
-	printf("PE:%d----BARRIER[0] = 0x%lx\n", __XBRTIME_CONFIG->_ID, __XBRTIME_CONFIG->_BARRIER[0]);
+	printf("PE:%d----BARRIER[O] = 0x%lx\n", __XBRTIME_CONFIG->_ID, __XBRTIME_CONFIG->_BARRIER[0]);
 	printf("PE:%d----BARRIER[1] = 0x%lx\n", __XBRTIME_CONFIG->_ID, __XBRTIME_CONFIG->_BARRIER[1]);
 #endif
   /* too many total PEs */
@@ -105,6 +106,8 @@ extern int xbrtime_init(){
   }
 
 
+  int init = 1;
+  *((uint64_t *)INIT_ADDR) = init;
   return 0;
 }
 

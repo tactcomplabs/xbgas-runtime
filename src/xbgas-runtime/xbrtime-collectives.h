@@ -18,8 +18,6 @@
 #define extern "C" {
 #endif
 
-
-
  /*!   \fn void xbrtime_TYPENAME_broadcast( TYPE *dest, const TYPE *src, size_t nelems, int stride, int root )
        \brief Broadcasts one or more values of type TYPE from the root to all PEs
        \param dest is a pointer to the base shared address where broadcasted values are placed on each PE

@@ -29,7 +29,7 @@
 
 #ifndef _XBRTIME_MIN_UNR_THRESHOLD_
 /** @brief Minimum transfer unrolling (to hide latency) */
-#define _XBRTIME_MIN_UNR_THRESHOLD_ 8
+#define _XBRTIME_MIN_UNR_THRESHOLD_ 10000000
 #endif
 
 /** @brief Unrolling factor for unrolled transfer API functons */
