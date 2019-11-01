@@ -60,7 +60,7 @@ __xbrtime_get_u1_seq:
   .type __xbrtime_get_u1_agg, @function
 __xbrtime_get_u1_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31, a3, a1
   elbu x30, 0(a0)
   ret
   .size __xbrtime_get_u1_agg, .-__xbrtime_get_u1_agg
@@ -88,7 +88,7 @@ __xbrtime_get_u2_seq:
   .type __xbrtime_get_u2_agg, @function
 __xbrtime_get_u2_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   elhu x30, 0(a0)
   ret
   .size __xbrtime_get_u2_agg, .-__xbrtime_get_u2_agg
@@ -116,7 +116,7 @@ __xbrtime_get_u4_seq:
   .type __xbrtime_get_u4_agg, @function
 __xbrtime_get_u4_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   elw x30, 0(a0)
   ret
   .size __xbrtime_get_u4_agg, .-__xbrtime_get_u4_agg
@@ -144,7 +144,7 @@ __xbrtime_get_u8_seq:
   .type __xbrtime_get_u8_agg, @function
 __xbrtime_get_u8_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   eld x30, 0(a0)
   ret
   .size __xbrtime_get_u8_agg, .-__xbrtime_get_u8_agg
@@ -172,7 +172,7 @@ __xbrtime_get_s1_seq:
   .type __xbrtime_get_s1_agg, @function
 __xbrtime_get_s1_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   elb x30, 0(a0)
   ret
   .size __xbrtime_get_s1_agg, .-__xbrtime_get_s1_agg
@@ -200,7 +200,7 @@ __xbrtime_get_s2_seq:
   .type __xbrtime_get_s2_agg, @function
 __xbrtime_get_s2_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   elh x30, 0(a0)
   ret
   .size __xbrtime_get_s2_agg, .-__xbrtime_get_s2_agg
@@ -228,7 +228,7 @@ __xbrtime_get_s4_seq:
   .type __xbrtime_get_s4_agg, @function
 __xbrtime_get_s4_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   elw x30, 0(a0)
   ret
   .size __xbrtime_get_s4_agg, .-__xbrtime_get_s4_agg
@@ -256,7 +256,7 @@ __xbrtime_get_s8_seq:
   .type __xbrtime_get_s8_agg, @function
 __xbrtime_get_s8_agg:
   eaddie e10, a2, 0
-  eag a3, a1
+  eag x31,a3, a1
   eld x30, 0(a0)
   ret
   .size __xbrtime_get_s8_agg, .-__xbrtime_get_s8_agg
@@ -284,7 +284,7 @@ __xbrtime_put_u1_seq:
   .type __xbrtime_put_u1_agg, @function
 __xbrtime_put_u1_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esb x30, 0(a1)
   ret
   .size __xbrtime_put_u1_agg, .-__xbrtime_put_u1_agg
@@ -312,7 +312,7 @@ __xbrtime_put_u2_seq:
   .type __xbrtime_put_u2_agg, @function
 __xbrtime_put_u2_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esh x30, 0(a1)
   ret
   .size __xbrtime_put_u2_agg, .-__xbrtime_put_u2_agg
@@ -340,7 +340,7 @@ __xbrtime_put_u4_seq:
   .type __xbrtime_put_u4_agg, @function
 __xbrtime_put_u4_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esw x30, 0(a1)
   ret
   .size __xbrtime_put_u4_agg, .-__xbrtime_put_u4_agg
@@ -368,7 +368,7 @@ __xbrtime_put_u8_seq:
   .type __xbrtime_put_u8_agg, @function
 __xbrtime_put_u8_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esd x30, 0(a1)
   ret
   .size __xbrtime_put_u8_agg, .-__xbrtime_put_u8_agg
@@ -396,7 +396,7 @@ __xbrtime_put_s1_seq:
   .type __xbrtime_put_s1_agg, @function
 __xbrtime_put_s1_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esb x30, 0(a1)
   ret
   .size __xbrtime_put_s1_agg, .-__xbrtime_put_s1_agg
@@ -424,7 +424,7 @@ __xbrtime_put_s2_seq:
   .type __xbrtime_put_s2_agg, @function
 __xbrtime_put_s2_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esh x30, 0(a1)
   ret
   .size __xbrtime_put_s2_agg, .-__xbrtime_put_s2_agg
@@ -452,7 +452,7 @@ __xbrtime_put_s4_seq:
   .type __xbrtime_put_s4_agg, @function
 __xbrtime_put_s4_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esw x30, 0(a1)
   ret
   .size __xbrtime_put_s4_agg, .-__xbrtime_put_s4_agg
@@ -480,7 +480,7 @@ __xbrtime_put_s8_seq:
   .type __xbrtime_put_s8_agg, @function
 __xbrtime_put_s8_agg:
   eaddie e11, a2, 0
-  eag a3, a0
+  eag x31,a3, a0
   esd x30, 0(a1)
   ret
   .size __xbrtime_put_s8_agg, .-__xbrtime_put_s8_agg
