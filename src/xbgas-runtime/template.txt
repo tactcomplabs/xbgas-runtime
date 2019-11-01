@@ -1,0 +1,40 @@
+template.txt
+
+void xbrtime_XXXX_XXXX(XXXX *dest, const XXXX *src,
+                     size_t nelems, int stride, int pe){
+  if( (stride != 1) || (nelems == 1)){
+    /* sequential execution */
+    __xbrtime_XXXX_XXXX_seq((uint64_t)(src),
+                         __xbrtime_ltor((uint64_t)(dest),pe),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(XXXX)));
+  }else{
+    /* aggregate requests */
+    __xbrtime_XXXX_XXXX_agg((uint64_t)(src),
+                         __xbrtime_ltor((uint64_t)(dest),pe),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(XXXX)));
+  }
+  __xbrtime_asm_fence();
+}
+
+void xbrtime_XXXX_XXXX_nb(XXXX *dest, const XXXX *src,
+                     size_t nelems, int stride, int pe){
+  if( (stride != 1) || (nelems == 1)){
+    /* sequential execution */
+    __xbrtime_XXXX_XXXX_seq((uint64_t)(src),
+                         __xbrtime_ltor((uint64_t)(dest),pe),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(XXXX)));
+  }else{
+    /* aggregate requests */
+    __xbrtime_XXXX_XXXX_agg((uint64_t)(src),
+                         __xbrtime_ltor((uint64_t)(dest),pe),
+                         xbrtime_decode_pe(pe),
+                         (uint32_t)(nelems),
+                         (uint32_t)(stride*sizeof(XXXX)));
+  }
+}
