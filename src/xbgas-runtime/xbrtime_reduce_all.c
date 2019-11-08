@@ -23,7 +23,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
     int i, j, numpes, my_rpe, my_vpe, r_partner, numpes_log_floor, p_prime, remainder;                                                                  \
     numpes = xbrtime_num_pes();                                                                                                                         \
     my_rpe = xbrtime_mype();                                                                                                                            \
-    my_vpe = my_rpe();                                                                                                                                  \
+    my_vpe = my_rpe;                                                                                                                                  \
     numpes_log_floor = (int) (log(numpes)/log(2));                                                                                                      \
     p_prime = 1 << numpes_log_floor;                                                                                                                    \
     remainder = numpes - p_prime;                                                                                                                       \
@@ -487,7 +487,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
     int i, j, numpes, my_rpe, my_vpe, r_partner, numpes_log_floor, p_prime, remainder;                                                                  \
     numpes = xbrtime_num_pes();                                                                                                                         \
     my_rpe = xbrtime_mype();                                                                                                                            \
-    my_vpe = my_rpe();                                                                                                                                  \
+    my_vpe = my_rpe;                                                                                                                                  \
     numpes_log_floor = (int) (log(numpes)/log(2));                                                                                                      \
     p_prime = 1 << numpes_log_floor;                                                                                                                    \
     remainder = numpes - p_prime;                                                                                                                       \
@@ -708,7 +708,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(partition_disp[offset]+j)] = _op(accumulate[(partition_disp[offset])+j], temp[(partition_disp[offset])+j])                                   \
+                    accumulate[(partition_disp[offset]+j)] = _op(accumulate[(partition_disp[offset])+j], temp[(partition_disp[offset])+j]);                                   \
                 }                                                                                                                                       \
             }                                                                                                                                           \
             /* PEs perform get and reduction of second buffer half */                                                                                   \
