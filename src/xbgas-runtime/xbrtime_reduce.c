@@ -132,6 +132,9 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                 {                                                                                                                                       \
                     accumulate[j] = accumulate[j] _op temp[j];                                                                                          \
                 }                                                                                                                                       \
+                                                                                                                                                        \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = my_lpe/2;                                                                                                                      \
             }                                                                                                                                           \
             /* Odd ranks */                                                                                                                             \
             else                                                                                                                                        \
@@ -143,7 +146,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, r_partner);                  \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);            \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -152,24 +155,15 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Put calculated second half values back to even partner */                                                                            \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, r_partner);            \
-            }                                                                                                                                           \
-        }                                                                                                                                               \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);      \
                                                                                                                                                         \
-        /* Assign new vpe ranks */                                                                                                                      \
-        if(my_lpe < 2*remainder)                                                                                                                        \
-        {                                                                                                                                               \
-            if(my_lpe % 2 == 0)                                                                                                                         \
-            {                                                                                                                                           \
-                my_vpe = my_lpe/2;                                                                                                                      \
-            }                                                                                                                                           \
-            else                                                                                                                                        \
-            {                                                                                                                                           \
+                /* Assign new vpe ranks */                                                                                                              \
                 my_vpe = -1;                                                                                                                            \
             }                                                                                                                                           \
         }                                                                                                                                               \
         else                                                                                                                                            \
         {                                                                                                                                               \
+            /* Assign new vpe ranks */                                                                                                                  \
             my_vpe = my_lpe - remainder;                                                                                                                \
         }                                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
@@ -195,7 +189,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                              \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                        \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -216,7 +210,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset+num_exchange])], accumulate[(pe_disp[offset+num_exchange])], msg_size, 1, r_partner);    \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                       \
+                                            msg_size, 1, r_partner);                                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -229,8 +224,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                 offset += num_exchange;                                                                                                                 \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange >> 1;                                                                                                                              \
-        pe_stride << 1;                                                                                                                                 \
+        num_exchange >>= 1;                                                                                                                             \
+        pe_stride <<= 1;                                                                                                                                \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
@@ -256,12 +251,12 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                        \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                  \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange << 1;                                                                                                                              \
-        pe_stride >> 1;                                                                                                                                 \
-        active_pes >> 1;                                                                                                                                \
+        num_exchange <<= 1;                                                                                                                             \
+        pe_stride >>= 1;                                                                                                                                \
+        active_pes >>= 1;                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
@@ -529,6 +524,9 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                 {                                                                                                                                       \
                     accumulate[j] = _op(accumulate[j], temp[j]);                                                                                        \
                 }                                                                                                                                       \
+                                                                                                                                                        \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = my_lpe/2;                                                                                                                      \
             }                                                                                                                                           \
             /* Odd ranks */                                                                                                                             \
             else                                                                                                                                        \
@@ -540,7 +538,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, r_partner);                  \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);            \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -549,24 +547,15 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Put calculated second half values back to even partner */                                                                            \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, r_partner);            \
-            }                                                                                                                                           \
-        }                                                                                                                                               \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);      \
                                                                                                                                                         \
-        /* Assign new vpe ranks */                                                                                                                      \
-        if(my_lpe < 2*remainder)                                                                                                                        \
-        {                                                                                                                                               \
-            if(my_lpe % 2 == 0)                                                                                                                         \
-            {                                                                                                                                           \
-                my_vpe = my_lpe/2;                                                                                                                      \
-            }                                                                                                                                           \
-            else                                                                                                                                        \
-            {                                                                                                                                           \
+                /* Assign new vpe ranks */                                                                                                              \
                 my_vpe = -1;                                                                                                                            \
             }                                                                                                                                           \
         }                                                                                                                                               \
         else                                                                                                                                            \
         {                                                                                                                                               \
+            /* Assign new vpe ranks */                                                                                                                  \
             my_vpe = my_lpe - remainder;                                                                                                                \
         }                                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
@@ -592,7 +581,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                              \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                        \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -613,7 +602,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset+num_exchange])], accumulate[(pe_disp[offset+num_exchange])], msg_size, 1, r_partner);    \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                       \
+                                            msg_size, 1, r_partner);                                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -626,8 +616,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                 offset += num_exchange;                                                                                                                 \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange >> 1;                                                                                                                              \
-        pe_stride << 1;                                                                                                                                 \
+        num_exchange >>= 1;                                                                                                                             \
+        pe_stride <<= 1;                                                                                                                                \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
@@ -653,12 +643,12 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                        \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                  \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange << 1;                                                                                                                              \
-        pe_stride >> 1;                                                                                                                                 \
-        active_pes >> 1;                                                                                                                                \
+        num_exchange <<= 1;                                                                                                                             \
+        pe_stride >>= 1;                                                                                                                                \
+        active_pes >>= 1;                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \

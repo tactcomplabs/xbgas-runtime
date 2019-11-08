@@ -17,12 +17,115 @@
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-#define XBGAS_REDUCE_ALL(_type, _typename, _funcname, _op)
-void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *dest, const _type *src, size_t nelems, int stride)
-{
-
-}
-
+#define XBGAS_REDUCE_ALL(_type, _typename, _funcname, _op)                                                                                              \
+void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *dest, const _type *src, size_t nelems, int stride)                        \
+{                                                                                                                                                       \
+    int i, j, numpes, my_rpe, my_vpe, r_partner, numpes_log_floor, p_prime, remainder;                                                                  \
+    numpes = xbrtime_num_pes();                                                                                                                         \
+    my_rpe = xbrtime_mype();                                                                                                                            \
+    my_vpe = my_rpe();                                                                                                                                  \
+    numpes_log_floor = (int) (log(numpes)/log(2));                                                                                                      \
+    p_prime = 1 << numpes_log_floor;                                                                                                                    \
+    remainder = numpes - p_prime;                                                                                                                       \
+    _type *accumulate = (_type*) xbrtime_malloc(sizeof(_type) * nelems);                                                                                \
+    _type *temp = (_type*) xbrtime_malloc(sizeof(_type) * nelems);                                                                                      \
+                                                                                                                                                        \
+    /* Load reduction values into accumulate buffer and remove stride */                                                                                \
+    for(i = 0; i < nelems; i++)                                                                                                                         \
+    {                                                                                                                                                   \
+        accumulate[i] = src[i*stride];                                                                                                                  \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Ensure buffer is ready */                                                                                                                        \
+    xbrtime_barrier();                                                                                                                                  \
+                                                                                                                                                        \
+    /* Stage 1 (only if NumPEs is not a power of two) */                                                                                                \
+    if(numpes_log_floor != (log(numpes)/log(2)))                                                                                                        \
+    {                                                                                                                                                   \
+        /* First 2r ranks */                                                                                                                            \
+        if(my_rpe < 2*remainder)                                                                                                                        \
+        {                                                                                                                                               \
+            /* Even ranks */                                                                                                                            \
+            if(my_rpe % 2 == 0)                                                                                                                         \
+            {                                                                                                                                           \
+                /* Get values from my_rpe + 1 */                                                                                                        \
+                xbrtime_##_typename##_get(temp, accumulate, nelems, 1, my_rpe + 1);                                                                     \
+                                                                                                                                                        \
+                /* Perform reduction op */                                                                                                              \
+                for(j = 0; j < nelems; j++)                                                                                                             \
+                {                                                                                                                                       \
+                    accumulate[j] = accumulate[j] _op temp[j];                                                                                          \
+                }                                                                                                                                       \
+                                                                                                                                                        \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = my_rpe/2;                                                                                                                      \
+            }                                                                                                                                           \
+            /* Odd ranks */                                                                                                                             \
+            else                                                                                                                                        \
+            {                                                                                                                                           \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = -1;                                                                                                                            \
+            }                                                                                                                                           \
+        }                                                                                                                                               \
+        else                                                                                                                                            \
+        {                                                                                                                                               \
+            /* Assign new vpe ranks */                                                                                                                  \
+            my_vpe = my_rpe - remainder;                                                                                                                \
+        }                                                                                                                                               \
+        xbrtime_barrier();                                                                                                                              \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Stage 2 - Recursive Doubling */                                                                                                                  \
+    int pe_stride = 1;                                                                                                                                  \
+    for(i = 0; i < numpes_log_floor; i++)                                                                                                               \
+    {                                                                                                                                                   \
+        if(my_vpe != -1)                                                                                                                                \
+        {                                                                                                                                               \
+            if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
+            {                                                                                                                                           \
+                /* Get from my_vpe + stride */                                                                                                          \
+                r_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder));                                    \
+            }                                                                                                                                           \
+            else                                                                                                                                        \
+            {                                                                                                                                           \
+                /* Get from my_vpe - stride */                                                                                                          \
+                r_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
+                            ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
+            }                                                                                                                                           \
+                                                                                                                                                        \
+            xbrtime_##_typename##_get(temp, accumulate, nelems, 1, r_partner);                                                                          \
+                                                                                                                                                        \
+            /* Perform reduction op */                                                                                                                  \
+            for(j = 0; j < nelems; j++)                                                                                                                 \
+            {                                                                                                                                           \
+                accumulate[j] = accumulate[j] _op temp[j];                                                                                              \
+            }                                                                                                                                           \
+        }                                                                                                                                               \
+        pe_stride <<= 1;                                                                                                                                \
+        xbrtime_barrier();                                                                                                                              \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Put all reduced values to remainder PEs if not a power of two */                                                                                 \
+    if(numpes_log_floor != (log(numpes)/log(2)))                                                                                                        \
+    {                                                                                                                                                   \
+        /* First r even rpe ranks*/                                                                                                                     \
+        if((my_rpe < 2*remainder) && (my_rpe % 2 == 0))                                                                                                 \
+        {                                                                                                                                               \
+            xbrtime_##_typename##_put(accumulate, accumulate, nelems, 1, my_rpe + 1);                                                                   \
+        }                                                                                                                                               \
+        xbrtime_barrier();                                                                                                                              \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Copy from buffer to dest with stride */                                                                                                          \
+    for(i = 0; i < nelems; i++)                                                                                                                         \
+    {                                                                                                                                                   \
+        dest[i*stride] = accumulate[i];                                                                                                                 \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    xbrtime_free(accumulate);                                                                                                                           \
+    xbrtime_free(temp);                                                                                                                                 \
+}                                                                                                                                                       \
+                                                                                                                                                        \
 void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, const _type *src, size_t nelems, int stride)                              \
 {                                                                                                                                                       \
     int i, numpes, my_rpe, my_vpe, r_partner, numpes_log_floor, p_prime, remainder, counter;                                                            \
@@ -81,6 +184,9 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 {                                                                                                                                       \
                     accumulate[j] = accumulate[j] _op temp[j];                                                                                          \
                 }                                                                                                                                       \
+                                                                                                                                                        \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = my_rpe/2;                                                                                                                      \
             }                                                                                                                                           \
             /* Odd ranks */                                                                                                                             \
             else                                                                                                                                        \
@@ -91,7 +197,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, my_rpe - 1);                 \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, my_rpe - 1);           \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -100,24 +206,15 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Put calculated second half values back to even partner */                                                                            \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, my_rpe - 1);           \
-            }                                                                                                                                           \
-        }                                                                                                                                               \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, my_rpe - 1);     \
                                                                                                                                                         \
-        /* Assign new vpe ranks */                                                                                                                      \
-        if(my_rpe < 2*remainder)                                                                                                                        \
-        {                                                                                                                                               \
-            if(my_rpe % 2 == 0)                                                                                                                         \
-            {                                                                                                                                           \
-                my_vpe = my_rpe/2;                                                                                                                      \
-            }                                                                                                                                           \
-            else                                                                                                                                        \
-            {                                                                                                                                           \
+                /* Assign new vpe ranks */                                                                                                              \
                 my_vpe = -1;                                                                                                                            \
             }                                                                                                                                           \
         }                                                                                                                                               \
         else                                                                                                                                            \
         {                                                                                                                                               \
+            /* Assign new vpe ranks */                                                                                                                  \
             my_vpe = my_rpe - remainder;                                                                                                                \
         }                                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
@@ -142,7 +239,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                              \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                        \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -162,7 +259,8 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset+num_exchange])], accumulate[(pe_disp[offset+num_exchange])], msg_size, 1, r_partner);    \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                       \
+                                            msg_size, 1, r_partner);                                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -175,8 +273,8 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 offset += num_exchange;                                                                                                                 \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange >> 1;                                                                                                                              \
-        pe_stride << 1;                                                                                                                                 \
+        num_exchange >>= 1;                                                                                                                             \
+        pe_stride <<= 1;                                                                                                                                \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
@@ -199,7 +297,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                        \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                  \
             }                                                                                                                                           \
             /* PEs perform put*/                                                                                                                        \
             else                                                                                                                                        \
@@ -216,12 +314,12 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[offset+num_exchange])], accumulate[(pe_disp[offset+num_exchange])],                       \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                 \
                                           msg_size, 1, r_partner);                                                                                      \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange << 1;                                                                                                                              \
-        pe_stride >> 1;                                                                                                                                 \
+        num_exchange <<= 1;                                                                                                                             \
+        pe_stride >>= 1;                                                                                                                                \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
@@ -383,12 +481,115 @@ void xbrtime_##_typename##_reduce_all_##_funcname(_type *dest, const _type *src,
 
 #undef XBGAS_REDUCE_ALL
 
-#define XBGAS_REDUCE_ALL_MM(_type, _typename, _funcname, _op)
-void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *dest, const _type *src, size_t nelems, int stride)
-{
-
-}
-
+#define XBGAS_REDUCE_ALL_MM(_type, _typename, _funcname, _op)                                                                                           \
+void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *dest, const _type *src, size_t nelems, int stride)                        \
+{                                                                                                                                                       \
+    int i, j, numpes, my_rpe, my_vpe, r_partner, numpes_log_floor, p_prime, remainder;                                                                  \
+    numpes = xbrtime_num_pes();                                                                                                                         \
+    my_rpe = xbrtime_mype();                                                                                                                            \
+    my_vpe = my_rpe();                                                                                                                                  \
+    numpes_log_floor = (int) (log(numpes)/log(2));                                                                                                      \
+    p_prime = 1 << numpes_log_floor;                                                                                                                    \
+    remainder = numpes - p_prime;                                                                                                                       \
+    _type *accumulate = (_type*) xbrtime_malloc(sizeof(_type) * nelems);                                                                                \
+    _type *temp = (_type*) xbrtime_malloc(sizeof(_type) * nelems);                                                                                      \
+                                                                                                                                                        \
+    /* Load reduction values into accumulate buffer and remove stride */                                                                                \
+    for(i = 0; i < nelems; i++)                                                                                                                         \
+    {                                                                                                                                                   \
+        accumulate[i] = src[i*stride];                                                                                                                  \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Ensure buffer is ready */                                                                                                                        \
+    xbrtime_barrier();                                                                                                                                  \
+                                                                                                                                                        \
+    /* Stage 1 (only if NumPEs is not a power of two) */                                                                                                \
+    if(numpes_log_floor != (log(numpes)/log(2)))                                                                                                        \
+    {                                                                                                                                                   \
+        /* First 2r ranks */                                                                                                                            \
+        if(my_rpe < 2*remainder)                                                                                                                        \
+        {                                                                                                                                               \
+            /* Even ranks */                                                                                                                            \
+            if(my_rpe % 2 == 0)                                                                                                                         \
+            {                                                                                                                                           \
+                /* Get values from my_rpe + 1 */                                                                                                        \
+                xbrtime_##_typename##_get(temp, accumulate, nelems, 1, my_rpe + 1);                                                                     \
+                                                                                                                                                        \
+                /* Perform reduction op */                                                                                                              \
+                for(j = 0; j < nelems; j++)                                                                                                             \
+                {                                                                                                                                       \
+                    accumulate[j] = _op(accumulate[j], temp[j]);                                                                                        \
+                }                                                                                                                                       \
+                                                                                                                                                        \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = my_rpe/2;                                                                                                                      \
+            }                                                                                                                                           \
+            /* Odd ranks */                                                                                                                             \
+            else                                                                                                                                        \
+            {                                                                                                                                           \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = -1;                                                                                                                            \
+            }                                                                                                                                           \
+        }                                                                                                                                               \
+        else                                                                                                                                            \
+        {                                                                                                                                               \
+            /* Assign new vpe ranks */                                                                                                                  \
+            my_vpe = my_rpe - remainder;                                                                                                                \
+        }                                                                                                                                               \
+        xbrtime_barrier();                                                                                                                              \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Stage 2 - Recursive Doubling */                                                                                                                  \
+    int pe_stride = 1;                                                                                                                                  \
+    for(i = 0; i < numpes_log_floor; i++)                                                                                                               \
+    {                                                                                                                                                   \
+        if(my_vpe != -1)                                                                                                                                \
+        {                                                                                                                                               \
+            if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
+            {                                                                                                                                           \
+                /* Get from my_vpe + stride */                                                                                                          \
+                r_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder));                                    \
+            }                                                                                                                                           \
+            else                                                                                                                                        \
+            {                                                                                                                                           \
+                /* Get from my_vpe - stride */                                                                                                          \
+                r_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
+                            ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
+            }                                                                                                                                           \
+                                                                                                                                                        \
+            xbrtime_##_typename##_get(temp, accumulate, nelems, 1, r_partner);                                                                          \
+                                                                                                                                                        \
+            /* Perform reduction op */                                                                                                                  \
+            for(j = 0; j < nelems; j++)                                                                                                                 \
+            {                                                                                                                                           \
+                accumulate[j] = _op(accumulate[j], temp[j]);                                                                                            \
+            }                                                                                                                                           \
+        }                                                                                                                                               \
+        pe_stride <<= 1;                                                                                                                                \
+        xbrtime_barrier();                                                                                                                              \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Put all reduced values to remainder PEs if not a power of two */                                                                                 \
+    if(numpes_log_floor != (log(numpes)/log(2)))                                                                                                        \
+    {                                                                                                                                                   \
+        /* First r even rpe ranks*/                                                                                                                     \
+        if((my_rpe < 2*remainder) && (my_rpe % 2 == 0))                                                                                                 \
+        {                                                                                                                                               \
+            xbrtime_##_typename##_put(accumulate, accumulate, nelems, 1, my_rpe + 1);                                                                   \
+        }                                                                                                                                               \
+        xbrtime_barrier();                                                                                                                              \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    /* Copy from buffer to dest with stride */                                                                                                          \
+    for(i = 0; i < nelems; i++)                                                                                                                         \
+    {                                                                                                                                                   \
+        dest[i*stride] = accumulate[i];                                                                                                                 \
+    }                                                                                                                                                   \
+                                                                                                                                                        \
+    xbrtime_free(accumulate);                                                                                                                           \
+    xbrtime_free(temp);                                                                                                                                 \
+}                                                                                                                                                       \
+                                                                                                                                                        \
 void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, const _type *src, size_t nelems, int stride)                              \
 {                                                                                                                                                       \
     int i, numpes, my_rpe, my_vpe, r_partner, numpes_log_floor, p_prime, remainder, counter;                                                            \
@@ -447,6 +648,9 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 {                                                                                                                                       \
                     accumulate[j] = _op(accumulate[j], temp[j]);                                                                                        \
                 }                                                                                                                                       \
+                                                                                                                                                        \
+                /* Assign new vpe ranks */                                                                                                              \
+                my_vpe = my_rpe/2;                                                                                                                      \
             }                                                                                                                                           \
             /* Odd ranks */                                                                                                                             \
             else                                                                                                                                        \
@@ -457,7 +661,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, my_rpe - 1);                 \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, my_rpe - 1);           \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -466,24 +670,15 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Put calculated second half values back to even partner */                                                                            \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[num_exchange])], accumulate[(pe_disp[num_exchange])], msg_size, 1, my_rpe - 1);           \
-            }                                                                                                                                           \
-        }                                                                                                                                               \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, my_rpe - 1);     \
                                                                                                                                                         \
-        /* Assign new vpe ranks */                                                                                                                      \
-        if(my_rpe < 2*remainder)                                                                                                                        \
-        {                                                                                                                                               \
-            if(my_rpe % 2 == 0)                                                                                                                         \
-            {                                                                                                                                           \
-                my_vpe = my_rpe/2;                                                                                                                      \
-            }                                                                                                                                           \
-            else                                                                                                                                        \
-            {                                                                                                                                           \
+                /* Assign new vpe ranks */                                                                                                              \
                 my_vpe = -1;                                                                                                                            \
             }                                                                                                                                           \
         }                                                                                                                                               \
         else                                                                                                                                            \
         {                                                                                                                                               \
+            /* Assign new vpe ranks */                                                                                                                  \
             my_vpe = my_rpe - remainder;                                                                                                                \
         }                                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
@@ -508,7 +703,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                              \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                        \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -528,7 +723,8 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(temp[(pe_disp[offset+num_exchange])], accumulate[(pe_disp[offset+num_exchange])], msg_size, 1, r_partner);    \
+                xbrtime_##_typename##_get(&(temp[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                       \
+                                            msg_size, 1, r_partner);                                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
@@ -541,8 +737,8 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                 offset += num_exchange;                                                                                                                 \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange >> 1;                                                                                                                              \
-        pe_stride << 1;                                                                                                                                 \
+        num_exchange >>= 1;                                                                                                                             \
+        pe_stride <<= 1;                                                                                                                                \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
@@ -565,7 +761,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[offset])], accumulate[(pe_disp[offset])], msg_size, 1, r_partner);                        \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                  \
             }                                                                                                                                           \
             /* PEs perform put*/                                                                                                                        \
             else                                                                                                                                        \
@@ -582,12 +778,12 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_rabenseifner(_type *dest, co
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(accumulate[(pe_disp[offset+num_exchange])], accumulate[(pe_disp[offset+num_exchange])],                       \
+                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                 \
                                           msg_size, 1, r_partner);                                                                                      \
             }                                                                                                                                           \
         }                                                                                                                                               \
-        num_exchange << 1;                                                                                                                              \
-        pe_stride >> 1;                                                                                                                                 \
+        num_exchange <<= 1;                                                                                                                             \
+        pe_stride >>= 1;                                                                                                                                \
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \

@@ -70,10 +70,10 @@
      xbrtime_barrier();                                                                                                     \
                                                                                                                             \
      /* Scatter data using binomial tree */                                                                                 \
-     xbrtime_##_typename##_scatter_tree(temp[(pe_disp[my_rpe])], temp, pe_msg_sz, pe_disp, nelems, root);                   \
+     xbrtime_##_typename##_scatter_tree(&(temp[(pe_disp[my_rpe])]), temp, pe_msg_sz, pe_disp, nelems, root);                \
                                                                                                                             \
      /* Perform ring gather_all */                                                                                          \
-     xbrtime_##_typename##_gather_all_ring(temp, temp[(pe_disp[my_rpe])], pe_msg_sz, pe_disp, nelems);                      \
+     xbrtime_##_typename##_gather_all_ring(temp, &(temp[(pe_disp[my_rpe])]), pe_msg_sz, pe_disp, nelems);                   \
                                                                                                                             \
      /* Migrate from buffer to dest with stride */                                                                          \
      if(my_rpe != root)                                                                                                     \
