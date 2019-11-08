@@ -31,8 +31,14 @@ xbrtime_util.c
 xbrtime_api.c
 xbrtime_alloc.c
 xbrtime_barrier.c
-xbrtime_collectives.c
 xbrtime_atomics.c
+# xbrtime_alltoall.c
+xbrtime_broadcast.c
+xbrtime_gather.c
+xbrtime_gather_all.c
+xbrtime_reduce.c
+xbrtime_reduce_all.c
+xbrtime_scatter.c
 xbrtime_ctor_asm.s
 xbrtime_util_asm.s
 xbrtime_api_asm.s
