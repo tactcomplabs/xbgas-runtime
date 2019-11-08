@@ -94,11 +94,13 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             }                                                                                                                                           \
                                                                                                                                                         \
             xbrtime_##_typename##_get(temp, accumulate, nelems, 1, r_partner);                                                                          \
+        }                                                                                                                                               \
+        /* Ensure get is complete */                                                                                                                    \
+        xbrtime_barrier();                                                                                                                              \
                                                                                                                                                         \
-            /* Ensure get is complete */                                                                                                                \
-            xbrtime_barrier();                                                                                                                          \
-                                                                                                                                                        \
-            /* Perform reduction op */                                                                                                                  \
+        /* Perform reduction op */                                                                                                                      \
+        if(my_vpe != -1)                                                                                                                                \
+        {                                                                                                                                               \
             for(j = 0; j < nelems; j++)                                                                                                                 \
             {                                                                                                                                           \
                 accumulate[j] = accumulate[j] _op temp[j];                                                                                              \
@@ -564,11 +566,13 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             }                                                                                                                                           \
                                                                                                                                                         \
             xbrtime_##_typename##_get(temp, accumulate, nelems, 1, r_partner);                                                                          \
+        }                                                                                                                                               \
+        /* Ensure get is complete */                                                                                                                    \
+        xbrtime_barrier();                                                                                                                              \
                                                                                                                                                         \
-            /* Ensure get is complete */                                                                                                                \
-            xbrtime_barrier();                                                                                                                          \
-                                                                                                                                                        \
-            /* Perform reduction op */                                                                                                                  \
+        /* Perform reduction op */                                                                                                                      \
+        if(my_vpe != -1)                                                                                                                                \
+        {                                                                                                                                               \
             for(j = 0; j < nelems; j++)                                                                                                                 \
             {                                                                                                                                           \
                 accumulate[j] = _op(accumulate[j], temp[j]);                                                                                            \
