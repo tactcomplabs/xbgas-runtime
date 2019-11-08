@@ -49,7 +49,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             if(my_rpe % 2 == 0)                                                                                                                         \
             {                                                                                                                                           \
                 /* Get values from my_rpe + 1 */                                                                                                        \
-                printf("Stage 1:PE %d performing get from PE %d", my_rpe, r_partner);\
+                printf("Stage 1:PE %d performing get from PE %d\n", my_rpe, r_partner);\
                 xbrtime_##_typename##_get(temp, accumulate, nelems, 1, my_rpe + 1);                                                                     \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
@@ -85,13 +85,13 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
             {                                                                                                                                           \
                 /* Get from my_vpe + stride */                                                                                                          \
-                printf("Stage 2:PE %d performing get from PE %d", my_rpe, r_partner);                                       \
+                printf("Stage 2:PE %d performing get from PE %d\n", my_rpe, r_partner);                                       \
                 r_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                     \
             }                                                                                                                                           \
             else                                                                                                                                        \
             {                                                                                                                                           \
                 /* Get from my_vpe - stride */                                                                                  \
-                printf("Stage 2:PE %d performing get from PE %d", my_rpe, r_partner);                                           \
+                printf("Stage 2:PE %d performing get from PE %d\n", my_rpe, r_partner);                                           \
                 r_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
             }                                                                                                                                           \
@@ -114,7 +114,7 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
         /* First r even rpe ranks*/                                                                                                                     \
         if((my_rpe < 2*remainder) && (my_rpe % 2 == 0))                                                                                                 \
         {                                                                                                                                               \
-            printf("Stage 3:PE %d performing put to %d", my_rpe, r_partner); \
+            printf("Stage 3:PE %d performing put to %d\n", my_rpe, r_partner); \
             xbrtime_##_typename##_put(accumulate, accumulate, nelems, 1, my_rpe + 1);                                                                   \
         }                                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
