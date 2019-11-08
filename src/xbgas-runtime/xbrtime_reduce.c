@@ -263,8 +263,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
         xbrtime_barrier();                                                                                                                              \
     }                                                                                                                                                   \
                                                                                                                                                         \
-    /* Copy from buffer to dest with stride on root rpe */                                                                                              \
-    if(my_vpe == 0)                                                                                                                                     \
+    /* Copy from buffer to dest with stride on root */                                                                                                  \
+    if(my_lpe == 0)                                                                                                                                     \
     {                                                                                                                                                   \
         for(i = 0; i < nelems; i++)                                                                                                                     \
         {                                                                                                                                               \
@@ -659,7 +659,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
     }                                                                                                                                                   \
                                                                                                                                                         \
     /* Copy from buffer to dest with stride on root rpe */                                                                                              \
-    if(my_vpe == 0)                                                                                                                                     \
+    if(my_lpe == 0)                                                                                                                                     \
     {                                                                                                                                                   \
         for(i = 0; i < nelems; i++)                                                                                                                     \
         {                                                                                                                                               \
