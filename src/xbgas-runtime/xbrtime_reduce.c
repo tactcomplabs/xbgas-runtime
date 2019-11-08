@@ -119,8 +119,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if(my_lpe % 2 == 0)                                                                                                                         \
             {                                                                                                                                           \
                 /* Calculate and get first half of values from my_lpe + 1 */                                                                            \
-                l_partner = my_lpe+1;															\
-		r_partner = ((l_partner+root) % numpes);;                                                                                           	\
+                l_partner = my_lpe+1;                                                                                                                   \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
@@ -140,8 +140,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             else                                                                                                                                        \
             {                                                                                                                                           \
                 /* Calculate and get second half of values from my_lpe - 1 */                                                                           \
-                l_partner = my_lpe-1;															\
-		r_partner = ((l_partner+root) % numpes);                                                                                                \
+                l_partner = my_lpe-1;                                                                                                                   \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = num_exchange; j < p_prime; j++)                                                                                                 \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
@@ -185,7 +185,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
             {                                                                                                                                           \
                 l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                     \
-                r_partner = ((l_partner+root) % numpes);                                                                                           	\
+                r_partner = ((l_partner+root) % numpes);                                                                                           	    \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -514,8 +514,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if(my_lpe % 2 == 0)                                                                                                                         \
             {                                                                                                                                           \
                 /* Calculate and get first half of values from my_lpe + 1 */                                                                            \
-                l_partner = my_lpe+1;															\
-		r_partner = ((l_partner+root) % numpes);                                                                                                \
+                l_partner = my_lpe+1;                                                                                                                   \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
@@ -536,8 +536,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             else                                                                                                                                        \
             {                                                                                                                                           \
                 /* Calculate and get second half of values from my_lpe - 1 */                                                                           \
-                l_partner = my_lpe-1;															\
-		r_partner = ((l_partner+root) % numpes);                                                                                                \
+                l_partner = my_lpe-1;                                                                                                                   \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = num_exchange; j < p_prime; j++)                                                                                                 \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
