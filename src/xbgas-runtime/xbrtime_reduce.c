@@ -74,7 +74,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_tree(_type *dest, const _type *s
                                                                                                                                                         \
 void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const _type *src, size_t nelems, int stride, int root)                        \
 {                                                                                                                                                       \
-    int i, numpes, my_rpe, my_lpe, my_vpe, r_partner, l_partner, numpes_log_floor, p_prime, remainder, counter;                                         \
+    int i, j, numpes, my_rpe, my_lpe, my_vpe, r_partner, l_partner, numpes_log_floor, p_prime, remainder, counter;                                         \
     numpes = xbrtime_num_pes();                                                                                                                         \
     my_rpe = xbrtime_mype();                                                                                                                            \
     my_lpe = ((my_rpe >= root) ? (my_rpe - root) : (my_rpe + numpes - root)); /* Logical PE abstraction - ensure root PE is not a removed PE */         \
@@ -146,16 +146,16 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(&(temp[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);            \
+                xbrtime_##_typename##_get(&(temp[(partition_disp[num_exchange])]), &(accumulate[(partition_disp[num_exchange])]), msg_size, 1, r_partner);            \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(pe_disp[num_exchange])+j] = accumulate[(pe_disp[num_exchange])+j] _op temp[(pe_disp[num_exchange])+j];                  \
+                    accumulate[(partition_disp[num_exchange])+j] = accumulate[(partition_disp[num_exchange])+j] _op temp[(partition_disp[num_exchange])+j];                  \
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Put calculated second half values back to even partner */                                                                            \
-                xbrtime_##_typename##_put(&(accumulate[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);      \
+                xbrtime_##_typename##_put(&(accumulate[(partition_disp[num_exchange])]), &(accumulate[(partition_disp[num_exchange])]), msg_size, 1, r_partner);      \
                                                                                                                                                         \
                 /* Assign new vpe ranks */                                                                                                              \
                 my_vpe = -1;                                                                                                                            \
@@ -180,8 +180,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             /* PEs perform get and reduction of first buffer half */                                                                                    \
             if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
             {                                                                                                                                           \
-                l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder));                                    \
-                r_partner = ((my_lpartner+remainder) % numpes);                                                                                         \
+                l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                    \
+                r_partner = ((l_partner+remainder) % numpes);                                                                                         \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -189,12 +189,12 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(&(temp[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                        \
+                xbrtime_##_typename##_get(&(temp[(partition_disp[offset])]), &(accumulate[(partition_disp[offset])]), msg_size, 1, r_partner);                        \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(pe_disp[offset]+j)] = accumulate[(pe_disp[offset])+j] _op temp[(pe_disp[offset])+j];                                    \
+                    accumulate[(partition_disp[offset]+j)] = accumulate[(partition_disp[offset])+j] _op temp[(partition_disp[offset])+j];                                    \
                 }                                                                                                                                       \
             }                                                                                                                                           \
             /* PEs perform get and reduction of second buffer half */                                                                                   \
@@ -202,7 +202,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((my_lpartner+remainder) % numpes);                                                                                         \
+                r_partner = ((l_partner+remainder) % numpes);                                                                                         \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -210,14 +210,14 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(&(temp[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                       \
+                xbrtime_##_typename##_get(&(temp[(partition_disp[offset+num_exchange])]), &(accumulate[(partition_disp[offset+num_exchange])]),                       \
                                             msg_size, 1, r_partner);                                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(pe_disp[offset+num_exchange])+j] = accumulate[(pe_disp[offset+num_exchange])+j]                                         \
-                                                                   _op temp[(pe_disp[offset+num_exchange])+j];                                          \
+                    accumulate[(partition_disp[offset+num_exchange])+j] = accumulate[(partition_disp[offset+num_exchange])+j]                                         \
+                                                                   _op temp[(partition_disp[offset+num_exchange])+j];                                          \
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Increase offset for these PEs*/                                                                                                      \
@@ -243,7 +243,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((my_lpartner+remainder) % numpes);                                                                                         \
+                r_partner = ((l_partner+remainder) % numpes);                                                                                         \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -251,7 +251,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                  \
+                xbrtime_##_typename##_put(&(accumulate[(partition_disp[offset])]), &(accumulate[(partition_disp[offset])]), msg_size, 1, r_partner);                  \
             }                                                                                                                                           \
         }                                                                                                                                               \
         num_exchange <<= 1;                                                                                                                             \
@@ -278,7 +278,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
 {                                                                                                                                                       \
     if((sizeof(_type)*nelems) < LARGE_REDUCE)                                                                                                           \
     {                                                                                                                                                   \
-        xbrtime_##_typename##_reduce_##_funcname##_tree(dest, src, nelems, stride, root)                                                                \
+        xbrtime_##_typename##_reduce_##_funcname##_tree(dest, src, nelems, stride, root);                                                                \
     }                                                                                                                                                   \
     else                                                                                                                                                \
     {                                                                                                                                                   \
@@ -466,7 +466,7 @@ void xbrtime_##_typename##_reduce_##_funcname_tree(_type *dest, const _type *src
                                                                                                                                                         \
 void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const _type *src, size_t nelems, int stride, int root)                        \
 {                                                                                                                                                       \
-    int i, numpes, my_rpe, my_lpe, my_vpe, r_partner, l_partner, numpes_log_floor, p_prime, remainder, counter;                                         \
+    int i, j, numpes, my_rpe, my_lpe, my_vpe, r_partner, l_partner, numpes_log_floor, p_prime, remainder, counter;                                         \
     numpes = xbrtime_num_pes();                                                                                                                         \
     my_rpe = xbrtime_mype();                                                                                                                            \
     my_lpe = ((my_rpe >= root) ? (my_rpe - root) : (my_rpe + numpes - root)); /* Logical PE abstraction - ensure root PE is not a removed PE */         \
@@ -538,16 +538,16 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(&(temp[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);            \
+                xbrtime_##_typename##_get(&(temp[(partition_disp[num_exchange])]), &(accumulate[(partition_disp[num_exchange])]), msg_size, 1, r_partner);            \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(pe_disp[num_exchange])+j] = _op(accumulate[(pe_disp[num_exchange])+j], temp[(pe_disp[num_exchange])+j]);                \
+                    accumulate[(partition_disp[num_exchange])+j] = _op(accumulate[(partition_disp[num_exchange])+j], temp[(partition_disp[num_exchange])+j]);                \
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Put calculated second half values back to even partner */                                                                            \
-                xbrtime_##_typename##_put(&(accumulate[(pe_disp[num_exchange])]), &(accumulate[(pe_disp[num_exchange])]), msg_size, 1, r_partner);      \
+                xbrtime_##_typename##_put(&(accumulate[(partition_disp[num_exchange])]), &(accumulate[(partition_disp[num_exchange])]), msg_size, 1, r_partner);      \
                                                                                                                                                         \
                 /* Assign new vpe ranks */                                                                                                              \
                 my_vpe = -1;                                                                                                                            \
@@ -572,8 +572,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             /* PEs perform get and reduction of first buffer half */                                                                                    \
             if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
             {                                                                                                                                           \
-                l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder));                                    \
-                r_partner = ((my_lpartner+remainder) % numpes);                                                                                         \
+                l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                    \
+                r_partner = ((l_partner+remainder) % numpes);                                                                                         \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -581,12 +581,12 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(&(temp[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                        \
+                xbrtime_##_typename##_get(&(temp[(partition_disp[offset])]), &(accumulate[(partition_disp[offset])]), msg_size, 1, r_partner);                        \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(pe_disp[offset]+j)] = _op(accumulate[(pe_disp[offset])+j], temp[(pe_disp[offset])+j]);                                  \
+                    accumulate[(partition_disp[offset]+j)] = _op(accumulate[(partition_disp[offset])+j], temp[(partition_disp[offset])+j]);                                  \
                 }                                                                                                                                       \
             }                                                                                                                                           \
             /* PEs perform get and reduction of second buffer half */                                                                                   \
@@ -594,7 +594,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((my_lpartner+remainder) % numpes);                                                                                         \
+                r_partner = ((l_partner+remainder) % numpes);                                                                                         \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -602,14 +602,14 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+num_exchange+j];                                                                                 \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_get(&(temp[(pe_disp[offset+num_exchange])]), &(accumulate[(pe_disp[offset+num_exchange])]),                       \
+                xbrtime_##_typename##_get(&(temp[(partition_disp[offset+num_exchange])]), &(accumulate[(partition_disp[offset+num_exchange])]),                       \
                                             msg_size, 1, r_partner);                                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
                 for(j = 0; j < msg_size; j++)                                                                                                           \
                 {                                                                                                                                       \
-                    accumulate[(pe_disp[offset+num_exchange])+j] = _op(accumulate[(pe_disp[offset+num_exchange])+j],                                    \
-                                                                       temp[(pe_disp[offset+num_exchange])+j]);                                         \
+                    accumulate[(partition_disp[offset+num_exchange])+j] = _op(accumulate[(partition_disp[offset+num_exchange])+j],                                    \
+                                                                       temp[(partition_disp[offset+num_exchange])+j]);                                         \
                 }                                                                                                                                       \
                                                                                                                                                         \
                 /* Increase offset for these PEs*/                                                                                                      \
@@ -635,7 +635,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((my_lpartner+remainder) % numpes);                                                                                         \
+                r_partner = ((l_partner+remainder) % numpes);                                                                                         \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -643,7 +643,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
                                                                                                                                                         \
-                xbrtime_##_typename##_put(&(accumulate[(pe_disp[offset])]), &(accumulate[(pe_disp[offset])]), msg_size, 1, r_partner);                  \
+                xbrtime_##_typename##_put(&(accumulate[(partition_disp[offset])]), &(accumulate[(partition_disp[offset])]), msg_size, 1, r_partner);                  \
             }                                                                                                                                           \
         }                                                                                                                                               \
         num_exchange <<= 1;                                                                                                                             \
@@ -670,7 +670,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
 {                                                                                                                                                       \
     if((sizeof(_type)*nelems) < LARGE_REDUCE)                                                                                                           \
     {                                                                                                                                                   \
-        xbrtime_##_typename##_reduce_##_funcname##_tree(dest, src, nelems, stride, root)                                                                \
+        xbrtime_##_typename##_reduce_##_funcname##_tree(dest, src, nelems, stride, root);                                                                \
     }                                                                                                                                                   \
     else                                                                                                                                                \
     {                                                                                                                                                   \
