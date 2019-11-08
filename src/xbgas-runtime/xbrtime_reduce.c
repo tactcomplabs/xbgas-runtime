@@ -410,7 +410,7 @@ void xbrtime_##_typename##_reduce_##_funcname(_type *dest, const _type *src, siz
 #undef XBGAS_REDUCE
 
 #define XBGAS_REDUCE_MM(_type, _typename, _funcname, _op)                                                                                               \
-void xbrtime_##_typename##_reduce_##_funcname_tree(_type *dest, const _type *src, size_t nelems, int stride, int root)                                  \
+void xbrtime_##_typename##_reduce_##_funcname##_tree(_type *dest, const _type *src, size_t nelems, int stride, int root)                                  \
 {                                                                                                                                                       \
     int i, j, numpes,my_rpe, my_vpe, numpes_log, mask, two_i, r_partner, v_partner;                                                                     \
     stride = ((stride == 0) ? 1 : stride);   /* Avoid memory allocation problem */                                                                      \
