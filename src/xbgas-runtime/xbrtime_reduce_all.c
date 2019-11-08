@@ -49,7 +49,6 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             if(my_rpe % 2 == 0)                                                                                                                         \
             {                                                                                                                                           \
                 /* Get values from my_rpe + 1 */                                                                                                        \
-                printf("Stage 1:PE %d performing get from PE %d\n", my_rpe, my_rpe+1);\
                 xbrtime_##_typename##_get(temp, accumulate, nelems, 1, my_rpe + 1);                                                                     \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
@@ -86,17 +85,18 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             {                                                                                                                                           \
                 /* Get from my_vpe + stride */                                                                                                          \
                 r_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                     \
-                printf("Stage 2. %d:PE %d performing get from PE %d\n", i, my_rpe, r_partner);                                       \
             }                                                                                                                                           \
             else                                                                                                                                        \
             {                                                                                                                                           \
-                /* Get from my_vpe - stride */                                                                                  \
+                /* Get from my_vpe - stride */                                                                                                          \
                 r_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                                            printf("Stage 2. %d :PE %d performing get from PE %d\n",i, my_rpe, r_partner);                                           \
             }                                                                                                                                           \
                                                                                                                                                         \
             xbrtime_##_typename##_get(temp, accumulate, nelems, 1, r_partner);                                                                          \
+                                                                                                                                                        \
+            /* Ensure get is complete */                                                                                                                \
+            xbrtime_barrier();                                                                                                                          \
                                                                                                                                                         \
             /* Perform reduction op */                                                                                                                  \
             for(j = 0; j < nelems; j++)                                                                                                                 \
@@ -114,7 +114,6 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
         /* First r even rpe ranks*/                                                                                                                     \
         if((my_rpe < 2*remainder) && (my_rpe % 2 == 0))                                                                                                 \
         {                                                                                                                                               \
-            printf("Stage 3:PE %d performing put to %d\n", my_rpe, my_rpe+1); \
             xbrtime_##_typename##_put(accumulate, accumulate, nelems, 1, my_rpe + 1);                                                                   \
         }                                                                                                                                               \
         xbrtime_barrier();                                                                                                                              \
@@ -565,6 +564,9 @@ void xbrtime_##_typename##_reduce_all_##_funcname##_recursive_doubling(_type *de
             }                                                                                                                                           \
                                                                                                                                                         \
             xbrtime_##_typename##_get(temp, accumulate, nelems, 1, r_partner);                                                                          \
+                                                                                                                                                        \
+            /* Ensure get is complete */                                                                                                                \
+            xbrtime_barrier();                                                                                                                          \
                                                                                                                                                         \
             /* Perform reduction op */                                                                                                                  \
             for(j = 0; j < nelems; j++)                                                                                                                 \
