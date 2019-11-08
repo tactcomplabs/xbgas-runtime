@@ -119,12 +119,12 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if(my_lpe % 2 == 0)                                                                                                                         \
             {                                                                                                                                           \
                 /* Calculate and get first half of values from my_lpe + 1 */                                                                            \
-                r_partner = ((my_lpe-1-remainder) % numpes);;                                                                                           \
+                l_partner = my_lpe+1;															\
+		r_partner = ((l_partner+root) % numpes);;                                                                                           	\
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
                 }                                                                                                                                       \
-                                                                                                                                                        \
                 xbrtime_##_typename##_get(temp, accumulate, msg_size, 1, r_partner);                                                                    \
                                                                                                                                                         \
                 /* Perform reduction op */                                                                                                              \
@@ -140,7 +140,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             else                                                                                                                                        \
             {                                                                                                                                           \
                 /* Calculate and get second half of values from my_lpe - 1 */                                                                           \
-                r_partner = ((my_lpe-1+remainder) % numpes);                                                                                            \
+                l_partner = my_lpe-1;															\
+		r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = num_exchange; j < p_prime; j++)                                                                                                 \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
@@ -184,7 +185,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
             {                                                                                                                                           \
                 l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                     \
-                r_partner = ((l_partner+remainder) % numpes);                                                                                           \
+                r_partner = ((l_partner+root) % numpes);                                                                                           	\
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -205,7 +206,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((l_partner+remainder) % numpes);                                                                                           \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -242,18 +243,17 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
         if(my_vpe != -1)                                                                                                                                \
         {                                                                                                                                               \
             /* PEs perform put */                                                                                                                       \
-            if(((my_vpe & ( 1 << i)) == i) && (my_vpe < active_pes))                                                                                    \
+            if(((my_vpe & ( 1 << i)) == (1 << i)) && (my_vpe < active_pes))                                                                             \
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((l_partner+remainder) % numpes);                                                                                           \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[offset+j];                                                                                              \
                 }                                                                                                                                       \
-                                                                                                                                                        \
                 xbrtime_##_typename##_put(&(accumulate[(partition_disp[offset])]), &(accumulate[(partition_disp[offset])]), msg_size, 1, r_partner);    \
             }                                                                                                                                           \
         }                                                                                                                                               \
@@ -514,7 +514,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if(my_lpe % 2 == 0)                                                                                                                         \
             {                                                                                                                                           \
                 /* Calculate and get first half of values from my_lpe + 1 */                                                                            \
-                r_partner = ((my_lpe-1-remainder) % numpes);;                                                                                           \
+                l_partner = my_lpe+1;															\
+		r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
@@ -535,7 +536,8 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             else                                                                                                                                        \
             {                                                                                                                                           \
                 /* Calculate and get second half of values from my_lpe - 1 */                                                                           \
-                r_partner = ((my_lpe-1+remainder) % numpes);                                                                                            \
+                l_partner = my_lpe-1;															\
+		r_partner = ((l_partner+root) % numpes);                                                                                                \
                 for(j = num_exchange; j < p_prime; j++)                                                                                                 \
                 {                                                                                                                                       \
                     msg_size += partition_sizes[j];                                                                                                     \
@@ -579,7 +581,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             if((my_vpe & ( 1 << i)) == 0)                                                                                                               \
             {                                                                                                                                           \
                 l_partner = ((my_vpe+pe_stride) < remainder ? (my_vpe+pe_stride)*2 : (my_vpe+pe_stride)+remainder);                                     \
-                r_partner = ((l_partner+remainder) % numpes);                                                                                           \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -600,7 +602,7 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((l_partner+remainder) % numpes);                                                                                           \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
@@ -637,11 +639,11 @@ void xbrtime_##_typename##_reduce_##_funcname##_rabenseifner(_type *dest, const 
         if(my_vpe != -1)                                                                                                                                \
         {                                                                                                                                               \
             /* PEs perform put */                                                                                                                       \
-            if(((my_vpe & ( 1 << i)) == i) && (my_vpe < active_pes))                                                                                    \
+            if(((my_vpe & ( 1 << i)) == (1 << i)) && (my_vpe < active_pes))                                                                             \
             {                                                                                                                                           \
                 l_partner = (((my_vpe-pe_stride+p_prime)%p_prime) < remainder ? ((my_vpe-pe_stride+p_prime)%p_prime)*2 :                                \
                             ((my_vpe-pe_stride+p_prime)%p_prime)+remainder);                                                                            \
-                r_partner = ((l_partner+remainder) % numpes);                                                                                           \
+                r_partner = ((l_partner+root) % numpes);                                                                                                \
                                                                                                                                                         \
                 /* Calculate msg_size */                                                                                                                \
                 for(j = 0; j < num_exchange; j++)                                                                                                       \
