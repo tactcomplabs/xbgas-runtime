@@ -71,10 +71,10 @@
                                                                                                                             \
      /* Scatter data using binomial tree */                                                                                 \
      xbrtime_##_typename##_scatter_tree(&(temp[(pe_disp[my_rpe])]), temp, pe_msg_sz, pe_disp, nelems, root);                \
-                            printf("PE %d completed scatter\n", my_rpe);                                                                                                \
+                                                                                                                            \
      /* Perform ring gather_all */                                                                                          \
      xbrtime_##_typename##_gather_all_ring(temp, &(temp[(pe_disp[my_rpe])]), pe_msg_sz, pe_disp, nelems);                   \
-                                printf("PE %d completed gather\n", my_rpe);                                                                                            \
+                                                                                                                            \
      /* Migrate from buffer to dest with stride */                                                                          \
      if(my_rpe != root)                                                                                                     \
      {                                                                                                                      \
