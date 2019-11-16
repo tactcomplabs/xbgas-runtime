@@ -17,24 +17,24 @@
   .global __xbrtime_ctor_reg_reset
   .type __xbrtime_ctor_reg_reset, @function
 __xbrtime_ctor_reg_reset:
-  eaddie e14, 0, zero
-  eaddie e15, 0, zero
-  eaddie e16, 0, zero
-  eaddie e17, 0, zero
-  eaddie e18, 0, zero
-  eaddie e19, 0, zero
-  eaddie e20, 0, zero
-  eaddie e21, 0, zero
-  eaddie e22, 0, zero
-  eaddie e23, 0, zero
-  eaddie e24, 0, zero
-  eaddie e25, 0, zero
-  eaddie e26, 0, zero
-  eaddie e27, 0, zero
-  eaddie e28, 0, zero
-  eaddie e29, 0, zero
-  eaddie e30, 0, zero
-  eaddie e31, 0, zero
+  eaddie e14, zero, 0
+  eaddie e15, zero, 0
+  eaddie e16, zero, 0
+  eaddie e17, zero, 0
+  eaddie e18, zero, 0
+  eaddie e19, zero, 0
+  eaddie e20, zero, 0
+  eaddie e21, zero, 0
+  eaddie e22, zero, 0
+  eaddie e23, zero, 0
+  eaddie e24, zero, 0
+  eaddie e25, zero, 0
+  eaddie e26, zero, 0
+  eaddie e27, zero, 0
+  eaddie e28, zero, 0
+  eaddie e29, zero, 0
+  eaddie e30, zero, 0
+  eaddie e31, zero, 0
   ret
   .size __xbrtime_ctor_reg_reset, .-__xbrtime_ctor_reg_reset
 
