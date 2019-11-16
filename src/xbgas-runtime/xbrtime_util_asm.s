@@ -22,28 +22,28 @@
   .global __xbrtime_asm_get_id
   .type __xbrtime_asm_get_id, @function
 __xbrtime_asm_get_id:
-  eaddi a0,0,e10
+  eaddi a0,e10,0
   ret
   .size __xbrtime_asm_get_id, .-__xbrtime_asm_get_id
 
   .global __xbrtime_asm_get_npes
   .type __xbrtime_asm_get_npes, @function
 __xbrtime_asm_get_npes:
-  eaddi a0,0,e11
+  eaddi a0,e11,0
   ret
   .size __xbrtime_asm_get_npes, .-__xbrtime_asm_get_npes
 
   .global __xbrtime_asm_get_memsize
   .type __xbrtime_asm_get_memsize, @function
 __xbrtime_asm_get_memsize:
-  eaddi a0,0,e12
+  eaddi a0,e12,0
   ret
   .size __xbrtime_asm_get_memsize, .-__xbrtime_asm_get_memsize
 
   .global __xbrtime_asm_get_startaddr
   .type __xbrtime_asm_get_startaddr, @function
 __xbrtime_asm_get_startaddr:
-  eaddi a0,0,e13
+  eaddi a0,e13,0
   ret
   .size __xbrtime_asm_get_startaddr, .-__xbrtime_asm_get_startaddr
 
@@ -68,7 +68,7 @@ __xbrtime_asm_quiet_fence:
   .globl __xbrtime_get_remote_alloc
   .type __xbrtime_get_remote_alloc, @function
 __xbrtime_get_remote_alloc:
-  eaddie e10, 0, a1
+  eaddie e10, a1, 0
   eld a0, 0(a0)
   ret
   .size __xbrtime_get_remote_alloc, .-__xbrtime_get_remote_alloc
@@ -80,7 +80,7 @@ __xbrtime_get_remote_alloc:
   .globl __xbrtime_remote_touch
   .type __xbrtime_remote_touch, @function
 __xbrtime_remote_touch:
-  eaddie e10, 0, a1
+  eaddie e10, a1, 0
   esd a2, 0(a0)
   ret
   .size __xbrtime_remote_touch, .-__xbrtime_remote_touch
