@@ -15,7 +15,7 @@
 #define _XBRTIME_ATOMICS_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 /*!   \fn xbrtime_TYPENAME_atomic_OP( TYPE *dest, TYPE op_val, int pe )

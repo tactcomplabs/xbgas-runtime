@@ -15,7 +15,7 @@
 #define _XBRTIME_VERSION_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 #define _XBRTIME_MAJOR_VERSION_ 0
