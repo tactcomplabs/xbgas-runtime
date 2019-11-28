@@ -24,7 +24,7 @@
 #define _XBRTIME_MACROS_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 #ifndef _XBRTIME_MIN_UNR_THRESHOLD_

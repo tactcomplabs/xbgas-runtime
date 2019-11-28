@@ -24,7 +24,7 @@
 //#define LARGE_ALL_TO_ALL            1
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
  /*!   \fn void xbrtime_TYPENAME_broadcast( TYPE *dest, const TYPE *src, size_t nelems, int stride, int root )
