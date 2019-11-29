@@ -32,7 +32,7 @@ xbrtime_api.c
 xbrtime_alloc.c
 xbrtime_barrier.c
 xbrtime_atomics.c
-# xbrtime_alltoall.c
+xbrtime_alltoall.c
 xbrtime_broadcast.c
 xbrtime_gather.c
 xbrtime_gather_all.c

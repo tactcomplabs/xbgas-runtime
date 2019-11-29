@@ -572,13 +572,14 @@ void xbrtime_##_typename##_gather_all(_type *dest, const _type *src, int *pe_msg
       \brief Performs a personalized all-to-all exchange of values of type TYPE between PEs
       \param dest is a pointer to the base shared address on each PE where exchanged values are to be stored (indexed by PE id)
       \param src is a pointer to the base shared address on each PE where values to be exchanged are initially located (indexed by PE id)
-      \param nelems is the total number of elements to be exchanged by each PE
-      \param stride is the stride size between elements at src and dest
+      \param src_stride is the stride size between elements at src
+      \param dest_stride is the stride size between elements at dest
+      \param nelems is the number of elements being exchanged with each PE
       \return void
 */
 #define XBGAS_DECL_ALLTOALL(_type, _typename)                                                                                           \
-void xbrtime_##_typename##_alltoall_shift_exchange(_type *dest, const _type *src, size_t nelems, int stride);                           \
-void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, size_t nelems, int stride);
+void xbrtime_##_typename##_alltoall_shift_exchange(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);      \
+void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);
 
     XBGAS_DECL_ALLTOALL(float, float)
     XBGAS_DECL_ALLTOALL(double, double)
