@@ -15,62 +15,12 @@
 
 /* A very simple and naive implementation until a better algorithm is found */
 #define XBGAS_ALLTOALL(_type, _typename)                                                                                               \
-void xbrtime_##_typename##_alltoall_concurrent(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems)          \
-{                                                                                                                                      \
-    int i, my_rpe, numpes, total_elems;                                                                                     \
-    my_rpe = xbrtime_mype();                                                                                                \
-    numpes = xbrtime_num_pes();                                                                                             \
-    total_elems = numpes * nelems; /* Total elements per PE */                                                              \
-    _type *src_buff = (_type*) xbrtime_malloc(total_elems * sizeof(_type));                                                 \
-    _type *dest_buff = (_type*) xbrtime_malloc(total_elems * sizeof(_type));                                                \
-                                                                                                                            \
-    /* Build src_buff */                                                                                                    \
-    for(i = 0; i < total_elems; i++)                                                                                        \
-    {                                                                                                                       \
-        src_buff[i] = src[i * src_stride];                                                                                  \
-    }                                                                                                                       \
-                                                                                                                            \
-    xbrtime_barrier();                                                                                                      \
-                                                                                                                            \
-    /* Perform put to dest_buff of each PE */                                                                               \
-    for(i = 0; i < numpes; i++)                                                                                             \
-    {                                                                                                                       \
-        xbrtime_##_typename##_put(&dest_buff[my_rpe*nelems], &src_buff[i*nelems], nelems, 1, i);                            \
-    }                                                                                                                       \
-                                                                                                                            \
-    xbrtime_barrier();                                                                                                      \
-                                                                                                                            \
-    /* Copy to dest with stride */                                                                                          \
-    for(i = 0; i < total_elems; i++)                                                                                        \
-    {                                                                                                                       \
-        dest[i * dest_stride] = dest_buff[i];                                                                               \
-    }                                                                                                                       \
-                                                                                                                            \
-    xbrtime_free(src_buff);                                                                                                 \
-    xbrtime_free(dest_buff);                                                                                                \
-}
-
-void xbrtime_##_typename##_alltoall_recursive_doubling(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems)
+void xbrtime_##_typename##_alltoall_shift_exchange(_type *dest, const _type *src, size_t nelems, int stride)
 {
 
 }
 
-void xbrtime_##_typename##_alltoall_bruck_index(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems)
-{
-
-}
-
-void xbrtime_##_typename##_alltoall_gen_pairwise(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems)
-{
-
-}
-
-void xbrtime_##_typename##_alltoall_shift_exchange(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems)
-{
-
-}
-
-void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems)
+void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, size_t nelems, int stride)
 {
 
 }

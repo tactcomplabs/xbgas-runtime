@@ -15,12 +15,12 @@
 #define _XBRTIME_COLLECTIVES_H_
 
 /* Large message size thresholds (bytes) */
-#define LARGE_BROADCAST             1
-#define LARGE_REDUCE                1
-#define LARGE_REDUCE_ALL            1
-#define LARGE_SCATTER               1
-#define LARGE_GATHER                1
-#define LARGE_GATHER_ALL            1
+#define LARGE_BROADCAST             12288
+#define LARGE_REDUCE                2048
+#define LARGE_REDUCE_ALL            2048
+//#define LARGE_SCATTER               1
+//#define LARGE_GATHER                1
+#define LARGE_GATHER_ALL            81920
 //#define LARGE_ALL_TO_ALL            1
 
 #ifdef __cplusplus
@@ -568,22 +568,17 @@ void xbrtime_##_typename##_gather_all(_type *dest, const _type *src, int *pe_msg
 
 #undef XBGAS_DECL_GATHER_ALL
 
-/*!   \fn xbrtime_TYPENAME_alltoall( TYPE *dest, TYPE *src, ptrdiff_t src_stride, ptrdiff_t dest_stride, size_t nelems)
+/*!   \fn xbrtime_TYPENAME_alltoall( TYPE *dest, const TYPE *src, size_t nelems, int stride )
       \brief Performs a personalized all-to-all exchange of values of type TYPE between PEs
       \param dest is a pointer to the base shared address on each PE where exchanged values are to be stored (indexed by PE id)
       \param src is a pointer to the base shared address on each PE where values to be exchanged are initially located (indexed by PE id)
-      \param src_stride is the stride size between elements at src
-      \param dest_stride is the stride size between elements at dest
       \param nelems is the total number of elements to be exchanged by each PE
+      \param stride is the stride size between elements at src and dest
       \return void
-
+*/
 #define XBGAS_DECL_ALLTOALL(_type, _typename)                                                                                           \
-void xbrtime_##_typename##_alltoall_concurrent(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);          \
-void xbrtime_##_typename##_alltoall_recursive_doubling(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);  \
-void xbrtime_##_typename##_alltoall_bruck_index(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);         \
-void xbrtime_##_typename##_alltoall_gen_pairwise(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);        \
-void xbrtime_##_typename##_alltoall_shift_exchange(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);      \
-void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_stride, int dest_stride, size_t nelems);
+void xbrtime_##_typename##_alltoall_shift_exchange(_type *dest, const _type *src, size_t nelems, int stride);                           \
+void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, size_t nelems, int stride);
 
     XBGAS_DECL_ALLTOALL(float, float)
     XBGAS_DECL_ALLTOALL(double, double)
@@ -611,7 +606,6 @@ void xbrtime_##_typename##_alltoall(_type *dest, const _type *src, int src_strid
     //  XBGAS_DECL_ALLTOALL(long double, longdouble)
 
 #undef XBGAS_DECL_ALLTOALL
-*/
 
 #ifdef __cplusplus
 }
