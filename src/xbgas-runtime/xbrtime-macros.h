@@ -24,12 +24,12 @@
 #define _XBRTIME_MACROS_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 #ifndef _XBRTIME_MIN_UNR_THRESHOLD_
 /** @brief Minimum transfer unrolling (to hide latency) */
-#define _XBRTIME_MIN_UNR_THRESHOLD_ 10000000
+#define _XBRTIME_MIN_UNR_THRESHOLD_ 8
 #endif
 
 /** @brief Unrolling factor for unrolled transfer API functons */

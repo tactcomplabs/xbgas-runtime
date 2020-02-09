@@ -24,7 +24,7 @@
 #define _XBRTIME_API_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 #include <stdlib.h>

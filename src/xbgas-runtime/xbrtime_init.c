@@ -105,10 +105,9 @@ extern int xbrtime_init(){
     __XBRTIME_CONFIG->_MAP[i]._PHYSICAL  = i+1;
   }
 
-  /* initiate a barrier */
 
-	int init = 1;
-	*((uint64_t *)INIT_ADDR) = init;
+  int init = 1;
+  *((uint64_t *)INIT_ADDR) = init;
   return 0;
 }
 

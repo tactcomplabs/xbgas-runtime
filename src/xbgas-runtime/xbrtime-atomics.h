@@ -15,18 +15,18 @@
 #define _XBRTIME_ATOMICS_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 /*!   \fn xbrtime_TYPENAME_atomic_OP( TYPE *dest, TYPE op_val, int pe )
-      \brief Performs an atomic memory operation on a remote pe; OP is one of {add, lor, land, lxor, min, max}
+      \brief Performs an atomic memory operation on a remote pe; OP is one of {add, bor, band, bxor, min, max}
       \param dest is a pointer to the base shared address on the target PE where the atomic operation is to be performed
       \param op_val is a provdied operand for the atomic operation
       \param pe is the id of the target remote pe
-      \return void
+      \return value at dest before OP
 */
 #define XBGAS_DECL_ATOMIC_OP(_type, _typename, _op)                                                     \
-void xbrtime_##_typename##_atomic_##_op(_type *dest, _type op_val, int pe);
+_type xbrtime_##_typename##_atomic_##_op(_type *dest, _type op_val, int pe);
 
     /* Atomic add */
     XBGAS_DECL_ATOMIC_OP(unsigned int, uint, add)
@@ -41,40 +41,40 @@ void xbrtime_##_typename##_atomic_##_op(_type *dest, _type op_val, int pe);
     XBGAS_DECL_ATOMIC_OP(int64_t, int64, add)
 
     /* Atomic logical and */
-    XBGAS_DECL_ATOMIC_OP(unsigned int, uint, land)
-    XBGAS_DECL_ATOMIC_OP(unsigned long, ulong, land)
-    XBGAS_DECL_ATOMIC_OP(uint32_t, uint32, land)
-    XBGAS_DECL_ATOMIC_OP(int, int, land)
-    XBGAS_DECL_ATOMIC_OP(long, long, land)
-    XBGAS_DECL_ATOMIC_OP(int32_t, int32, land)
-    XBGAS_DECL_ATOMIC_OP(unsigned long long, ulonglong, land)
-    XBGAS_DECL_ATOMIC_OP(uint64_t, uint64, land)
-    XBGAS_DECL_ATOMIC_OP(long long, longlong, land)
-    XBGAS_DECL_ATOMIC_OP(int64_t, int64, land)
+    XBGAS_DECL_ATOMIC_OP(unsigned int, uint, band)
+    XBGAS_DECL_ATOMIC_OP(unsigned long, ulong, band)
+    XBGAS_DECL_ATOMIC_OP(uint32_t, uint32, band)
+    XBGAS_DECL_ATOMIC_OP(int, int, band)
+    XBGAS_DECL_ATOMIC_OP(long, long, band)
+    XBGAS_DECL_ATOMIC_OP(int32_t, int32, band)
+    XBGAS_DECL_ATOMIC_OP(unsigned long long, ulonglong, band)
+    XBGAS_DECL_ATOMIC_OP(uint64_t, uint64, band)
+    XBGAS_DECL_ATOMIC_OP(long long, longlong, band)
+    XBGAS_DECL_ATOMIC_OP(int64_t, int64, band)
 
     /* Atomic logical or */
-    XBGAS_DECL_ATOMIC_OP(unsigned int, uint, lor)
-    XBGAS_DECL_ATOMIC_OP(unsigned long, ulong, lor)
-    XBGAS_DECL_ATOMIC_OP(uint32_t, uint32, lor)
-    XBGAS_DECL_ATOMIC_OP(int, int, lor)
-    XBGAS_DECL_ATOMIC_OP(long, long, lor)
-    XBGAS_DECL_ATOMIC_OP(int32_t, int32, lor)
-    XBGAS_DECL_ATOMIC_OP(unsigned long long, ulonglong, lor)
-    XBGAS_DECL_ATOMIC_OP(uint64_t, uint64, lor)
-    XBGAS_DECL_ATOMIC_OP(long long, longlong, lor)
-    XBGAS_DECL_ATOMIC_OP(int64_t, int64, lor)
+    XBGAS_DECL_ATOMIC_OP(unsigned int, uint, bor)
+    XBGAS_DECL_ATOMIC_OP(unsigned long, ulong, bor)
+    XBGAS_DECL_ATOMIC_OP(uint32_t, uint32, bor)
+    XBGAS_DECL_ATOMIC_OP(int, int, bor)
+    XBGAS_DECL_ATOMIC_OP(long, long, bor)
+    XBGAS_DECL_ATOMIC_OP(int32_t, int32, bor)
+    XBGAS_DECL_ATOMIC_OP(unsigned long long, ulonglong, bor)
+    XBGAS_DECL_ATOMIC_OP(uint64_t, uint64, bor)
+    XBGAS_DECL_ATOMIC_OP(long long, longlong, bor)
+    XBGAS_DECL_ATOMIC_OP(int64_t, int64, bor)
 
     /* Atomic logical exclusive or */
-    XBGAS_DECL_ATOMIC_OP(unsigned int, uint, lxor)
-    XBGAS_DECL_ATOMIC_OP(unsigned long, ulong, lxor)
-    XBGAS_DECL_ATOMIC_OP(uint32_t, uint32, lxor)
-    XBGAS_DECL_ATOMIC_OP(int, int, lxor)
-    XBGAS_DECL_ATOMIC_OP(long, long, lxor)
-    XBGAS_DECL_ATOMIC_OP(int32_t, int32, lxor)
-    XBGAS_DECL_ATOMIC_OP(unsigned long long, ulonglong, lxor)
-    XBGAS_DECL_ATOMIC_OP(uint64_t, uint64, lxor)
-    XBGAS_DECL_ATOMIC_OP(long long, longlong, lxor)
-    XBGAS_DECL_ATOMIC_OP(int64_t, int64, lxor)
+    XBGAS_DECL_ATOMIC_OP(unsigned int, uint, bxor)
+    XBGAS_DECL_ATOMIC_OP(unsigned long, ulong, bxor)
+    XBGAS_DECL_ATOMIC_OP(uint32_t, uint32, bxor)
+    XBGAS_DECL_ATOMIC_OP(int, int, bxor)
+    XBGAS_DECL_ATOMIC_OP(long, long, bxor)
+    XBGAS_DECL_ATOMIC_OP(int32_t, int32, bxor)
+    XBGAS_DECL_ATOMIC_OP(unsigned long long, ulonglong, bxor)
+    XBGAS_DECL_ATOMIC_OP(uint64_t, uint64, bxor)
+    XBGAS_DECL_ATOMIC_OP(long long, longlong, bxor)
+    XBGAS_DECL_ATOMIC_OP(int64_t, int64, bxor)
 
     /* Atomic min */
     XBGAS_DECL_ATOMIC_OP(unsigned int, uint, min)
@@ -107,10 +107,10 @@ void xbrtime_##_typename##_atomic_##_op(_type *dest, _type op_val, int pe);
       \param dest is a pointer to the base shared address on the target PE where the compare & swap is to be performed
       \param comp_val is the provided value to compare against the value at DEST
       \param pe is the id of the target remote pe
-      \return void
+      \return value at dest before compare and swap
 */
 #define XBGAS_DECL_ATOMIC_CAS(_type, _typename)                                                         \
-void xbrtime_##_typename##_atomic_compare_swap(_type *dest, _type comp_val, int pe);
+_type xbrtime_##_typename##_atomic_compare_swap(_type *dest, _type comp_val, int pe);
 
     /* Atomic compare and swap */
     XBGAS_DECL_ATOMIC_CAS(unsigned int, uint)

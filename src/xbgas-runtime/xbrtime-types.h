@@ -10,12 +10,11 @@
  * of the distribution.
  *
  */
-//#define MAX_PE 12
 #ifndef _XBRTIME_TYPES_H_
 #define _XBRTIME_TYPES_H_
 
 #ifdef __cplusplus
-#define extern "C" {
+extern "C" {
 #endif
 
 #include <stdint.h>
