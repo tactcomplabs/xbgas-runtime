@@ -18,10 +18,7 @@
 #define LARGE_BROADCAST             12288
 #define LARGE_REDUCE                2048
 #define LARGE_REDUCE_ALL            2048
-//#define LARGE_SCATTER               1
-//#define LARGE_GATHER                1
 #define LARGE_GATHER_ALL            81920
-//#define LARGE_ALL_TO_ALL            1
 
 #ifdef __cplusplus
 extern "C" {
