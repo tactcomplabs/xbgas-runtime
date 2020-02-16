@@ -50,12 +50,25 @@
          xbrtime_barrier();                                                                                                 \
     }                                                                                                                       \
                                                                                                                             \
-     /* Migrate from buffer to dest with stride */                                                                          \
-     for(i = 0; i < nelems; i++)                                                                                            \
-     {                                                                                                                      \
-         dest[i*stride] = temp[i];                                                                                          \
-     }                                                                                                                      \
-     xbrtime_free(temp);                                                                                                    \
+    /* Migrate from src to dest on root*/                                                                                   \
+    if(my_rpe == root)                                                                                                      \
+    {                                                                                                                       \
+        /* Migrate from buffer to dest with stride */                                                                       \
+        for(i = 0; i < nelems; i++)                                                                                         \
+        {                                                                                                                   \
+            dest[i*stride] = src[i*stride];                                                                                 \
+        }                                                                                                                   \
+    }                                                                                                                       \
+    /* Migrate from buffer to dest with stride otherwise */                                                                 \
+    else                                                                                                                    \
+    {                                                                                                                       \
+        /* Migrate from buffer to dest with stride */                                                                       \
+        for(i = 0; i < nelems; i++)                                                                                         \
+        {                                                                                                                   \
+            dest[i*stride] = temp[i];                                                                                       \
+        }                                                                                                                   \
+    }                                                                                                                       \
+    xbrtime_free(temp);                                                                                                     \
 }                                                                                                                           \
                                                                                                                             \
  void xbrtime_##_typename##_broadcast_van_de_geijn(_type *dest, const _type *src, size_t nelems, int stride, int root)      \
@@ -92,12 +105,25 @@
      /* Perform ring gather_all */                                                                                          \
      xbrtime_##_typename##_gather_all_ring(temp, &(temp[(pe_disp[my_rpe])]), pe_msg_sz, pe_disp, nelems);                   \
                                                                                                                             \
-     /* Migrate from buffer to dest with stride */                                                                          \
-     for(i = 0; i < nelems; i++)                                                                                            \
-     {                                                                                                                      \
-         dest[i*stride] = temp[i];                                                                                          \
-     }                                                                                                                      \
-     xbrtime_free(temp);                                                                                                    \
+    /* Migrate from src to dest on root*/                                                                                   \
+    if(my_rpe == root)                                                                                                      \
+    {                                                                                                                       \
+        /* Migrate from buffer to dest with stride */                                                                       \
+        for(i = 0; i < nelems; i++)                                                                                         \
+        {                                                                                                                   \
+            dest[i*stride] = src[i*stride];                                                                                 \
+        }                                                                                                                   \
+    }                                                                                                                       \
+    /* Migrate from buffer to dest with stride otherwise */                                                                 \
+    else                                                                                                                    \
+    {                                                                                                                       \
+        /* Migrate from buffer to dest with stride */                                                                       \
+        for(i = 0; i < nelems; i++)                                                                                         \
+        {                                                                                                                   \
+            dest[i*stride] = temp[i];                                                                                       \
+        }                                                                                                                   \
+    }                                                                                                                       \
+    xbrtime_free(temp);                                                                                                     \
  }                                                                                                                          \
                                                                                                                             \
  /* Wrapper function - binomial tree for small messages, van de geijn for large messages */                                 \
