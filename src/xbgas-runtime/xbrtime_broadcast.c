@@ -20,18 +20,8 @@
      numpes = xbrtime_num_pes();                                                                                            \
      my_rpe = xbrtime_mype();                                                                                               \
      my_vpe = ((my_rpe >= root) ? (my_rpe - root) : (my_rpe + numpes - root));                                              \
-     _type *temp = (_type*) xbrtime_malloc(sizeof(_type) * nelems);                                                         \
      numpes_log = (int) ceil((log(numpes)/log(2)));  /* Number of commmuication stages */                                   \
      mask = (int) (pow(2,numpes_log) - 1);                                                                                  \
-                                                                                                                            \
-     /* Root load values into buffer without stride */                                                                      \
-     if(my_rpe == root)                                                                                                     \
-     {                                                                                                                      \
-         for(i = 0; i < nelems; i++)                                                                                        \
-         {                                                                                                                  \
-             temp[i] = src[i*stride];                                                                                       \
-         }                                                                                                                  \
-     }                                                                                                                      \
                                                                                                                             \
      /* Perform communication if PE active at stage i and has valid partner */                                              \
      for(i = numpes_log-1; i >= 0; i--)                                                                                     \
@@ -44,25 +34,14 @@
              r_partner = (v_partner + root) % numpes;                                                                       \
              if(my_vpe < v_partner)                                                                                         \
              {                                                                                                              \
-                 xbrtime_##_typename##_put(temp, temp, nelems, 1, r_partner);                                               \
+                 xbrtime_##_typename##_put(dest, src, nelems, stride, r_partner);                                           \
              }                                                                                                              \
          }                                                                                                                  \
          xbrtime_barrier();                                                                                                 \
     }                                                                                                                       \
-                                                                                                                            \
-    /* Migrate from src to dest on root*/                                                                                   \
-    if(my_rpe == root)                                                                                                      \
+    /* Migrate from buffer to dest with stride */                                                                           \
+    if(my_rpe != root)                                                                                                      \
     {                                                                                                                       \
-        /* Migrate from buffer to dest with stride */                                                                       \
-        for(i = 0; i < nelems; i++)                                                                                         \
-        {                                                                                                                   \
-            dest[i*stride] = src[i*stride];                                                                                 \
-        }                                                                                                                   \
-    }                                                                                                                       \
-    /* Migrate from buffer to dest with stride otherwise */                                                                 \
-    else                                                                                                                    \
-    {                                                                                                                       \
-        /* Migrate from buffer to dest with stride */                                                                       \
         for(i = 0; i < nelems; i++)                                                                                         \
         {                                                                                                                   \
             dest[i*stride] = temp[i];                                                                                       \
@@ -105,25 +84,15 @@
      /* Perform ring gather_all */                                                                                          \
      xbrtime_##_typename##_gather_all_ring(temp, &(temp[(pe_disp[my_rpe])]), pe_msg_sz, pe_disp, nelems);                   \
                                                                                                                             \
-    /* Migrate from src to dest on root*/                                                                                   \
-    if(my_rpe == root)                                                                                                      \
-    {                                                                                                                       \
-        /* Migrate from buffer to dest with stride */                                                                       \
-        for(i = 0; i < nelems; i++)                                                                                         \
-        {                                                                                                                   \
-            dest[i*stride] = src[i*stride];                                                                                 \
-        }                                                                                                                   \
-    }                                                                                                                       \
-    /* Migrate from buffer to dest with stride otherwise */                                                                 \
-    else                                                                                                                    \
-    {                                                                                                                       \
-        /* Migrate from buffer to dest with stride */                                                                       \
-        for(i = 0; i < nelems; i++)                                                                                         \
-        {                                                                                                                   \
-            dest[i*stride] = temp[i];                                                                                       \
-        }                                                                                                                   \
-    }                                                                                                                       \
-    xbrtime_free(temp);                                                                                                     \
+     /* Migrate from buffer to dest with stride */                                                                          \
+     if(my_rpe != root)                                                                                                     \
+     {                                                                                                                      \
+         for(i = 0; i < nelems; i++)                                                                                        \
+         {                                                                                                                  \
+             dest[i*stride] = temp[i];                                                                                      \
+         }                                                                                                                  \
+     }                                                                                                                      \
+     xbrtime_free(temp);                                                                                                    \
  }                                                                                                                          \
                                                                                                                             \
  /* Wrapper function - binomial tree for small messages, van de geijn for large messages */                                 \
